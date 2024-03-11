@@ -1,28 +1,28 @@
-#server:
-## default-owo jest 8080
-#  port: 8190
-#  servlet:
-#    context-path: /meet-your-meal
+server:
+# default-owo jest 8080
+  port: 8080
+  servlet:
+    context-path:
 
-#spring:
-#  datasource:
-#    type: com.zaxxer.hikari.HikariDataSource
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://localhost:5432/meet_your_meal
-#    username: postgres
-#    password: postgres
-#    hikari:
-#      idle-timeout: 10000
-#      connectionTimeout: 20000
-#      minimumIdle: 10
-#      maximumPoolSize: 20
-#  jpa:
-#    hibernate:
-#      ddl-auto: none
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
-#  mvc:
-#    hiddenmethod:
-#      filter:
-#        enabled: true
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/meet_your_meal
+    username: postgres
+    password: postgres
+    hikari:
+      idle-timeout: 10000
+      connectionTimeout: 20000
+      minimumIdle: 10
+      maximumPoolSize: 20
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
