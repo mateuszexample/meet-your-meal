@@ -6,6 +6,6 @@ CREATE TABLE address
     postal_code         VARCHAR(32) NOT NULL,
     address             VARCHAR(32) NOT NULL,
     building_number     VARCHAR(32) NOT NULL,
-    unit_number         VARCHAR(32) NOT NULL,
+    unit_number         VARCHAR(32),
     PRIMARY KEY (address_id)
 );
