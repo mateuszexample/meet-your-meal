@@ -2,7 +2,6 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version "${springBootVersion}"
 	id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
-//	id 'org.openapi.generator' version "${openapiGeneratorVersion}"
 }
 
 group = 'pl.molsztyn'

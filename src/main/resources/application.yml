@@ -2,7 +2,7 @@ server:
 # default-owo jest 8080
   port: 8080
   servlet:
-    context-path:
+    context-path: /meet-your-meal
 
 spring:
   datasource:
