@@ -7,15 +7,11 @@
 
 }
 
-.container-fluid {
-    margin-left: 30px;
-}
-
 .navbar-brand.me-auto {
     color: #009970;
     font-weight: 500;
     font-size: 24px;
-    margin-left: 30px;
+    margin-left: 20px;
     transition: 0.3s color;
 }
 
@@ -23,7 +19,7 @@
     background-color: #009970;
     color: #fff;
     font-size: 14px;
-    margin-right: 30px;
+    margin-right: 20px;
     padding: 8px 20px;
     border-radius: 50px;
     text-decoration: none;
