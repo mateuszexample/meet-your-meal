@@ -17,10 +17,10 @@ insert into meet_your_meal_user (user_id, user_name, email, password, active) va
 
 insert into meet_your_meal_user (user_id, user_name, email, password, active) values (8, 'test_user', 'test_user@gmail.pl', '$2a$12$TwQsp1IusXTDl7LwZqL0qeu49Ypr6vRdEzRq2vAsgb.zvOtrnzm5G', true);
 
-UPDATE restaurant_owner SET user_id = 1 WHERE phone = '123456789';
-UPDATE restaurant_owner SET user_id = 2 WHERE phone = '456789123';
-UPDATE restaurant_owner SET user_id = 3 WHERE phone = '789123456';
-UPDATE restaurant_owner SET user_id = 4 WHERE phone = '987654321';
+UPDATE restaurant_owner SET user_id = 1 WHERE pesel = '94051311769';
+UPDATE restaurant_owner SET user_id = 2 WHERE pesel = '95061422870';
+UPDATE restaurant_owner SET user_id = 3 WHERE pesel = '96071433971';
+UPDATE restaurant_owner SET user_id = 4 WHERE pesel = '95073322230';
 
 UPDATE customer SET user_id = 5 WHERE phone = '654321987';
 UPDATE customer SET user_id = 6 WHERE phone = '321987654';

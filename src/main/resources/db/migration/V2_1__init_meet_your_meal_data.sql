@@ -1,11 +1,11 @@
-insert into restaurant_owner (name, surname, phone)
+insert into restaurant_owner (name, surname, pesel)
 values
-('Rekin', 'Biznesu', '123456789'),
-('Marta', 'Restauracja', '456789123'),
-('Alfred', 'Pizzamaster', '789123456'),
-('Robert', 'Thermomix', '987654321');
+('Rekin', 'Biznesu', '94051311769'),
+('Marta', 'Restauracja', '95061422870'),
+('Alfred', 'Pizzamaster', '96071433971'),
+('Robert', 'Thermomix', '95073322230');
 
-insert into address (address_id, country, city, postal_code, address, building_number, unit_number)
+insert into address (address_id, country, city, postal_code, street, building_number, unit_number)
 values
 ('1', 'Polska', 'Suwałki', '16-400', 'Kowalskiego', '67', '15'),
 ('2', 'Polska', 'Suwałki', '16-400', 'Pułaskiego', '1', '1'),
