@@ -1,0 +1,45 @@
+package pl.molsztyn.meetyourmeal.database.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Getter
+@Setter
+@EqualsAndHashCode(of = "addressId")
+@ToString(of = {"addressId", "country", "city", "postalCode", "street"})
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "address")
+public class AddressEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "address_id")
+    private Integer addressId;
+
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "postal_code")
+    private String postalCode;
+
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "building_number")
+    private String buildingNumber;
+
+    @Column(name = "unit_number")
+    private String unitNumber;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "address")
+    private CustomerEntity customer;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "address")
+    private RestaurantEntity restaurant;
+}
