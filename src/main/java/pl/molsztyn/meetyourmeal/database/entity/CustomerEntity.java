@@ -3,8 +3,6 @@ package pl.molsztyn.meetyourmeal.database.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @EqualsAndHashCode(of = "customerId")

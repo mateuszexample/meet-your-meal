@@ -2,7 +2,6 @@ package pl.molsztyn.meetyourmeal.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import pl.molsztyn.meetyourmeal.api.security.RoleEntity;
 
 import java.util.Set;
 
