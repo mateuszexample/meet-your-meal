@@ -28,8 +28,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity6:${thymeleafExtrasSpringsecurity6Version}"
 
+	// thymeleaf
+	implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity6:${thymeleafExtrasSpringsecurity6Version}"
+	implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:${thymeleafLayoutDialectVersion}"
 
 	// db
 	implementation 'org.flywaydb:flyway-core'
@@ -43,20 +45,20 @@ dependencies {
 	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
 
 	// api
-	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocOpenApiVersion}"
+//	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocOpenApiVersion}"
 
 	// test
-	testCompileOnly 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.testcontainers:junit-jupiter'
-	testImplementation 'org.testcontainers:postgresql'
-
-	dependencyManagement {
-		imports {
-			mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
-		}
-	}
+//	testCompileOnly 'org.projectlombok:lombok'
+//	testAnnotationProcessor 'org.projectlombok:lombok'
+//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	testImplementation 'org.testcontainers:junit-jupiter'
+//	testImplementation 'org.testcontainers:postgresql'
+//
+//	dependencyManagement {
+//		imports {
+//			mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+//		}
+//	}
 
 }
 

@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html   lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/fragments/layouts/owner_dashboard_layout}">
+
+<head>
+    <title>Meet your meal</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="card" style="border-radius: 1rem;">
+            <div class="card-body p-4">
+
+                <h1 class="mb-4 text-center">Add restaurant</h1>
+
+                <form>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form6Example1" class="form-control" placeholder="Name"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form6Example2" class="form-control" placeholder="Country"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form6Example3" class="form-control" placeholder="City"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form6Example4" class="form-control" placeholder="Postal code"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form6Example5" class="form-control" placeholder="Street"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form6Example6" class="form-control" placeholder="Building number"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form6Example7" class="form-control" placeholder="Unit number"/>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-secondary btn-rounded btn-block">Confirm</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

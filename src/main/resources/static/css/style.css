@@ -1,18 +1,74 @@
-.navbar {
-    background-color: #fff;
+body {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+#wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    overflow: auto;
+}
+
+#header {
     height: 80px;
-    /*margin: 20px;
+}
+
+#main {
+    height: calc(100vh - 80px);
+    width: 100%;
+    position: relative;
+}
+
+#containerLeft {
+    float: left;
+    background-color: white;
+    height: 100%;
+    width: 20%;
+}
+
+#containerRight {
+    background-color: white;
     border-radius: 20px;
-    padding: 0.5rem;*/
+    float: left;
+    position: absolute;
+    top: 4%;
+    left: 24%;
+    right: 4%;
+    bottom: 4%;
+    overflow: overlay;
+}
+
+#containerRight .card {
+    border: none;
 
 }
 
-.navbar-brand.me-auto {
+#containerRight .card-body h1 {
+    font-size: calc(1.365rem + 1.2vw);
+
+}
+
+#containerRight .card-body .mb-4 {
+    margin-bottom: 1.3rem !important;
+}
+
+#containerRight .card-body .btn {
+    float: right;
+}
+
+.navbar {
+    background-color: #fff;
+    height: 80px;
+}
+
+.navbar .navbar-brand {
     color: #009970;
     font-weight: 500;
     font-size: 24px;
     margin-left: 20px;
-    transition: 0.3s color;
+}
+
+.navbar .navbar-brand:hover {
+    color: #009970;
 }
 
 .login-button {
@@ -23,27 +79,9 @@
     padding: 8px 20px;
     border-radius: 50px;
     text-decoration: none;
-    transition: 0.3s background-color;
+    transition: background-color 0.3s;
 }
 
 .login-button:hover {
     background-color: #00b383;
-}
-
-.hero-section {
-    /*background: url(cos.jpg) no-repeat center;*/
-    background-color: white;
-    background-size: cover;
-    width: 100%;
-    height: 100vh;
-}
-
-.hero-section::before {
-    background-color: rgba(0, 0, 0, 0.6);
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
 }

@@ -47,7 +47,7 @@ public class SecurityConfiguration {
                 .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
                 .requestMatchers("/login", "/error", "/images/something_is_not_yes.png").permitAll()
                 .requestMatchers("/", "/meet-your-meal", "/where-is-your-meal").permitAll()
-                .requestMatchers("/restaurant-owner/**").hasAnyAuthority("RESTAURANT_OWNER")
+                .requestMatchers("/owner-dashboard/**").hasAnyAuthority("RESTAURANT_OWNER")
                 .and()
                 .formLogin()
                 .permitAll()

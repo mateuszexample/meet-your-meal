@@ -2,16 +2,23 @@ package pl.molsztyn.meetyourmeal.api.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequiredArgsConstructor
 public class RestaurantOwnerController {
-    private static final String RESTAURANT_OWNER = "/restaurant-owner";
+    private static final String OWNER = "/owner-dashboard";
+    private static final String OWNER_RESTAURANT_DETAILS = "/owner-dashboard/restaurant-details";
 
-    @GetMapping(value = RESTAURANT_OWNER)
+    @RequestMapping(value = OWNER, method = RequestMethod.GET)
     public String homePage() {
-        return "restaurant_owner";
+        return "owner_dashboard";
+    }
+
+    @RequestMapping(value = OWNER_RESTAURANT_DETAILS, method = RequestMethod.GET)
+    public String ownerRestaurantDetails() {
+        return "owner_dashboard#restaurant_details";
     }
 
 }
