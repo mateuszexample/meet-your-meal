@@ -12,7 +12,7 @@ public class RestaurantOwnerController {
     private static final String OWNER_RESTAURANT_DETAILS = "/owner-dashboard/restaurant-details";
 
     @RequestMapping(value = OWNER, method = RequestMethod.GET)
-    public String homePage() {
+    public String ownerDashboard() {
         return "owner_dashboard";
     }
 
