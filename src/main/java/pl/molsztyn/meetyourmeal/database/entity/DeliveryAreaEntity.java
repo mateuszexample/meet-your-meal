@@ -4,7 +4,11 @@ package pl.molsztyn.meetyourmeal.database.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+
+@Getter
+@Setter
+@EqualsAndHashCode(of = "deliveryAreaId")
+@ToString(of = {"deliveryAreaId", "country", "city", "postalCode", "street"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
