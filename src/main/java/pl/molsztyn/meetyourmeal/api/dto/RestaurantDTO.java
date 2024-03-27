@@ -1,0 +1,23 @@
+package pl.molsztyn.meetyourmeal.api.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import pl.molsztyn.meetyourmeal.domain.Address;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RestaurantDTO {
+
+    private String name;
+
+    private String restaurantCountry;
+    private String restaurantCity;
+    private String restaurantPostalCode;
+    private String restaurantStreet;
+    private String restaurantBuildingNumber;
+    private String restaurantUnitNumber;
+}
