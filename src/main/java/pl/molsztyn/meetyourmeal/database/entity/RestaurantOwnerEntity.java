@@ -19,6 +19,7 @@ public class RestaurantOwnerEntity {
     @Column(name = "restaurant_owner_id")
     private Integer restaurantOwnerId;
 
+
     @Column(name = "name")
     private String name;
 
@@ -27,6 +28,9 @@ public class RestaurantOwnerEntity {
 
     @Column(name = "pesel")
     private String pesel;
+
+    @Column(name = "user_id")
+    private Integer userId;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurantOwner")
     private RestaurantEntity restaurant;

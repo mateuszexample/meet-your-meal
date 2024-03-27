@@ -46,5 +46,9 @@ public class MeetYourMealUserDetailsService implements UserDetailsService {
         );
     }
 
+    @Transactional
+    public Integer getUserId(String name) {
+        return userRepository.findByUserName(name).getId();
+    }
 
 }
