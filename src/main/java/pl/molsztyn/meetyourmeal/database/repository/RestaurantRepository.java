@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import pl.molsztyn.meetyourmeal.business.dao.RestaurantDAO;
 import pl.molsztyn.meetyourmeal.database.entity.RestaurantEntity;
 import pl.molsztyn.meetyourmeal.database.repository.jpa.RestaurantJpaRepository;
+import pl.molsztyn.meetyourmeal.database.repository.jpa.RestaurantOwnerJpaRepository;
 import pl.molsztyn.meetyourmeal.database.repository.mapper.RestaurantEntityMapper;
 import pl.molsztyn.meetyourmeal.domain.Restaurant;
 
@@ -19,6 +20,6 @@ public class RestaurantRepository implements RestaurantDAO {
     @Override
     public void createRestaurant(Restaurant restaurant) {
         RestaurantEntity restaurantToSave = restaurantEntityMapper.mapToEntity(restaurant);
-        RestaurantEntity restaurantSaved = restaurantJpaRepository.saveAndFlush(restaurantToSave);
+        RestaurantEntity restaurantSaved = restaurantJpaRepository.save(restaurantToSave);
     }
 }

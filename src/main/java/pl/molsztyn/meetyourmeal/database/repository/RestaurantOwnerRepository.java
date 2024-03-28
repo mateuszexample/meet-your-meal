@@ -22,4 +22,10 @@ public class RestaurantOwnerRepository implements RestaurantOwnerDAO {
         return restaurantOwnerJpaRepository.findByPesel(pesel)
                 .map(restaurantOwnerEntityMapper::mapFromEntity);
     }
+
+    @Override
+    public Optional<RestaurantOwner> findByUserId(Integer userId) {
+        return restaurantOwnerJpaRepository.findByUserId(userId)
+                .map(restaurantOwnerEntityMapper::mapFromEntity);
+    }
 }

@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface RestaurantOwnerDAO {
 
     Optional<RestaurantOwner> findByPesel(String pesel);
+    Optional<RestaurantOwner> findByUserId(Integer userId);
 }

@@ -1,10 +1,6 @@
 package pl.molsztyn.meetyourmeal.api.dto;
 
 import lombok.*;
-import pl.molsztyn.meetyourmeal.domain.DeliveryArea;
-import pl.molsztyn.meetyourmeal.domain.RestaurantOwner;
-
-import java.util.Set;
 
 @With
 @Data
@@ -21,6 +17,4 @@ public class RestaurantCreateRequestDTO {
     private String restaurantStreet;
     private String restaurantBuildingNumber;
     private String restaurantUnitNumber;
-
-//    private Set<DeliveryArea> deliveryAreas;
 }

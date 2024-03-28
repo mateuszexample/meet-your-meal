@@ -1,0 +1,22 @@
+package pl.molsztyn.meetyourmeal.domain;
+
+import lombok.Builder;
+import lombok.Value;
+import lombok.With;
+
+import java.util.Set;
+
+@With
+@Value
+@Builder
+public class RestaurantCreateRequest {
+
+    String name;
+
+    String restaurantCountry;
+    String restaurantCity;
+    String restaurantPostalCode;
+    String restaurantStreet;
+    String restaurantBuildingNumber;
+    String restaurantUnitNumber;
+}

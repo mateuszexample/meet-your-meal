@@ -1,22 +1,19 @@
 package pl.molsztyn.meetyourmeal.api.controller;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import pl.molsztyn.meetyourmeal.api.dto.RestaurantCreateRequestDTO;
-import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantCreateRequestMapper;
-import pl.molsztyn.meetyourmeal.api.security.MeetYourMealUserDetailsService;
-import pl.molsztyn.meetyourmeal.business.RestaurantService;
-import pl.molsztyn.meetyourmeal.database.entity.AddressEntity;
-import pl.molsztyn.meetyourmeal.database.entity.RestaurantEntity;
-import pl.molsztyn.meetyourmeal.database.entity.RestaurantOwnerEntity;
-import pl.molsztyn.meetyourmeal.database.repository.jpa.RestaurantJpaRepository;
-import pl.molsztyn.meetyourmeal.database.repository.jpa.RestaurantOwnerJpaRepository;
+import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
+import pl.molsztyn.meetyourmeal.business.RestaurantDashboardService;
+import pl.molsztyn.meetyourmeal.business.RestaurantOwnerService;
+import pl.molsztyn.meetyourmeal.domain.RestaurantCreateRequest;
+import pl.molsztyn.meetyourmeal.domain.RestaurantOwner;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,13 +22,9 @@ public class RestaurantOwnerController {
     private static final String OWNER_RESTAURANT_DETAILS = "/owner-dashboard/restaurant-details";
     private static final String OWNER_RESTAURANT_DETAILS_ADD = "/owner-dashboard/restaurant-details/add";
 
-    private final MeetYourMealUserDetailsService meetYourMealUserDetailsService;
+    private final RestaurantDashboardService restaurantDashboardService;
 
-    private final RestaurantService restaurantService;
-    private final RestaurantCreateRequestMapper restaurantCreateRequestMapper;
-
-    private final RestaurantOwnerJpaRepository restaurantOwnerJpaRepository;
-    private final RestaurantJpaRepository restaurantJpaRepository;
+    private final RestaurantMapper restaurantMapper;
 
 
     @GetMapping(value = OWNER)
@@ -51,31 +44,10 @@ public class RestaurantOwnerController {
             @ModelAttribute("restaurantCreateRequestDTO") RestaurantCreateRequestDTO restaurantCreateRequestDTO,
             Authentication authentication
     ) {
-
-        String username = authentication.getName();
-
-        RestaurantEntity newRestaurant = RestaurantEntity.builder()
-                .name(restaurantCreateRequestDTO.getName())
-                .address(AddressEntity.builder()
-                        .country(restaurantCreateRequestDTO.getRestaurantCountry())
-                        .city(restaurantCreateRequestDTO.getRestaurantCity())
-                        .postalCode(restaurantCreateRequestDTO.getRestaurantPostalCode())
-                        .street(restaurantCreateRequestDTO.getRestaurantStreet())
-                        .buildingNumber(restaurantCreateRequestDTO.getRestaurantBuildingNumber())
-                        .unitNumber(restaurantCreateRequestDTO.getRestaurantUnitNumber())
-                        .build())
-                .restaurantOwner(getRestaurantOwner(username))
-                .build();
-        restaurantJpaRepository.save(newRestaurant);
-//        Restaurant restaurant = restaurantCreateRequestMapper.map(restaurantCreateRequestDTO);
-//        restaurantService.createRestaurant(restaurant);
+        RestaurantCreateRequest request = restaurantMapper.mapFromDTO(restaurantCreateRequestDTO);
+        restaurantDashboardService.create(request, authentication);
 
         return "redirect:/owner-dashboard";
-    }
-
-    private RestaurantOwnerEntity getRestaurantOwner(String username) {
-        Integer userId = meetYourMealUserDetailsService.getUserId(username);
-        return restaurantOwnerJpaRepository.findByUserId(userId).get();
     }
 
 }

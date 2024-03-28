@@ -13,5 +13,6 @@ public class RestaurantOwner {
     String name;
     String surname;
     String pesel;
+    Integer userId;
     Restaurant restaurant;
 }
