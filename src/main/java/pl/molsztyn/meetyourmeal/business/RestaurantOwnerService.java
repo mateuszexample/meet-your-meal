@@ -1,15 +1,9 @@
 package pl.molsztyn.meetyourmeal.business;
 
-import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.molsztyn.meetyourmeal.api.security.MeetYourMealUserDetailsService;
 import pl.molsztyn.meetyourmeal.business.dao.RestaurantOwnerDAO;
-import pl.molsztyn.meetyourmeal.domain.Address;
-import pl.molsztyn.meetyourmeal.domain.Restaurant;
-import pl.molsztyn.meetyourmeal.domain.RestaurantCreateRequest;
 import pl.molsztyn.meetyourmeal.domain.RestaurantOwner;
 import pl.molsztyn.meetyourmeal.domain.exception.NotFoundException;
 
@@ -31,5 +25,8 @@ public class RestaurantOwnerService {
     }
 
 
-
+    @Transactional
+    public void createRestaurant(RestaurantOwner restaurantOwnerWithRestaurant) {
+        restaurantOwnerDAO.createRestaurant(restaurantOwnerWithRestaurant);
+    }
 }

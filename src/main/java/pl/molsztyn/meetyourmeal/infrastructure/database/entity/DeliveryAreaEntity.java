@@ -1,4 +1,4 @@
-package pl.molsztyn.meetyourmeal.database.entity;
+package pl.molsztyn.meetyourmeal.infrastructure.database.entity;
 
 
 import jakarta.persistence.*;
@@ -7,7 +7,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = "deliveryAreaId")
+@EqualsAndHashCode(of = {"country", "city", "postalCode", "street"})
 @ToString(of = {"deliveryAreaId", "country", "city", "postalCode", "street"})
 @Builder
 @NoArgsConstructor

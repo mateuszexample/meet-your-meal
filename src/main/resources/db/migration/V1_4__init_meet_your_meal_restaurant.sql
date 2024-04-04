@@ -3,15 +3,11 @@ CREATE TABLE restaurant
     restaurant_id           SERIAL        NOT NULL,
     name                    VARCHAR(32)   NOT NULL,
     address_id              INT           NOT NULL,
-    restaurant_owner_id     INT           NOT NULL,
     PRIMARY KEY (restaurant_id),
     UNIQUE (address_id),
     CONSTRAINT fk_restaurant_address
         FOREIGN KEY (address_id)
-            REFERENCES address (address_id),
-    CONSTRAINT fk_restaurant_restaurant_owner
-        FOREIGN KEY (restaurant_owner_id)
-            REFERENCES restaurant_owner (restaurant_owner_id)
+            REFERENCES address (address_id)
 );
 
 CREATE TABLE delivery_area

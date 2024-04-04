@@ -1,6 +1,9 @@
 package pl.molsztyn.meetyourmeal.domain;
 
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @With
@@ -15,6 +18,10 @@ public class Restaurant {
     Address address;
     RestaurantOwner restaurantOwner;
     Set<DeliveryArea> deliveryAreas;
+
+    public Set<DeliveryArea> getDeliveryAreas() {
+        return Objects.isNull(deliveryAreas) ? new HashSet<>() : deliveryAreas;
+    }
 }
 
 

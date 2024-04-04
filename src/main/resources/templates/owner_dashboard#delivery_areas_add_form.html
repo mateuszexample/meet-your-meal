@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/fragments/layouts/owner_dashboard_layout}">
+
+<head>
+    <title>Meet your meal</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="card" style="border-radius: 1rem;">
+            <div class="card-body p-4">
+
+                <h1 class="mb-4 text-center">Add delivery area</h1>
+
+                <form action="#" th:action="@{/owner-dashboard/delivery-areas/add}" method="POST" th:object="${deliveryAreaAddRequestDTO}">
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="country" th:field="*{country}" class="form-control" placeholder="Country"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="city" th:field="*{city}" class="form-control" placeholder="City"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="postalCode" th:field="*{postalCode}" class="form-control" placeholder="Postal code"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="street" th:field="*{street}" class="form-control" placeholder="Street"/>
+                    </div>
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-secondary btn-rounded btn-block">Confirm</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

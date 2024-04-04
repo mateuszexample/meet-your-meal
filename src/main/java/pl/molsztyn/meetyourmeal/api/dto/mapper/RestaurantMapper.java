@@ -2,8 +2,6 @@ package pl.molsztyn.meetyourmeal.api.dto.mapper;
 
 import org.mapstruct.Mapper;
 import pl.molsztyn.meetyourmeal.api.dto.RestaurantCreateRequestDTO;
-import pl.molsztyn.meetyourmeal.domain.Address;
-import pl.molsztyn.meetyourmeal.domain.Restaurant;
 import pl.molsztyn.meetyourmeal.domain.RestaurantCreateRequest;
 
 @Mapper(componentModel = "spring")

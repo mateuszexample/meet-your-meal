@@ -1,6 +1,9 @@
 package pl.molsztyn.meetyourmeal.api.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -8,8 +11,9 @@ import lombok.*;
 @AllArgsConstructor
 public class DeliveryAreaDTO {
 
-    String country;
-    String city;
-    String postalCode;
-    String street;
+    private Integer deliveryAreaId;
+    private String country;
+    private String city;
+    private String postalCode;
+    private String street;
 }

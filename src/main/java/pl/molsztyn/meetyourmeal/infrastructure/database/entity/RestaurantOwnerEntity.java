@@ -1,4 +1,4 @@
-package pl.molsztyn.meetyourmeal.database.entity;
+package pl.molsztyn.meetyourmeal.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +32,7 @@ public class RestaurantOwnerEntity {
     @Column(name = "user_id")
     private Integer userId;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurantOwner")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "restaurant_id")
     private RestaurantEntity restaurant;
 }

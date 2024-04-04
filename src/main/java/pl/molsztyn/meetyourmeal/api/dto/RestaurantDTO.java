@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.molsztyn.meetyourmeal.domain.Address;
 
 @Data
 @Builder

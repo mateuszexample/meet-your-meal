@@ -1,4 +1,4 @@
-package pl.molsztyn.meetyourmeal.api.security;
+package pl.molsztyn.meetyourmeal.infrastructure.security;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package pl.molsztyn.meetyourmeal.database.entity;
+package pl.molsztyn.meetyourmeal.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

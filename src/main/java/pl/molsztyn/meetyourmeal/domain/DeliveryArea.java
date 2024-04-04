@@ -5,7 +5,7 @@ import lombok.*;
 @With
 @Value
 @Builder
-@EqualsAndHashCode(of = "deliveryAreaId")
+@EqualsAndHashCode(of = {"country", "city", "postalCode", "street"})
 @ToString(of = {"deliveryAreaId", "country", "city", "postalCode", "street"})
 public class DeliveryArea {
 

@@ -1,4 +1,4 @@
-package pl.molsztyn.meetyourmeal.api.security;
+package pl.molsztyn.meetyourmeal.infrastructure.security;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
