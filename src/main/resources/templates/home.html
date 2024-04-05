@@ -8,7 +8,52 @@
 </head>
 
 <body>
-
+    <div layout:fragment="contentHero">
+        <h1>Let's look for some restaurants near You!</h1>
+        <div id="containerSearchBar">
+            <form id="searchBar" class="row gy-2 gx-3 align-items-center">
+                <div class="col-auto">
+                    <label class="visually-hidden" for="inputCountry">Preference</label>
+                    <select class="form-select" id="inputCountry">
+                        <option selected>Country</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="visually-hidden" for="inputCity">Preference</label>
+                    <select class="form-select" id="inputCity">
+                        <option selected>City</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="visually-hidden" for="inputPostalCode">Preference</label>
+                    <select class="form-select" id="inputPostalCode">
+                        <option selected>Postal code</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="visually-hidden" for="inputStreet">Preference</label>
+                    <select class="form-select" id="inputStreet">
+                        <option selected>Street</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>

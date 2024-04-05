@@ -16,18 +16,31 @@
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container-fluid">
+    <div id="wrapper">
+        <div id="header">
+            <!--    <header>-->
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg fixed-top">
+                <div class="container-fluid">
 
-            <a th:href="@{/}" class="navbar-brand me-auto">meet your meal</a>
+                    <a th:href="@{/}" class="navbar-brand me-auto">meet your meal</a>
 
-            <a sec:authorize="!isAuthenticated()" class="login-button" th:href="@{/login}">Login</a>
-            <a sec:authorize="isAuthenticated()" class="login-button" th:href="@{/logout}">Logout</a>
+                    <a sec:authorize="!isAuthenticated()" class="login-button" th:href="@{/login}">Login</a>
+                    <a sec:authorize="isAuthenticated()" class="login-button" th:href="@{/logout}">Logout</a>
+
+                </div>
+            </nav>
+            <!-- End Navbar -->
+            <!--    </header>-->
+        </div>
+        <div id="main">
+
+            <div id="containerHero" layout:fragment="contentHero">
+
+            </div>
 
         </div>
-    </nav>
-    <!-- End Navbar -->
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
