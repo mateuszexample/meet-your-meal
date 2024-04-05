@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/fragments/layouts/base_layout}">
 
@@ -8,52 +9,49 @@
 </head>
 
 <body>
-    <div layout:fragment="contentHero">
-        <h1>Let's look for some restaurants near You!</h1>
-        <div id="containerSearchBar">
-            <form id="searchBar" class="row gy-2 gx-3 align-items-center">
-                <div class="col-auto">
-                    <label class="visually-hidden" for="inputCountry">Preference</label>
-                    <select class="form-select" id="inputCountry">
-                        <option selected>Country</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <div class="col-auto">
-                    <label class="visually-hidden" for="inputCity">Preference</label>
-                    <select class="form-select" id="inputCity">
-                        <option selected>City</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <div class="col-auto">
-                    <label class="visually-hidden" for="inputPostalCode">Preference</label>
-                    <select class="form-select" id="inputPostalCode">
-                        <option selected>Postal code</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <div class="col-auto">
-                    <label class="visually-hidden" for="inputStreet">Preference</label>
-                    <select class="form-select" id="inputStreet">
-                        <option selected>Street</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </div>
-            </form>
-        </div>
+<div layout:fragment="contentHero">
+    <h1>Let's look for some restaurants near You!</h1>
+    <div id="containerSearchBar">
+        <form id="searchBar"
+              class="row gy-2 gx-3 align-items-center"
+              action="#"
+              th:action="@{/search-for-restaurants}"
+              th:object="${deliveryAreaDTO}"
+              method="POST">
+            <div class="col-auto">
+                <label class="visually-hidden" for="country">Preference</label>
+                <select required class="form-select" id="country" th:field="*{country}">
+                    <option value="">Country</option>
+                    <option th:each="country : ${availableCountries}" th:value="${country}" th:text="${country}"></option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="visually-hidden" for="city">Preference</label>
+                <select required class="form-select" id="city" th:field="*{city}">
+                    <option value="">City</option>
+                    <option th:each="city : ${availableCities}" th:value="${city}" th:text="${city}"></option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="visually-hidden" for="postalCode">Preference</label>
+                <select required class="form-select" id="postalCode" th:field="*{postalCode}">
+                    <option value="">Postal code</option>
+                    <option th:each="postalCode : ${availablePostalCodes}" th:value="${postalCode}" th:text="${postalCode}"></option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="visually-hidden" for="street">Preference</label>
+                <select required class="form-select" id="street" th:field="*{street}">
+                    <option value="">Street</option>
+                    <option th:each="street : ${availableStreets}" th:value="${street}" th:text="${street}"></option>
+                </select>
+            </div>
+            <div class="col-auto" id="col-auto-submit">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
     </div>
+</div>
 </body>
 
 </html>

@@ -32,8 +32,8 @@ body {
     border-radius: 30px;
     position: absolute;
     padding: 15px;
-    max-width: 620px;
-    width: 100%;
+    width: auto;
+    min-width: 70vw;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -41,6 +41,7 @@ body {
 
 #searchBar {
     display: flex;
+    width: 100%;
     align-items: center;
 }
 
@@ -49,8 +50,12 @@ body {
 }
 
 #searchBar .col-auto .btn-primary {
-    margin-left: 35px;
     border-radius: 30px;
+}
+
+#col-auto-submit {
+    position: absolute;
+    right: 8px;
 }
 
 #containerLeft {

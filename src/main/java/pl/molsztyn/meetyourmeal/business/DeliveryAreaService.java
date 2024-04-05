@@ -2,10 +2,12 @@ package pl.molsztyn.meetyourmeal.business;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.molsztyn.meetyourmeal.api.dto.DeliveryAreaDTO;
 import pl.molsztyn.meetyourmeal.business.dao.DeliveryAreaDAO;
 import pl.molsztyn.meetyourmeal.domain.DeliveryArea;
 import pl.molsztyn.meetyourmeal.domain.DeliveryAreaAddRequest;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,5 +26,9 @@ public class DeliveryAreaService {
         );
 
         return deliveryAreaOpt;
+    }
+
+    public List<DeliveryArea> findAll() {
+        return deliveryAreaDAO.findAll();
     }
 }
