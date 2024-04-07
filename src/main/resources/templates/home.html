@@ -9,49 +9,48 @@
 </head>
 
 <body>
-<div layout:fragment="contentHero">
-    <h1>Let's look for some restaurants near You!</h1>
-    <div id="containerSearchBar">
-        <form id="searchBar"
-              class="row gy-2 gx-3 align-items-center"
-              action="#"
-              th:action="@{/search-for-restaurants}"
-              th:object="${deliveryAreaDTO}"
-              method="POST">
-            <div class="col-auto">
-                <label class="visually-hidden" for="country">Preference</label>
-                <select required class="form-select" id="country" th:field="*{country}">
-                    <option value="">Country</option>
-                    <option th:each="country : ${availableCountries}" th:value="${country}" th:text="${country}"></option>
-                </select>
-            </div>
-            <div class="col-auto">
-                <label class="visually-hidden" for="city">Preference</label>
-                <select required class="form-select" id="city" th:field="*{city}">
-                    <option value="">City</option>
-                    <option th:each="city : ${availableCities}" th:value="${city}" th:text="${city}"></option>
-                </select>
-            </div>
-            <div class="col-auto">
-                <label class="visually-hidden" for="postalCode">Preference</label>
-                <select required class="form-select" id="postalCode" th:field="*{postalCode}">
-                    <option value="">Postal code</option>
-                    <option th:each="postalCode : ${availablePostalCodes}" th:value="${postalCode}" th:text="${postalCode}"></option>
-                </select>
-            </div>
-            <div class="col-auto">
-                <label class="visually-hidden" for="street">Preference</label>
-                <select required class="form-select" id="street" th:field="*{street}">
-                    <option value="">Street</option>
-                    <option th:each="street : ${availableStreets}" th:value="${street}" th:text="${street}"></option>
-                </select>
-            </div>
-            <div class="col-auto" id="col-auto-submit">
-                <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-        </form>
+
+    <div layout:fragment="contentHero">
+        <h1>Let's look for some restaurants near You!</h1>
+        <div id="containerSearchBar">
+            <form id="searchBar"
+                  class="row gy-2 gx-3 align-items-center"
+                  action="#"
+                  th:action="@{/search-for-restaurants}"
+                  th:object="${deliveryAreaDTO}"
+                  method="POST">
+                <div class="col-auto">
+                    <label class="visually-hidden" for="country">Country</label>
+                    <select required class="form-select" id="country" th:field="*{country}">
+                        <option value="">Country</option>
+                        <option th:each="country : ${availableCountries}" th:value="${country}" th:text="${country}"></option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="visually-hidden" for="city">City</label>
+                    <select required class="form-select" id="city" th:field="*{city}">
+                        <option value="">City</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="visually-hidden" for="postalCode">Postal code</label>
+                    <select required class="form-select" id="postalCode" th:field="*{postalCode}">
+                        <option value="">Postal code</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="visually-hidden" for="street">Street</label>
+                    <select required class="form-select" id="street" th:field="*{street}">
+                        <option value="">Street</option>
+                    </select>
+                </div>
+                <div class="col-auto" id="col-auto-submit">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+
 </body>
 
 </html>

@@ -33,6 +33,10 @@ dependencies {
 	implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity6:${thymeleafExtrasSpringsecurity6Version}"
 	implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:${thymeleafLayoutDialectVersion}"
 
+	// jQuery
+	implementation "org.webjars:webjars-locator:${webjarsLocatorVersion}"
+	implementation "org.webjars:jquery:${jqueryVersion}"
+
 	// db
 	implementation 'org.flywaydb:flyway-core'
 	runtimeOnly 'org.postgresql:postgresql'

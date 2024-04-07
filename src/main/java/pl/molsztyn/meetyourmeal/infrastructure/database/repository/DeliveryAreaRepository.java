@@ -2,14 +2,16 @@ package pl.molsztyn.meetyourmeal.infrastructure.database.repository;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
-import pl.molsztyn.meetyourmeal.api.dto.DeliveryAreaDTO;
 import pl.molsztyn.meetyourmeal.business.dao.DeliveryAreaDAO;
 import pl.molsztyn.meetyourmeal.domain.DeliveryArea;
+import pl.molsztyn.meetyourmeal.infrastructure.database.entity.DeliveryAreaEntity;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.jpa.DeliveryAreaJpaRepository;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.mapper.DeliveryAreaEntityMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
@@ -39,5 +41,38 @@ public class DeliveryAreaRepository implements DeliveryAreaDAO {
         return deliveryAreaJpaRepository.findAll().stream()
                 .map(deliveryAreaEntityMapper::mapFromEntity)
                 .toList();
+    }
+
+    @Override
+    public Set<String> findCitiesByCountry(String country) {
+        Set<DeliveryAreaEntity> citiesByCountry = deliveryAreaJpaRepository.findCitiesByCountry(country);
+
+        return citiesByCountry.stream()
+                .map(deliveryAreaEntityMapper::mapFromEntity)
+                .map(DeliveryArea::getCity)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<String> findPostalCodesByCountryAndCity(String country, String city) {
+        var postalCodesByCountryAndCity = deliveryAreaJpaRepository.findPostalCodesByCountryAndCity(country, city);
+
+        return postalCodesByCountryAndCity.stream()
+                .map(deliveryAreaEntityMapper::mapFromEntity)
+                .map(DeliveryArea::getPostalCode)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<String> findStreetsByCountryAndCityAndPostalCode(String country, String city, String postalCode) {
+        var streetsByCountryAndCityAndPostalCode = deliveryAreaJpaRepository.findStreetsByCountryAndCityAndPostalCode(
+                country,
+                city,
+                postalCode);
+
+        return streetsByCountryAndCityAndPostalCode.stream()
+                .map(deliveryAreaEntityMapper::mapFromEntity)
+                .map(DeliveryArea::getStreet)
+                .collect(Collectors.toSet());
     }
 }
