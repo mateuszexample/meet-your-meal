@@ -3,13 +3,23 @@ package pl.molsztyn.meetyourmeal.api.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import pl.molsztyn.meetyourmeal.api.dto.DeliveryAreaDTO;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import pl.molsztyn.meetyourmeal.api.dto.DeliveryAreaRequestDTO;
+import pl.molsztyn.meetyourmeal.api.dto.RestaurantDTO;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.DeliveryAreaMapper;
+import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
 import pl.molsztyn.meetyourmeal.business.DeliveryAreaService;
+import pl.molsztyn.meetyourmeal.business.RestaurantService;
 import pl.molsztyn.meetyourmeal.domain.DeliveryArea;
+import pl.molsztyn.meetyourmeal.domain.DeliveryAreaRequest;
+import pl.molsztyn.meetyourmeal.domain.Restaurant;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -23,14 +33,16 @@ public class HomeController {
     static final String HOME_SEARCH_FOR_RESTAURANTS = "/search-for-restaurants";
 
     private final DeliveryAreaService deliveryAreaService;
+    private final RestaurantService restaurantService;
 
     private final DeliveryAreaMapper deliveryAreaMapper;
+    private final RestaurantMapper restaurantMapper;
 
     @RequestMapping(value = HOME, method = RequestMethod.GET)
     public String home(Model model) {
 
         model.addAttribute("availableCountries", getAvailableCountries());
-        model.addAttribute("deliveryAreaDTO", new DeliveryAreaDTO());
+        model.addAttribute("deliveryAreaRequestDTO", new DeliveryAreaRequestDTO());
 
         return "home";
     }
@@ -40,16 +52,27 @@ public class HomeController {
                 .map(DeliveryArea::getCountry)
                 .collect(Collectors.toCollection(() -> new TreeSet<String>(Comparator.naturalOrder())));
     }
+
+    @PostMapping(HOME_SEARCH_FOR_RESTAURANTS)
+    public String searchForRestaurantsNearYou(
+            @ModelAttribute("deliveryAreaRequestDTO") DeliveryAreaRequestDTO deliveryAreaRequestDTO,
+            ModelMap modelMap
+    ) {
+
+        DeliveryAreaRequest deliveryAreaRequest = deliveryAreaMapper.mapFromDTO(deliveryAreaRequestDTO);
+        Integer deliveryAreaId = deliveryAreaService.findDeliveryAreaId(deliveryAreaRequest);
+
+        List<Restaurant> restaurantList = restaurantService.getRestaurantsByDeliveryAreaId(deliveryAreaId);
+
+        List<RestaurantDTO> restaurantDTOList = restaurantList.stream()
+                .map(restaurantMapper::mapToDTO)
+                .toList();
+
+        modelMap.addAttribute("restaurantDTOs", restaurantDTOList);
+
+        return "restaurants_near_you";
+    }
+
+
 }
-
-//    @PostMapping(HOME_SEARCH_FOR_RESTAURANTS)
-//    public String searchForRestaurantsNearYou(
-//            @ModelAttribute("deliveryAreaDTO") DeliveryAreaDTO deliveryAreaDTO,
-//            ModelMap modelMap
-//    ) {
-//        modelMap.addAllAttributes(prepareAvailableCountriesToChoose());
-//        return "redirect:/";
-
-//    }
-
 

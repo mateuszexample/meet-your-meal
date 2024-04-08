@@ -8,6 +8,8 @@ import pl.molsztyn.meetyourmeal.infrastructure.database.entity.RestaurantEntity;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.jpa.RestaurantJpaRepository;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.mapper.RestaurantEntityMapper;
 
+import java.util.List;
+
 @Repository
 @AllArgsConstructor
 public class RestaurantRepository implements RestaurantDAO {
@@ -20,6 +22,15 @@ public class RestaurantRepository implements RestaurantDAO {
     public void updateRestaurant(Restaurant restaurant) {
         RestaurantEntity restaurantToSave = restaurantEntityMapper.mapToEntity(restaurant);
         RestaurantEntity restaurantSaved = restaurantJpaRepository.saveAndFlush(restaurantToSave);
+    }
+
+    @Override
+    public List<Restaurant> findRestaurantsByDeliveryAreaId(Integer deliveryAreaId) {
+        List<RestaurantEntity> restaurantEntityList = restaurantJpaRepository.findByDeliveryAreasDeliveryAreaId(deliveryAreaId);
+
+        return restaurantEntityList.stream()
+                .map(restaurantEntityMapper::mapFromEntity)
+                .toList();
     }
 
 }

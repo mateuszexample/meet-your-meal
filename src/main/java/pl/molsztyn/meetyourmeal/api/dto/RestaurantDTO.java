@@ -13,10 +13,4 @@ public class RestaurantDTO {
 
     private String name;
 
-    private String restaurantCountry;
-    private String restaurantCity;
-    private String restaurantPostalCode;
-    private String restaurantStreet;
-    private String restaurantBuildingNumber;
-    private String restaurantUnitNumber;
 }

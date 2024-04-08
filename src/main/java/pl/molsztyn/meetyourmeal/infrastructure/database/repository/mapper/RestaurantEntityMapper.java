@@ -12,6 +12,7 @@ public interface RestaurantEntityMapper {
     RestaurantEntity mapToEntity(Restaurant restaurant);
 
     // CREATING RESTAURANT SAVING RESTAURANT OWNER
-    @Mapping(target = "restaurantOwner", ignore = true)
+    @Mapping(target = "restaurantOwner.restaurant", ignore = true)
+    @Mapping(target = "address.restaurant", ignore = true)
     Restaurant mapFromEntity(RestaurantEntity restaurantEntity);
 }

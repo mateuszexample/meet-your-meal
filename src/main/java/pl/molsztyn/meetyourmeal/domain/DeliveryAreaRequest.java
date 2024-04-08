@@ -7,7 +7,7 @@ import lombok.With;
 @With
 @Value
 @Builder
-public class DeliveryAreaAddRequest {
+public class DeliveryAreaRequest {
 
     String country;
     String city;

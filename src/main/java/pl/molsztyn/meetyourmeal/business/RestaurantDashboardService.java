@@ -65,29 +65,29 @@ public class RestaurantDashboardService {
         return restaurantOwnerService.findRestaurantOwner(userId);
     }
 
-    public void addDeliveryArea(DeliveryAreaAddRequest deliveryAreaAddRequest, Authentication authentication) {
+    public void addDeliveryArea(DeliveryAreaRequest deliveryAreaRequest, Authentication authentication) {
         RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
         Restaurant restaurant = restaurantOwner.getRestaurant();
-//        DeliveryArea deliveryArea = buildDeliveryArea(deliveryAreaAddRequest);
-        Optional<DeliveryArea> deliveryAreaOpt = deliveryAreaService.findDeliveryArea(deliveryAreaAddRequest);
-        DeliveryArea deliveryArea = buildOrGetDeliveryArea(deliveryAreaAddRequest, deliveryAreaOpt);
+        Optional<DeliveryArea> deliveryAreaOpt = deliveryAreaService.findDeliveryArea(deliveryAreaRequest);
+        DeliveryArea deliveryArea = buildOrGetDeliveryArea(deliveryAreaRequest, deliveryAreaOpt);
         Set<DeliveryArea> deliveryAreas = restaurant.getDeliveryAreas();
         deliveryAreas.add(deliveryArea);
         restaurantService.updateRestaurant(restaurant.withDeliveryAreas(deliveryAreas));
     }
 
     private DeliveryArea buildOrGetDeliveryArea(
-            DeliveryAreaAddRequest deliveryAreaAddRequest,
-            Optional<DeliveryArea> deliveryAreaOpt) {
-        return deliveryAreaOpt.orElseGet(() -> buildDeliveryArea(deliveryAreaAddRequest));
+            DeliveryAreaRequest deliveryAreaRequest,
+            Optional<DeliveryArea> deliveryAreaOpt
+    ) {
+        return deliveryAreaOpt.orElseGet(() -> buildDeliveryArea(deliveryAreaRequest));
     }
 
-    private DeliveryArea buildDeliveryArea(DeliveryAreaAddRequest deliveryAreaAddRequest) {
+    private DeliveryArea buildDeliveryArea(DeliveryAreaRequest deliveryAreaRequest) {
         return DeliveryArea.builder()
-                .country(deliveryAreaAddRequest.getCountry())
-                .city(deliveryAreaAddRequest.getCity())
-                .postalCode(deliveryAreaAddRequest.getPostalCode())
-                .street(deliveryAreaAddRequest.getStreet())
+                .country(deliveryAreaRequest.getCountry())
+                .city(deliveryAreaRequest.getCity())
+                .postalCode(deliveryAreaRequest.getPostalCode())
+                .street(deliveryAreaRequest.getStreet())
                 .build();
     }
 
@@ -99,7 +99,7 @@ public class RestaurantDashboardService {
                 .filter(deliveryArea -> id.equals(deliveryArea.getDeliveryAreaId()))
                 .findFirst();
 
-        if(deliveryAreaToDelete.isEmpty()) {
+        if (deliveryAreaToDelete.isEmpty()) {
             throw new NotFoundException("Could not find delivery area by id: [%s]".formatted(id));
         }
         deliveryAreas.remove(deliveryAreaToDelete.get());

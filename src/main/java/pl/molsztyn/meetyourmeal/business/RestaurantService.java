@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import pl.molsztyn.meetyourmeal.business.dao.RestaurantDAO;
 import pl.molsztyn.meetyourmeal.domain.Restaurant;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class RestaurantService {
@@ -15,4 +17,7 @@ public class RestaurantService {
         restaurantDAO.updateRestaurant(restaurant);
     }
 
+    public List<Restaurant> getRestaurantsByDeliveryAreaId(Integer deliveryAreaId) {
+        return restaurantDAO.findRestaurantsByDeliveryAreaId(deliveryAreaId);
+    }
 }

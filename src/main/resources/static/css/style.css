@@ -58,6 +58,31 @@ body {
     right: 8px;
 }
 
+
+
+#containerRestaurants {
+    display: block;
+    position: absolute;
+    width: auto;
+    max-width: 70vw;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+#containerRestaurants h2 {
+    color: white;
+    text-align: center;
+    margin: 20px;
+}
+
+#restaurantCard .img-fluid {
+    max-height: 200px;
+    width: auto;
+}
+
+
+
+
 #containerLeft {
     float: left;
     background-color: white;

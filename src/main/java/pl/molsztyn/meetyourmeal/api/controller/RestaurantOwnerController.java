@@ -5,12 +5,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.molsztyn.meetyourmeal.api.dto.DeliveryAreaAddRequestDTO;
+import pl.molsztyn.meetyourmeal.api.dto.DeliveryAreaRequestDTO;
 import pl.molsztyn.meetyourmeal.api.dto.RestaurantCreateRequestDTO;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.DeliveryAreaMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
 import pl.molsztyn.meetyourmeal.business.RestaurantDashboardService;
-import pl.molsztyn.meetyourmeal.domain.DeliveryAreaAddRequest;
+import pl.molsztyn.meetyourmeal.domain.DeliveryAreaRequest;
 import pl.molsztyn.meetyourmeal.domain.RestaurantCreateRequest;
 
 import java.util.stream.Collectors;
@@ -68,16 +68,16 @@ public class RestaurantOwnerController {
 
     @GetMapping(value = OWNER_DELIVERY_AREAS_ADD)
     public String showAddFormDeliveryArea(Model model) {
-        model.addAttribute("deliveryAreaAddRequestDTO", new DeliveryAreaAddRequestDTO());
+        model.addAttribute("deliveryAreaRequestDTO", new DeliveryAreaRequestDTO());
         return "owner_dashboard#delivery_areas_add_form";
     }
 
     @PostMapping(OWNER_DELIVERY_AREAS_ADD)
     public String addDeliveryArea(
-            @ModelAttribute("deliveryAreaDTOs") DeliveryAreaAddRequestDTO deliveryAreaAddRequestDTO,
+            @ModelAttribute("deliveryAreaDTOs") DeliveryAreaRequestDTO deliveryAreaRequestDTO,
             Authentication authentication
     ) {
-        DeliveryAreaAddRequest deliveryArea = deliveryAreaMapper.mapFromDTO(deliveryAreaAddRequestDTO);
+        DeliveryAreaRequest deliveryArea = deliveryAreaMapper.mapFromDTO(deliveryAreaRequestDTO);
         restaurantDashboardService.addDeliveryArea(deliveryArea, authentication);
 
         return "redirect:/owner-dashboard/delivery-areas";

@@ -16,7 +16,7 @@
 
                 <h1 class="mb-4 text-center">Add delivery area</h1>
 
-                <form action="#" th:action="@{/owner-dashboard/delivery-areas/add}" method="POST" th:object="${deliveryAreaAddRequestDTO}">
+                <form action="#" th:action="@{/owner-dashboard/delivery-areas/add}" method="POST" th:object="${deliveryAreaRequestDTO}">
                     <!-- Text input -->
                     <div class="form-outline mb-4">
                         <input type="text" id="country" th:field="*{country}" class="form-control" placeholder="Country"/>
