@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface RestaurantJpaRepository extends JpaRepository<RestaurantEntity, Integer> {
     List<RestaurantEntity> findByDeliveryAreasDeliveryAreaId(Integer deliveryAreaId);
+
+    RestaurantEntity findRestaurantByName(String restaurantName);
 }

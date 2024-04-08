@@ -2,6 +2,7 @@ package pl.molsztyn.meetyourmeal.business;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.molsztyn.meetyourmeal.api.dto.RestaurantDTO;
 import pl.molsztyn.meetyourmeal.business.dao.RestaurantDAO;
 import pl.molsztyn.meetyourmeal.domain.Restaurant;
 
@@ -19,5 +20,9 @@ public class RestaurantService {
 
     public List<Restaurant> getRestaurantsByDeliveryAreaId(Integer deliveryAreaId) {
         return restaurantDAO.findRestaurantsByDeliveryAreaId(deliveryAreaId);
+    }
+
+    public Restaurant getRestaurantByName(String restaurantName) {
+        return restaurantDAO.findRestaurantByName(restaurantName);
     }
 }

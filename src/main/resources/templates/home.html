@@ -18,7 +18,7 @@
                   action="#"
                   th:action="@{/search-for-restaurants}"
                   th:object="${deliveryAreaRequestDTO}"
-                  method="POST">
+                  method="GET">
                 <div class="col-auto">
                     <label class="visually-hidden" for="country">Country</label>
                     <select required class="form-select" id="country" th:field="*{country}">

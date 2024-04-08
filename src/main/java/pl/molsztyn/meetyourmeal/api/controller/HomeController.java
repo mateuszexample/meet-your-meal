@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.molsztyn.meetyourmeal.api.dto.DeliveryAreaRequestDTO;
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     static final String HOME = "/";
-    static final String DELIVERY_AREA = "/delivery-area";
     static final String HOME_SEARCH_FOR_RESTAURANTS = "/search-for-restaurants";
 
     private final DeliveryAreaService deliveryAreaService;
@@ -53,7 +51,7 @@ public class HomeController {
                 .collect(Collectors.toCollection(() -> new TreeSet<String>(Comparator.naturalOrder())));
     }
 
-    @PostMapping(HOME_SEARCH_FOR_RESTAURANTS)
+    @RequestMapping(value = HOME_SEARCH_FOR_RESTAURANTS, method = RequestMethod.GET)
     public String searchForRestaurantsNearYou(
             @ModelAttribute("deliveryAreaRequestDTO") DeliveryAreaRequestDTO deliveryAreaRequestDTO,
             ModelMap modelMap

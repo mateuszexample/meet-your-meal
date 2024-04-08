@@ -33,4 +33,10 @@ public class RestaurantRepository implements RestaurantDAO {
                 .toList();
     }
 
+    @Override
+    public Restaurant findRestaurantByName(String restaurantName) {
+        RestaurantEntity restaurantEntity = restaurantJpaRepository.findRestaurantByName(restaurantName);
+
+        return restaurantEntityMapper.mapFromEntity(restaurantEntity);
+    }
 }
