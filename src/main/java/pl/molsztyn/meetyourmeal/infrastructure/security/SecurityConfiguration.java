@@ -41,8 +41,8 @@ public class SecurityConfiguration {
     @ConditionalOnProperty(value = "spring.security.enabled", havingValue = "true", matchIfMissing = true)
     SecurityFilterChain securityEnabled(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-//                .csrf()
-//                .disable()
+                .csrf()
+                .disable()
                 .authorizeHttpRequests()
 //                .requestMatchers("/**").permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()

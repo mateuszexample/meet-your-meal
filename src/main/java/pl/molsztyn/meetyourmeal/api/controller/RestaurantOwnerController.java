@@ -6,11 +6,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.molsztyn.meetyourmeal.api.dto.DeliveryAreaRequestDTO;
+import pl.molsztyn.meetyourmeal.api.dto.FoodCategoryRequestDTO;
 import pl.molsztyn.meetyourmeal.api.dto.RestaurantCreateRequestDTO;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.DeliveryAreaMapper;
+import pl.molsztyn.meetyourmeal.api.dto.mapper.FoodMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
 import pl.molsztyn.meetyourmeal.business.RestaurantDashboardService;
 import pl.molsztyn.meetyourmeal.domain.DeliveryAreaRequest;
+import pl.molsztyn.meetyourmeal.domain.FoodCategoryRequest;
 import pl.molsztyn.meetyourmeal.domain.RestaurantCreateRequest;
 
 import java.util.stream.Collectors;
@@ -24,11 +27,15 @@ public class RestaurantOwnerController {
     private static final String OWNER_DELIVERY_AREAS = "/owner-dashboard/delivery-areas";
     private static final String OWNER_DELIVERY_AREAS_ADD = "/owner-dashboard/delivery-areas/add";
     private static final String OWNER_DELIVERY_AREAS_DELETE = "/owner-dashboard/delivery-areas/delete/{id}";
+    private static final String OWNER_FOOD_CATEGORIES = "/owner-dashboard/food-categories";
+    private static final String OWNER_FOOD_CATEGORIES_ADD = "/owner-dashboard/food-categories/add";
+    private static final String OWNER_FOOD_CATEGORIES_DELETE = "/owner-dashboard/food-categories/delete/{category}";
 
     private final RestaurantDashboardService restaurantDashboardService;
 
     private final RestaurantMapper restaurantMapper;
     private final DeliveryAreaMapper deliveryAreaMapper;
+    private final FoodMapper foodMapper;
 
 
     @GetMapping(value = OWNER)
@@ -56,7 +63,7 @@ public class RestaurantOwnerController {
 
     @GetMapping(value = OWNER_DELIVERY_AREAS)
     public String ownerDeliveryAreasPage(Model model, Authentication authentication) {
-        var deliveryAreas = restaurantDashboardService.deliveryAreas(authentication).stream()
+        var deliveryAreas = restaurantDashboardService.getDeliveryAreas(authentication).stream()
                 .map(deliveryAreaMapper::mapToDTO)
                 .collect(Collectors.toSet());
 
@@ -64,7 +71,6 @@ public class RestaurantOwnerController {
 
         return "owner_dashboard#delivery_areas";
     }
-
 
     @GetMapping(value = OWNER_DELIVERY_AREAS_ADD)
     public String showAddFormDeliveryArea(Model model) {
@@ -74,7 +80,7 @@ public class RestaurantOwnerController {
 
     @PostMapping(OWNER_DELIVERY_AREAS_ADD)
     public String addDeliveryArea(
-            @ModelAttribute("deliveryAreaDTOs") DeliveryAreaRequestDTO deliveryAreaRequestDTO,
+            @ModelAttribute("deliveryAreaRequestDTO") DeliveryAreaRequestDTO deliveryAreaRequestDTO,
             Authentication authentication
     ) {
         DeliveryAreaRequest deliveryArea = deliveryAreaMapper.mapFromDTO(deliveryAreaRequestDTO);
@@ -93,4 +99,31 @@ public class RestaurantOwnerController {
         return "redirect:/owner-dashboard/delivery-areas";
     }
 
+    @GetMapping(value = OWNER_FOOD_CATEGORIES)
+    public String ownerFoodCategoryPage(Model model, Authentication authentication) {
+        var foodCategories = restaurantDashboardService.getFoodCategories(authentication).stream()
+                .map(foodMapper::mapToDTO)
+                .collect(Collectors.toSet());
+
+        model.addAttribute("foodCategoryDTOs", foodCategories);
+
+        return "owner_dashboard#food_categories";
+    }
+
+    @GetMapping(value = OWNER_FOOD_CATEGORIES_ADD)
+    public String showAddFormFoodCategory(Model model) {
+        model.addAttribute("foodCategoryRequestDTO", new FoodCategoryRequestDTO());
+        return "owner_dashboard#food_categories_add_form";
+    }
+
+    @PostMapping(OWNER_FOOD_CATEGORIES_ADD)
+    public String addFoodCategory(
+            @ModelAttribute("foodCategoryRequestDTO") FoodCategoryRequestDTO foodCategoryRequestDTO,
+            Authentication authentication
+    ) {
+        FoodCategoryRequest foodCategoryRequest = foodMapper.mapFromDTO(foodCategoryRequestDTO);
+        restaurantDashboardService.addFoodCategory(foodCategoryRequest, authentication);
+
+        return "redirect:/owner-dashboard/food-categories";
+    }
 }

@@ -20,14 +20,18 @@ CREATE TABLE restaurant_food_category
 
 CREATE TABLE food
 (
-    food_id             SERIAL      NOT NULL,
-    name                VARCHAR(32) NOT NULL,
-    price               VARCHAR(32) NOT NULL,
-    description         VARCHAR(32) NOT NULL,
-    food_category_id    INT         NOT NULL,
-    image_url           VARCHAR(32),
+    food_id             SERIAL          NOT NULL,
+    name                VARCHAR(32)     NOT NULL,
+    price               NUMERIC(19, 2)  NOT NULL,
+    description         VARCHAR(64)     NOT NULL,
+    image_url           VARCHAR(255),
+    food_category_id    INT             NOT NULL,
+    restaurant_id       INT             NOT NULL,
     PRIMARY KEY (food_id),
     CONSTRAINT fk_food_food_category
         FOREIGN KEY (food_category_id)
-            REFERENCES food_category (food_category_id)
+            REFERENCES food_category (food_category_id),
+    CONSTRAINT fk_food_restaurant
+        FOREIGN KEY (restaurant_id)
+            REFERENCES restaurant (restaurant_id)
 );

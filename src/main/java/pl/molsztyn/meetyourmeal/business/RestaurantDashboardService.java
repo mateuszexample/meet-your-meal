@@ -19,6 +19,7 @@ public class RestaurantDashboardService {
     private final RestaurantOwnerService restaurantOwnerService;
     private final RestaurantService restaurantService;
     private final DeliveryAreaService deliveryAreaService;
+    private final FoodService foodService;
 
     @Transactional
     public void create(RestaurantCreateRequest request, Authentication authentication) {
@@ -54,7 +55,7 @@ public class RestaurantDashboardService {
                 .build();
     }
 
-    public Set<DeliveryArea> deliveryAreas(Authentication authentication) {
+    public Set<DeliveryArea> getDeliveryAreas(Authentication authentication) {
         RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
         return restaurantOwner.getRestaurant().getDeliveryAreas();
     }
@@ -69,17 +70,10 @@ public class RestaurantDashboardService {
         RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
         Restaurant restaurant = restaurantOwner.getRestaurant();
         Optional<DeliveryArea> deliveryAreaOpt = deliveryAreaService.findDeliveryArea(deliveryAreaRequest);
-        DeliveryArea deliveryArea = buildOrGetDeliveryArea(deliveryAreaRequest, deliveryAreaOpt);
+        DeliveryArea deliveryArea = deliveryAreaOpt.orElseGet(() -> buildDeliveryArea(deliveryAreaRequest));
         Set<DeliveryArea> deliveryAreas = restaurant.getDeliveryAreas();
         deliveryAreas.add(deliveryArea);
         restaurantService.updateRestaurant(restaurant.withDeliveryAreas(deliveryAreas));
-    }
-
-    private DeliveryArea buildOrGetDeliveryArea(
-            DeliveryAreaRequest deliveryAreaRequest,
-            Optional<DeliveryArea> deliveryAreaOpt
-    ) {
-        return deliveryAreaOpt.orElseGet(() -> buildDeliveryArea(deliveryAreaRequest));
     }
 
     private DeliveryArea buildDeliveryArea(DeliveryAreaRequest deliveryAreaRequest) {
@@ -105,5 +99,26 @@ public class RestaurantDashboardService {
         deliveryAreas.remove(deliveryAreaToDelete.get());
 
         restaurantService.updateRestaurant(restaurant.withDeliveryAreas(deliveryAreas));
+    }
+
+    public Set<FoodCategory> getFoodCategories(Authentication authentication) {
+        RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
+        return restaurantOwner.getRestaurant().getFoodCategories();
+    }
+
+    public void addFoodCategory(FoodCategoryRequest foodCategoryRequest, Authentication authentication) {
+        RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
+        Restaurant restaurant = restaurantOwner.getRestaurant();
+        Optional<FoodCategory> foodCategoryOpt = foodService.findFoodCategory(foodCategoryRequest);
+        FoodCategory foodCategory = foodCategoryOpt.orElseGet(() -> buildFoodCategory(foodCategoryRequest));
+        Set<FoodCategory> foodCategories = restaurant.getFoodCategories();
+        foodCategories.add(foodCategory);
+        restaurantService.updateRestaurant(restaurant.withFoodCategories(foodCategories));
+    }
+
+    private FoodCategory buildFoodCategory(FoodCategoryRequest foodCategoryRequest) {
+        return FoodCategory.builder()
+                .category(foodCategoryRequest.getCategory())
+                .build();
     }
 }

@@ -36,6 +36,17 @@ public class RestaurantEntity {
     )
     private Set<DeliveryAreaEntity> deliveryAreas;
 
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "restaurant_food_category",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "food_category_id")
+    )
+    private Set<FoodCategoryEntity> foodCategories;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "restaurant")
+    private Set<FoodEntity> foods;
+
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private RestaurantOwnerEntity restaurantOwner;
 }

@@ -7,4 +7,7 @@ DROP TABLE IF EXISTS address CASCADE;
 DROP TABLE IF EXISTS meet_your_meal_user_role CASCADE;
 DROP TABLE IF EXISTS meet_your_meal_user CASCADE;
 DROP TABLE IF EXISTS meet_your_meal_role CASCADE;
+DROP TABLE IF EXISTS food_category CASCADE;
+DROP TABLE IF EXISTS restaurant_food_category CASCADE;
+DROP TABLE IF EXISTS food CASCADE;
 DROP TABLE IF EXISTS flyway_schema_history CASCADE;
