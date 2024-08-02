@@ -121,4 +121,20 @@ public class RestaurantDashboardService {
                 .category(foodCategoryRequest.getCategory())
                 .build();
     }
+
+    public void deleteFoodCategory(Integer id, Authentication authentication) {
+        RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
+        Restaurant restaurant = restaurantOwner.getRestaurant();
+        Set<FoodCategory> foodCategories = restaurant.getFoodCategories();
+        Optional<FoodCategory> foodCategoryToDelete = foodCategories.stream()
+                .filter(foodCategory -> id.equals(foodCategory.getFoodCategoryId()))
+                .findFirst();
+
+        if (foodCategoryToDelete.isEmpty()) {
+            throw new NotFoundException("Could not find food category by id: [%s]".formatted(id));
+        }
+        foodCategories.remove(foodCategoryToDelete.get());
+
+        restaurantService.updateRestaurant(restaurant.withFoodCategories(foodCategories));
+    }
 }

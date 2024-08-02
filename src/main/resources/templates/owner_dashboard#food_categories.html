@@ -33,7 +33,7 @@
                             <td th:text="${foodCategory.category}"></td>
                             <td>
                                 <form
-                                        th:action="@{/owner-dashboard/food-categories/delete/{category}(category=${foodCategory.category})}"
+                                        th:action="@{/owner-dashboard/food-categories/delete/{id}(id=${foodCategory.foodCategoryId})}"
                                         th:method="DELETE">
                                     <button class="btn" title="Delete" data-toggle="tooltip">
                                         <i class="material-icons">&#xE872;</i>

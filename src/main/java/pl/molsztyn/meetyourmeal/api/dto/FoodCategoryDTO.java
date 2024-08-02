@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FoodCategoryDTO {
 
+    private Integer foodCategoryId;
     private String category;
 }

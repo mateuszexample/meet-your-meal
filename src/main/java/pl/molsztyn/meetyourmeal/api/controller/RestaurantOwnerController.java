@@ -29,7 +29,7 @@ public class RestaurantOwnerController {
     private static final String OWNER_DELIVERY_AREAS_DELETE = "/owner-dashboard/delivery-areas/delete/{id}";
     private static final String OWNER_FOOD_CATEGORIES = "/owner-dashboard/food-categories";
     private static final String OWNER_FOOD_CATEGORIES_ADD = "/owner-dashboard/food-categories/add";
-    private static final String OWNER_FOOD_CATEGORIES_DELETE = "/owner-dashboard/food-categories/delete/{category}";
+    private static final String OWNER_FOOD_CATEGORIES_DELETE = "/owner-dashboard/food-categories/delete/{id}";
 
     private final RestaurantDashboardService restaurantDashboardService;
 
@@ -123,6 +123,16 @@ public class RestaurantOwnerController {
     ) {
         FoodCategoryRequest foodCategoryRequest = foodMapper.mapFromDTO(foodCategoryRequestDTO);
         restaurantDashboardService.addFoodCategory(foodCategoryRequest, authentication);
+
+        return "redirect:/owner-dashboard/food-categories";
+    }
+
+    @DeleteMapping(OWNER_FOOD_CATEGORIES_DELETE)
+    public String deleteFoodCategory(
+            @PathVariable Integer id,
+            Authentication authentication
+    ) {
+        restaurantDashboardService.deleteFoodCategory(id, authentication);
 
         return "redirect:/owner-dashboard/food-categories";
     }
