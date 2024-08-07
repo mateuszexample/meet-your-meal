@@ -24,11 +24,11 @@ public class FoodEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "price")
-    private BigDecimal price;
-
     @Column(name = "description")
     private String description;
+
+    @Column(name = "price")
+    private BigDecimal price;
 
     @Column(name = "image_url")
     private String image_url;

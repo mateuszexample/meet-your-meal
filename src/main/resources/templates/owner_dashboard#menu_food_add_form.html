@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layouts/owner_dashboard_layout}">
+
+<head>
+    <title>Meet your meal</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="card" style="border-radius: 1rem;">
+            <div class="card-body p-4">
+
+                <h1 class="mb-4 text-center">Add food to menu</h1>
+
+                <form action="#" th:action="@{/owner-dashboard/menu/add}" method="POST" th:object="${foodRequestDTO}">
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <label class="visually-hidden" for="category">Category</label>
+                        <select required class="form-select" id="category" th:field="*{category}">
+                            <option value="">Category</option>
+                            <option th:each="availableCategory : ${availableFoodCategoryDTOs}" th:value="${availableCategory}" th:text="${availableCategory}"></option>
+                        </select>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Name"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="description" th:field="*{description}" class="form-control" placeholder="Description"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="price" th:field="*{price}" class="form-control" placeholder="Price"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="image_url" th:field="*{image_url}" class="form-control" placeholder="Image_url"/>
+                    </div>
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-secondary btn-rounded btn-block">Confirm</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

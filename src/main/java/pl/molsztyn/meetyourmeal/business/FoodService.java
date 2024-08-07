@@ -6,6 +6,7 @@ import pl.molsztyn.meetyourmeal.business.dao.FoodCategoryDAO;
 import pl.molsztyn.meetyourmeal.domain.FoodCategory;
 import pl.molsztyn.meetyourmeal.domain.FoodCategoryRequest;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,5 +17,9 @@ public class FoodService {
 
     public Optional<FoodCategory> findFoodCategory(FoodCategoryRequest foodCategoryRequest) {
         return foodCategoryDAO.findByCategory(foodCategoryRequest.getCategory());
+    }
+
+    public List<FoodCategory> findAll() {
+        return foodCategoryDAO.findAll();
     }
 }

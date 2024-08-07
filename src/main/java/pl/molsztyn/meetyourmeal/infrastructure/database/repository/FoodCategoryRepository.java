@@ -7,6 +7,7 @@ import pl.molsztyn.meetyourmeal.domain.FoodCategory;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.jpa.FoodCategoryJpaRepository;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.mapper.FoodCategoryEntityMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,5 +22,12 @@ public class FoodCategoryRepository implements FoodCategoryDAO {
     public Optional<FoodCategory> findByCategory(String category) {
         return foodCategoryJpaRepository.findByCategory(category)
                 .map(foodCategoryEntityMapper::mapFromEntity);
+    }
+
+    @Override
+    public List<FoodCategory> findAll() {
+        return foodCategoryJpaRepository.findAll().stream()
+                .map(foodCategoryEntityMapper::mapFromEntity)
+                .toList();
     }
 }

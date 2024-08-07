@@ -19,12 +19,15 @@ public class Restaurant {
     RestaurantOwner restaurantOwner;
     Set<DeliveryArea> deliveryAreas;
     Set<FoodCategory> foodCategories;
+    Set<Food> menu;
 
     public Set<DeliveryArea> getDeliveryAreas() {
         return Objects.isNull(deliveryAreas) ? new HashSet<>() : deliveryAreas;
     }
     public Set<FoodCategory> getFoodCategories() {
         return Objects.isNull(foodCategories) ? new HashSet<>() : foodCategories;
+    }  public Set<Food> getMenu() {
+        return Objects.isNull(menu) ? new HashSet<>() : menu;
     }
 }
 

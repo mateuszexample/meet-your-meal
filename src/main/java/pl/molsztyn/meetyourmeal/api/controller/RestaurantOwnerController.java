@@ -5,9 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.molsztyn.meetyourmeal.api.dto.DeliveryAreaRequestDTO;
-import pl.molsztyn.meetyourmeal.api.dto.FoodCategoryRequestDTO;
-import pl.molsztyn.meetyourmeal.api.dto.RestaurantCreateRequestDTO;
+import pl.molsztyn.meetyourmeal.api.dto.*;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.DeliveryAreaMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.FoodMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
@@ -16,6 +14,7 @@ import pl.molsztyn.meetyourmeal.domain.DeliveryAreaRequest;
 import pl.molsztyn.meetyourmeal.domain.FoodCategoryRequest;
 import pl.molsztyn.meetyourmeal.domain.RestaurantCreateRequest;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -30,6 +29,9 @@ public class RestaurantOwnerController {
     private static final String OWNER_FOOD_CATEGORIES = "/owner-dashboard/food-categories";
     private static final String OWNER_FOOD_CATEGORIES_ADD = "/owner-dashboard/food-categories/add";
     private static final String OWNER_FOOD_CATEGORIES_DELETE = "/owner-dashboard/food-categories/delete/{id}";
+    private static final String OWNER_MENU = "/owner-dashboard/menu";
+    private static final String OWNER_MENU_FOOD_ADD = "/owner-dashboard/menu/add";
+    private static final String OWNER_MENU_FOOD_DELETE = "/owner-dashboard/menu/delete/{id}";
 
     private final RestaurantDashboardService restaurantDashboardService;
 
@@ -136,4 +138,49 @@ public class RestaurantOwnerController {
 
         return "redirect:/owner-dashboard/food-categories";
     }
+    @GetMapping(value = OWNER_MENU)
+    public String ownerMenuPage(Model model, Authentication authentication) {
+        var menu = restaurantDashboardService.getMenu(authentication).stream()
+                .map(foodMapper::mapToDTO)
+                .collect(Collectors.toSet());
+
+        model.addAttribute("foodDTOs", menu);
+
+        return "owner_dashboard#menu";
+    }
+
+    @GetMapping(value = OWNER_MENU_FOOD_ADD)
+    public String showAddFormFood(Model model) {
+
+        List<String> availableFoodCategories = restaurantDashboardService.getAvailableFoodCategories().stream()
+                .map(foodMapper::mapToDTO)
+                .map(FoodCategoryDTO::getCategory)
+                .toList();
+
+        model.addAttribute("foodRequestDTO", new FoodRequestDTO());
+        model.addAttribute("availableFoodCategoryDTOs", availableFoodCategories);
+
+        return "owner_dashboard#menu_food_add_form";
+    }
+
+//    @PostMapping(OWNER_MENU_FOOD_ADD)
+//    public String addFood(
+//            @ModelAttribute("foodCategoryRequestDTO") FoodCategoryRequestDTO foodCategoryRequestDTO,
+//            Authentication authentication
+//    ) {
+//        FoodCategoryRequest foodCategoryRequest = foodMapper.mapFromDTO(foodCategoryRequestDTO);
+//        restaurantDashboardService.addFoodCategory(foodCategoryRequest, authentication);
+//
+//        return "redirect:/owner-dashboard/food-categories";
+//    }
+//
+//    @DeleteMapping(OWNER_MENU_FOOD_DELETE)
+//    public String deleteFood(
+//            @PathVariable Integer id,
+//            Authentication authentication
+//    ) {
+//        restaurantDashboardService.deleteFoodCategory(id, authentication);
+//
+//        return "redirect:/owner-dashboard/food-categories";
+//    }
 }

@@ -8,6 +8,7 @@ import pl.molsztyn.meetyourmeal.domain.*;
 import pl.molsztyn.meetyourmeal.domain.exception.NotFoundException;
 import pl.molsztyn.meetyourmeal.infrastructure.security.MeetYourMealUserDetailsService;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,9 +24,7 @@ public class RestaurantDashboardService {
 
     @Transactional
     public void create(RestaurantCreateRequest request, Authentication authentication) {
-        String username = authentication.getName();
-        Integer userId = meetYourMealUserDetailsService.getUserId(username);
-        RestaurantOwner restaurantOwner = restaurantOwnerService.findRestaurantOwner(userId);
+        RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
 
         Address address = buildAddress(request);
         Restaurant restaurant = buildRestaurant(request, address);
@@ -56,8 +55,7 @@ public class RestaurantDashboardService {
     }
 
     public Set<DeliveryArea> getDeliveryAreas(Authentication authentication) {
-        RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
-        return restaurantOwner.getRestaurant().getDeliveryAreas();
+        return getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant().getDeliveryAreas();
     }
 
     private RestaurantOwner getCurrentlyLoggedInRestaurantOwner(Authentication authentication) {
@@ -67,8 +65,7 @@ public class RestaurantDashboardService {
     }
 
     public void addDeliveryArea(DeliveryAreaRequest deliveryAreaRequest, Authentication authentication) {
-        RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
-        Restaurant restaurant = restaurantOwner.getRestaurant();
+        Restaurant restaurant = getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
         Optional<DeliveryArea> deliveryAreaOpt = deliveryAreaService.findDeliveryArea(deliveryAreaRequest);
         DeliveryArea deliveryArea = deliveryAreaOpt.orElseGet(() -> buildDeliveryArea(deliveryAreaRequest));
         Set<DeliveryArea> deliveryAreas = restaurant.getDeliveryAreas();
@@ -86,8 +83,7 @@ public class RestaurantDashboardService {
     }
 
     public void deleteDeliveryArea(final Integer id, Authentication authentication) {
-        RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
-        Restaurant restaurant = restaurantOwner.getRestaurant();
+        Restaurant restaurant = getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
         Set<DeliveryArea> deliveryAreas = restaurant.getDeliveryAreas();
         Optional<DeliveryArea> deliveryAreaToDelete = deliveryAreas.stream()
                 .filter(deliveryArea -> id.equals(deliveryArea.getDeliveryAreaId()))
@@ -102,13 +98,11 @@ public class RestaurantDashboardService {
     }
 
     public Set<FoodCategory> getFoodCategories(Authentication authentication) {
-        RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
-        return restaurantOwner.getRestaurant().getFoodCategories();
+        return getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant().getFoodCategories();
     }
 
     public void addFoodCategory(FoodCategoryRequest foodCategoryRequest, Authentication authentication) {
-        RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
-        Restaurant restaurant = restaurantOwner.getRestaurant();
+        Restaurant restaurant = getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
         Optional<FoodCategory> foodCategoryOpt = foodService.findFoodCategory(foodCategoryRequest);
         FoodCategory foodCategory = foodCategoryOpt.orElseGet(() -> buildFoodCategory(foodCategoryRequest));
         Set<FoodCategory> foodCategories = restaurant.getFoodCategories();
@@ -123,8 +117,7 @@ public class RestaurantDashboardService {
     }
 
     public void deleteFoodCategory(Integer id, Authentication authentication) {
-        RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
-        Restaurant restaurant = restaurantOwner.getRestaurant();
+        Restaurant restaurant = getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
         Set<FoodCategory> foodCategories = restaurant.getFoodCategories();
         Optional<FoodCategory> foodCategoryToDelete = foodCategories.stream()
                 .filter(foodCategory -> id.equals(foodCategory.getFoodCategoryId()))
@@ -136,5 +129,13 @@ public class RestaurantDashboardService {
         foodCategories.remove(foodCategoryToDelete.get());
 
         restaurantService.updateRestaurant(restaurant.withFoodCategories(foodCategories));
+    }
+
+    public Set<Food> getMenu(Authentication authentication) {
+        return getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant().getMenu();
+    }
+
+    public List<FoodCategory> getAvailableFoodCategories() {
+        return foodService.findAll();
     }
 }

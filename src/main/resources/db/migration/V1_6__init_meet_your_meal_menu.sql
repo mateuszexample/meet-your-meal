@@ -22,8 +22,8 @@ CREATE TABLE food
 (
     food_id             SERIAL          NOT NULL,
     name                VARCHAR(32)     NOT NULL,
-    price               NUMERIC(19, 2)  NOT NULL,
     description         VARCHAR(64)     NOT NULL,
+    price               NUMERIC(19, 2)  NOT NULL,
     image_url           VARCHAR(255),
     food_category_id    INT             NOT NULL,
     restaurant_id       INT             NOT NULL,

@@ -48,7 +48,7 @@ public class HomeController {
     private Set<String> getAvailableCountries() {
         return deliveryAreaService.findAll().stream()
                 .map(DeliveryArea::getCountry)
-                .collect(Collectors.toCollection(() -> new TreeSet<String>(Comparator.naturalOrder())));
+                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.naturalOrder())));
     }
 
     @RequestMapping(value = HOME_SEARCH_FOR_RESTAURANTS, method = RequestMethod.GET)
@@ -70,7 +70,5 @@ public class HomeController {
 
         return "restaurants_near_you";
     }
-
-
 }
 
