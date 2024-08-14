@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = "foodId")
+@EqualsAndHashCode(of = {"name", "description", "foodCategory"})
 @ToString(of = {"foodId", "name", "price", "description", "foodCategory"})
 @Builder
 @NoArgsConstructor

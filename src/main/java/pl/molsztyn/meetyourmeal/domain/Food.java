@@ -7,8 +7,8 @@ import java.math.BigDecimal;
 @With
 @Value
 @Builder
-@EqualsAndHashCode(of = {"name", "price", "description", "image_url"})
-@ToString(of = {"foodId", "name", "price", "description", "image_url"})
+@EqualsAndHashCode(of = {"name", "description", "foodCategory"})
+@ToString(of = {"foodId", "name", "price", "description"})
 public class Food {
 
     Integer foodId;
@@ -16,4 +16,6 @@ public class Food {
     BigDecimal price;
     String description;
     String image_url;
+    FoodCategory foodCategory;
+    Restaurant restaurant;
 }

@@ -12,6 +12,7 @@ import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
 import pl.molsztyn.meetyourmeal.business.RestaurantDashboardService;
 import pl.molsztyn.meetyourmeal.domain.DeliveryAreaRequest;
 import pl.molsztyn.meetyourmeal.domain.FoodCategoryRequest;
+import pl.molsztyn.meetyourmeal.domain.FoodRequest;
 import pl.molsztyn.meetyourmeal.domain.RestaurantCreateRequest;
 
 import java.util.List;
@@ -163,23 +164,23 @@ public class RestaurantOwnerController {
         return "owner_dashboard#menu_food_add_form";
     }
 
-//    @PostMapping(OWNER_MENU_FOOD_ADD)
-//    public String addFood(
-//            @ModelAttribute("foodCategoryRequestDTO") FoodCategoryRequestDTO foodCategoryRequestDTO,
-//            Authentication authentication
-//    ) {
-//        FoodCategoryRequest foodCategoryRequest = foodMapper.mapFromDTO(foodCategoryRequestDTO);
-//        restaurantDashboardService.addFoodCategory(foodCategoryRequest, authentication);
-//
-//        return "redirect:/owner-dashboard/food-categories";
-//    }
-//
+    @PostMapping(OWNER_MENU_FOOD_ADD)
+    public String addFood(
+            @ModelAttribute("foodRequestDTO") FoodRequestDTO foodRequestDTO,
+            Authentication authentication
+    ) {
+        FoodRequest foodRequest = foodMapper.mapFromDTO(foodRequestDTO);
+        restaurantDashboardService.addFood(foodRequest, authentication);
+
+        return "redirect:/owner-dashboard/menu";
+    }
+
 //    @DeleteMapping(OWNER_MENU_FOOD_DELETE)
 //    public String deleteFood(
 //            @PathVariable Integer id,
 //            Authentication authentication
 //    ) {
-//        restaurantDashboardService.deleteFoodCategory(id, authentication);
+//        restaurantDashboardService.deleteFood(id, authentication);
 //
 //        return "redirect:/owner-dashboard/food-categories";
 //    }

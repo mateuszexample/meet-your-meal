@@ -15,7 +15,7 @@ import java.util.List;
 public class RestaurantRepository implements RestaurantDAO {
 
     private final RestaurantJpaRepository restaurantJpaRepository;
-    
+
     private final RestaurantEntityMapper restaurantEntityMapper;
 
     @Override

@@ -2,9 +2,9 @@ package pl.molsztyn.meetyourmeal.business;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.molsztyn.meetyourmeal.business.dao.FoodCategoryDAO;
 import pl.molsztyn.meetyourmeal.domain.FoodCategory;
-import pl.molsztyn.meetyourmeal.domain.FoodCategoryRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,11 +15,14 @@ public class FoodService {
 
     private final FoodCategoryDAO foodCategoryDAO;
 
-    public Optional<FoodCategory> findFoodCategory(FoodCategoryRequest foodCategoryRequest) {
-        return foodCategoryDAO.findByCategory(foodCategoryRequest.getCategory());
+    @Transactional
+    public Optional<FoodCategory> findFoodCategory(String foodCategoryToFind) {
+        return foodCategoryDAO.findByCategory(foodCategoryToFind);
     }
 
+    @Transactional
     public List<FoodCategory> findAll() {
         return foodCategoryDAO.findAll();
     }
+
 }

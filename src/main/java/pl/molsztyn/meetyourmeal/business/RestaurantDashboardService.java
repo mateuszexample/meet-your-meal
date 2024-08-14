@@ -103,7 +103,8 @@ public class RestaurantDashboardService {
 
     public void addFoodCategory(FoodCategoryRequest foodCategoryRequest, Authentication authentication) {
         Restaurant restaurant = getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
-        Optional<FoodCategory> foodCategoryOpt = foodService.findFoodCategory(foodCategoryRequest);
+        String foodCategoryToFind = foodCategoryRequest.getCategory();
+        Optional<FoodCategory> foodCategoryOpt = foodService.findFoodCategory(foodCategoryToFind);
         FoodCategory foodCategory = foodCategoryOpt.orElseGet(() -> buildFoodCategory(foodCategoryRequest));
         Set<FoodCategory> foodCategories = restaurant.getFoodCategories();
         foodCategories.add(foodCategory);
@@ -138,4 +139,32 @@ public class RestaurantDashboardService {
     public List<FoodCategory> getAvailableFoodCategories() {
         return foodService.findAll();
     }
+
+    public void addFood(FoodRequest foodRequest, Authentication authentication) {
+        Restaurant restaurant = getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
+
+        String category = foodRequest.getCategory();
+        Optional<FoodCategory> foodCategoryOpt = foodService.findFoodCategory(category);
+        if (foodCategoryOpt.isEmpty()) {
+            throw new NotFoundException("Could not find food category by category: [%s]".formatted(category));
+        }
+
+        FoodCategory foodCategory = foodCategoryOpt.get();
+        Food food = buildFood(restaurant, foodRequest, foodCategory);
+        Set<Food> menu = restaurant.getMenu();
+        menu.add(food);
+        restaurantService.updateRestaurant(restaurant.withMenu(menu));
+    }
+
+    private Food buildFood(Restaurant restaurant, FoodRequest foodRequest, FoodCategory foodCategory) {
+        return Food.builder()
+                .name(foodRequest.getName())
+                .price(foodRequest.getPrice())
+                .description(foodRequest.getDescription())
+                .image_url(foodRequest.getImage_url())
+                .foodCategory(foodCategory)
+                .restaurant(restaurant)
+                .build();
+    }
+
 }
