@@ -15,7 +15,7 @@ public class Food {
     String name;
     BigDecimal price;
     String description;
-    String image_url;
+    byte[] imageData;
     FoodCategory foodCategory;
     Restaurant restaurant;
 }

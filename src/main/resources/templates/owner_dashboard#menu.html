@@ -36,7 +36,13 @@
                             <td th:text="${food.name}"></td>
                             <td th:text="${food.description}"></td>
                             <td th:text="${food.price}"></td>
-                            <td th:text="${food.image_url}"></td>
+                            <td>
+                                <img th:if="${food.hasImage}"
+                                     th:src="@{menu/image/{id}(id=${food.foodId})}"
+                                     alt="Food Image"
+                                     style="max-width: 100px; max-height: 100px;">
+                                <span th:unless="${food.hasImage}">No image</span>
+                            </td>
                             <td>
                                 <form
                                         th:action="@{/owner-dashboard/menu/delete/{id}(id=${food.foodId})}"

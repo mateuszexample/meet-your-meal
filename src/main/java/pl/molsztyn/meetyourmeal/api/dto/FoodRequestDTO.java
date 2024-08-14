@@ -17,5 +17,4 @@ public class FoodRequestDTO {
     private String name;
     private String description;
     private BigDecimal price;
-    private String image_url;
 }

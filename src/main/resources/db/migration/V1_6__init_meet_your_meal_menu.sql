@@ -24,7 +24,7 @@ CREATE TABLE food
     name                VARCHAR(32)     NOT NULL,
     description         VARCHAR(64)     NOT NULL,
     price               NUMERIC(19, 2)  NOT NULL,
-    image_url           VARCHAR(255),
+    image_data          BYTEA,
     food_category_id    INT             NOT NULL,
     restaurant_id       INT             NOT NULL,
     PRIMARY KEY (food_id),

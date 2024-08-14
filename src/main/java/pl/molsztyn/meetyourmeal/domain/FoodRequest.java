@@ -15,5 +15,5 @@ public class FoodRequest {
     String name;
     BigDecimal price;
     String description;
-    String image_url;
+    byte[] imageData;
 }

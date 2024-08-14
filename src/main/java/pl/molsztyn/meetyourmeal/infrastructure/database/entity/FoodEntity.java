@@ -30,8 +30,8 @@ public class FoodEntity {
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "image_url")
-    private String image_url;
+    @Column(name = "image_data", columnDefinition="bytea")
+    private byte[] imageData;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "food_category_id")

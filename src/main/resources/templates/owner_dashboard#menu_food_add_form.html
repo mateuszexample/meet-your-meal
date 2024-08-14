@@ -16,7 +16,7 @@
 
                 <h1 class="mb-4 text-center">Add food to menu</h1>
 
-                <form action="#" th:action="@{/owner-dashboard/menu/add}" method="POST" th:object="${foodRequestDTO}">
+                <form action="#" th:action="@{/owner-dashboard/menu/add}" method="POST" th:object="${foodRequestDTO}" enctype="multipart/form-data">
                     <!-- Text input -->
                     <div class="form-outline mb-4">
                         <label class="visually-hidden" for="category">Category</label>
@@ -39,7 +39,8 @@
                     </div>
                     <!-- Text input -->
                     <div class="form-outline mb-4">
-                        <input type="text" id="image_url" th:field="*{image_url}" class="form-control" placeholder="Image_url"/>
+                        <label for="image">Food Image</label>
+                        <input type="file" id="image" name="image" class="form-control" accept="image/*"/>
                     </div>
                     <!-- Submit button -->
                     <button type="submit" class="btn btn-secondary btn-rounded btn-block">Confirm</button>

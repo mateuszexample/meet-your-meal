@@ -136,6 +136,14 @@ public class RestaurantDashboardService {
         return getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant().getMenu();
     }
 
+    public byte[] getFoodImage(Integer foodId, Authentication authentication) {
+        return getMenu(authentication).stream()
+                .filter(food -> food.getFoodId().equals(foodId))
+                .findFirst()
+                .map(Food::getImageData)
+                .orElseThrow(() -> new RuntimeException("Food image not found"));
+    }
+
     public List<FoodCategory> getAvailableFoodCategories() {
         return foodService.findAll();
     }
@@ -161,7 +169,7 @@ public class RestaurantDashboardService {
                 .name(foodRequest.getName())
                 .price(foodRequest.getPrice())
                 .description(foodRequest.getDescription())
-                .image_url(foodRequest.getImage_url())
+                .imageData(foodRequest.getImageData())
                 .foodCategory(foodCategory)
                 .restaurant(restaurant)
                 .build();

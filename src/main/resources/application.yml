@@ -1,5 +1,4 @@
 server:
-# default-owo jest 8080
   port: 8080
   servlet:
     context-path: /meet-your-meal
@@ -26,3 +25,9 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
+      max-request-size: 2MB
+      file-size-threshold: 3MB

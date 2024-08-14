@@ -1,6 +1,7 @@
 package pl.molsztyn.meetyourmeal.api.dto.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import pl.molsztyn.meetyourmeal.api.dto.FoodCategoryDTO;
 import pl.molsztyn.meetyourmeal.api.dto.FoodCategoryRequestDTO;
 import pl.molsztyn.meetyourmeal.api.dto.FoodDTO;
@@ -17,7 +18,9 @@ public interface FoodMapper {
 
     FoodCategoryRequest mapFromDTO(FoodCategoryRequestDTO foodCategoryRequestDTO);
 
+    @Mapping(target = "hasImage", expression = "java(food.getImageData() != null && food.getImageData().length > 0)")
     FoodDTO mapToDTO(Food food);
 
+    @Mapping(target = "imageData", ignore = true)
     FoodRequest mapFromDTO(FoodRequestDTO foodRequestDTO);
 }

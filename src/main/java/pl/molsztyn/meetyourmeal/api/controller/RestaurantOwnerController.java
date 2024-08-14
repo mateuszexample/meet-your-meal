@@ -1,10 +1,15 @@
 package pl.molsztyn.meetyourmeal.api.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.molsztyn.meetyourmeal.api.dto.*;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.DeliveryAreaMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.FoodMapper;
@@ -15,6 +20,7 @@ import pl.molsztyn.meetyourmeal.domain.FoodCategoryRequest;
 import pl.molsztyn.meetyourmeal.domain.FoodRequest;
 import pl.molsztyn.meetyourmeal.domain.RestaurantCreateRequest;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +39,7 @@ public class RestaurantOwnerController {
     private static final String OWNER_MENU = "/owner-dashboard/menu";
     private static final String OWNER_MENU_FOOD_ADD = "/owner-dashboard/menu/add";
     private static final String OWNER_MENU_FOOD_DELETE = "/owner-dashboard/menu/delete/{id}";
+    private static final String OWNER_MENU_FOOD_IMAGE = "/owner-dashboard/menu/image/{id}";
 
     private final RestaurantDashboardService restaurantDashboardService;
 
@@ -167,12 +174,28 @@ public class RestaurantOwnerController {
     @PostMapping(OWNER_MENU_FOOD_ADD)
     public String addFood(
             @ModelAttribute("foodRequestDTO") FoodRequestDTO foodRequestDTO,
+            @RequestParam("image") MultipartFile image,
             Authentication authentication
-    ) {
+    ) throws IOException {
         FoodRequest foodRequest = foodMapper.mapFromDTO(foodRequestDTO);
+
+        // image upload
+        if(!image.isEmpty()) {
+            byte[] imageData = image.getBytes();
+            foodRequest = foodRequest.withImageData(imageData);
+        }
+
         restaurantDashboardService.addFood(foodRequest, authentication);
 
         return "redirect:/owner-dashboard/menu";
+    }
+
+    @GetMapping(OWNER_MENU_FOOD_IMAGE)
+    public ResponseEntity<byte[]> getFoodImage(@PathVariable Integer id, Authentication authentication) {
+        byte[] imageData = restaurantDashboardService.getFoodImage(id, authentication);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(imageData);
     }
 
 //    @DeleteMapping(OWNER_MENU_FOOD_DELETE)
