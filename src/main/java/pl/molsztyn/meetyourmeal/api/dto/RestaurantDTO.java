@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class RestaurantDTO {
 
     private String name;
-
+    private boolean hasImage;
 }

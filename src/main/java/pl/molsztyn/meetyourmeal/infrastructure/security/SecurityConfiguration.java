@@ -51,7 +51,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/login", "/error", "/images/something_is_not_yes.png").permitAll()
                 .requestMatchers("/", "/meet-your-meal").permitAll()
                 .requestMatchers("/fetch-cities", "/fetch-postal-codes", "/fetch-streets").permitAll()
-                .requestMatchers("/search-for-restaurants", "/restaurant-details/**").permitAll()
+                .requestMatchers("/search-for-restaurants/**", "/restaurant-details/**").permitAll()
                 .requestMatchers("/owner-dashboard/**").hasAnyAuthority("RESTAURANT_OWNER")
                 .and()
                 .formLogin()

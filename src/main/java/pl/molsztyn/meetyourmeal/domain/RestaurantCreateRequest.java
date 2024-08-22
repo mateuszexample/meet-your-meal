@@ -10,6 +10,7 @@ import lombok.With;
 public class RestaurantCreateRequest {
 
     String name;
+    byte[] imageData;
 
     String restaurantCountry;
     String restaurantCity;

@@ -16,7 +16,7 @@
 
                 <h1 class="mb-4 text-center">Add restaurant</h1>
 
-                <form action="#" th:action="@{/owner-dashboard/restaurant-details/add}" method="POST" th:object="${restaurantCreateRequestDTO}">
+                <form action="#" th:action="@{/owner-dashboard/restaurant-details/add}" method="POST" th:object="${restaurantCreateRequestDTO}" enctype="multipart/form-data">
                     <!-- Text input -->
                     <div class="form-outline mb-4">
                         <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Restaurant name"/>
@@ -44,6 +44,11 @@
                     <!-- Text input -->
                     <div class="form-outline mb-4">
                         <input type="text" id="restaurantUnitNumber" th:field="*{restaurantUnitNumber}" class="form-control" placeholder="Unit number"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <label for="image">Please add your restaurant image</label>
+                        <input type="file" id="image" name="image" class="form-control" accept="image/*"/>
                     </div>
                     <!-- Submit button -->
                     <button type="submit" class="btn btn-secondary btn-rounded btn-block">Confirm</button>

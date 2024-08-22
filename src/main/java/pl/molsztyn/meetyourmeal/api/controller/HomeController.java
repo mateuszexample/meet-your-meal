@@ -1,12 +1,12 @@
 package pl.molsztyn.meetyourmeal.api.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import pl.molsztyn.meetyourmeal.api.dto.DeliveryAreaRequestDTO;
 import pl.molsztyn.meetyourmeal.api.dto.RestaurantDTO;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.DeliveryAreaMapper;
@@ -29,6 +29,8 @@ public class HomeController {
 
     static final String HOME = "/";
     static final String HOME_SEARCH_FOR_RESTAURANTS = "/search-for-restaurants";
+    private static final String HOME_SEARCH_FOR_RESTAURANTS_RESTAURANT_IMAGE = "/search-for-restaurants/image/{name}";
+
 
     private final DeliveryAreaService deliveryAreaService;
     private final RestaurantService restaurantService;
@@ -69,6 +71,15 @@ public class HomeController {
         modelMap.addAttribute("restaurantDTOs", restaurantDTOList);
 
         return "restaurants_near_you";
+    }
+
+    @GetMapping(HOME_SEARCH_FOR_RESTAURANTS_RESTAURANT_IMAGE)
+    public ResponseEntity<byte[]> getRestaurantImage(@PathVariable("name") String restaurantName) {
+        Restaurant restaurant = restaurantService.getRestaurantByName(restaurantName);
+        byte[] imageData = restaurant.getImageData();
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(imageData);
     }
 }
 

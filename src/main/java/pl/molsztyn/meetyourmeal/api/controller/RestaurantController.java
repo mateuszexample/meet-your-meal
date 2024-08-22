@@ -1,6 +1,8 @@
 package pl.molsztyn.meetyourmeal.api.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,9 @@ import pl.molsztyn.meetyourmeal.domain.Restaurant;
 @AllArgsConstructor
 public class RestaurantController {
 
+//    private static final String RESTAURANTS_RESTAURANT_IMAGE = "/search-for-restaurants/restaurant/image/{name}";
+    private static final String RESTAURANTS_RESTAURANT_IMAGE = "/restaurant-details/image/{name}";
+
     private final RestaurantService restaurantService;
 
     private final RestaurantMapper restaurantMapper;
@@ -26,5 +31,14 @@ public class RestaurantController {
         model.addAttribute("restaurantDTO", restaurantDTO);
 
         return "restaurant_details";
+    }
+
+    @GetMapping(RESTAURANTS_RESTAURANT_IMAGE)
+    public ResponseEntity<byte[]> getRestaurantImage(@PathVariable("name") String restaurantName) {
+        Restaurant restaurant = restaurantService.getRestaurantByName(restaurantName);
+        byte[] imageData = restaurant.getImageData();
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(imageData);
     }
 }

@@ -39,6 +39,7 @@ public class RestaurantDashboardService {
     ) {
         return Restaurant.builder()
                 .name(request.getName())
+                .imageData(request.getImageData())
                 .address(address)
                 .build();
     }

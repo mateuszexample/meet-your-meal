@@ -9,12 +9,13 @@ import java.util.Set;
 @With
 @Value
 @Builder
-@EqualsAndHashCode(of = "restaurantId")
+@EqualsAndHashCode(of = {"name", "address"})
 @ToString(of = {"restaurantId", "name"})
 public class Restaurant {
 
     Integer restaurantId;
     String name;
+    byte[] imageData;
     Address address;
     RestaurantOwner restaurantOwner;
     Set<DeliveryArea> deliveryAreas;

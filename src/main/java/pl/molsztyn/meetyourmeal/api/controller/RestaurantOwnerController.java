@@ -63,9 +63,17 @@ public class RestaurantOwnerController {
     @PostMapping(OWNER_RESTAURANT_DETAILS_ADD)
     public String createRestaurant(
             @ModelAttribute("restaurantCreateRequestDTO") RestaurantCreateRequestDTO restaurantCreateRequestDTO,
+            @RequestParam("image") MultipartFile image,
             Authentication authentication
-    ) {
+    ) throws IOException {
         RestaurantCreateRequest request = restaurantMapper.mapFromDTO(restaurantCreateRequestDTO);
+
+        // image upload
+        if(!image.isEmpty()) {
+            byte[] imageData = image.getBytes();
+            request = request.withImageData(imageData);
+        }
+
         restaurantDashboardService.create(request, authentication);
 
         return "redirect:/owner-dashboard";

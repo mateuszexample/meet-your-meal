@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = "restaurantId")
+@EqualsAndHashCode(of = {"name", "address"})
 @ToString(of = {"restaurantId", "name"})
 @Builder
 @NoArgsConstructor
@@ -23,6 +23,9 @@ public class RestaurantEntity {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "image_data", columnDefinition="bytea")
+    private byte[] imageData;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
