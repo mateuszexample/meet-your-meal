@@ -1,63 +1,161 @@
 <!DOCTYPE HTML>
-<html   lang="en"
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{fragments/layouts/owner_dashboard_layout}">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layouts/owner_dashboard_layout}">
 
 <head>
-    <title>Meet your meal</title>
+    <title>Restaurant Details - Meet Your Meal</title>
 </head>
 
 <body>
-    <div layout:fragment="content">
+<div layout:fragment="content">
 
-        <div class="card" style="border-radius: 1rem;">
-            <div class="card-body p-4">
+    <div class="card" style="border-radius: 1rem;">
+        <div class="card-body p-4">
+            <h2>Restaurant Details</h2>
 
-                <h1 class="mb-4 text-center">Add restaurant</h1>
+            <!-- Restaurant Name Section -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 th:text="${restaurantDTO.name}">Restaurant Name</h4>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#editNameModal">
+                    <i class="material-icons">edit</i>
+                </a>
+            </div>
 
-                <form action="#" th:action="@{/owner-dashboard/restaurant-details/add}" method="POST" th:object="${restaurantCreateRequestDTO}" enctype="multipart/form-data">
-                    <!-- Text input -->
-                    <div class="form-outline mb-4">
-                        <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Restaurant name"/>
-                    </div>
-                    <!-- Text input -->
-                    <div class="form-outline mb-4">
-                        <input type="text" id="restaurantCountry" th:field="*{restaurantCountry}" class="form-control" placeholder="Country"/>
-                    </div>
-                    <!-- Text input -->
-                    <div class="form-outline mb-4">
-                        <input type="text" id="restaurantCity" th:field="*{restaurantCity}" class="form-control" placeholder="City"/>
-                    </div>
-                    <!-- Text input -->
-                    <div class="form-outline mb-4">
-                        <input type="text" id="restaurantPostalCode" th:field="*{restaurantPostalCode}" class="form-control" placeholder="Postal code"/>
-                    </div>
-                    <!-- Text input -->
-                    <div class="form-outline mb-4">
-                        <input type="text" id="restaurantStreet" th:field="*{restaurantStreet}" class="form-control" placeholder="Street"/>
-                    </div>
-                    <!-- Text input -->
-                    <div class="form-outline mb-4">
-                        <input type="text" id="restaurantBuildingNumber" th:field="*{restaurantBuildingNumber}" class="form-control" placeholder="Building number"/>
-                    </div>
-                    <!-- Text input -->
-                    <div class="form-outline mb-4">
-                        <input type="text" id="restaurantUnitNumber" th:field="*{restaurantUnitNumber}" class="form-control" placeholder="Unit number"/>
-                    </div>
-                    <!-- Text input -->
-                    <div class="form-outline mb-4">
-                        <label for="image">Please add your restaurant image</label>
-                        <input type="file" id="image" name="image" class="form-control" accept="image/*"/>
-                    </div>
-                    <!-- Submit button -->
-                    <button type="submit" class="btn btn-secondary btn-rounded btn-block">Confirm</button>
-                </form>
+            <!-- Restaurant Address Section -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <p th:text="${restaurantDTO.restaurantStreet + ' ' + restaurantDTO.restaurantBuildingNumber + ', ' + restaurantDTO.restaurantCity + ', ' + restaurantDTO.restaurantCountry + ' - ' + restaurantDTO.restaurantPostalCode}">
+                    Restaurant Address
+                </p>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#editAddressModal">
+                    <i class="material-icons">edit</i>
+                </a>
+            </div>
 
+            <!-- Restaurant Image Section -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <img th:if="${restaurantDTO.hasImage}"
+                         th:src="@{'data:image/jpeg;base64,' + ${base64Image}}"
+                         alt="Restaurant Image"
+                         class="img-fluid"
+                         style="max-width: 300px; max-height: 200px;">
+                    <span th:unless="${restaurantDTO.hasImage}">No image</span>
+                </div>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#editImageModal">
+                    <i class="material-icons">edit</i>
+                </a>
+            </div>
+
+            <!-- Modals for Editing Information -->
+
+            <!-- Edit Name Modal -->
+            <div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editNameModalLabel">Edit Restaurant Name</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="@{/owner-dashboard/restaurant-details/update-name}"
+                                  th:object="${restaurantDTO}" method="post">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Restaurant Name</label>
+                                    <input type="text" class="form-control" id="name" th:field="*{name}"
+                                           placeholder="Enter restaurant name">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Address Modal -->
+            <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editAddressModalLabel">Edit Restaurant Address</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="@{/owner-dashboard/restaurant-details/update-address}"
+                                  th:object="${restaurantDTO}" method="post">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="restaurantCountry" class="form-label">Country</label>
+                                        <input type="text" class="form-control" id="restaurantCountry"
+                                               th:field="*{restaurantCountry}" placeholder="Enter country">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="restaurantCity" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="restaurantCity"
+                                               th:field="*{restaurantCity}" placeholder="Enter city">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="restaurantPostalCode" class="form-label">Postal Code</label>
+                                        <input type="text" class="form-control" id="restaurantPostalCode"
+                                               th:field="*{restaurantPostalCode}" placeholder="Enter postal code">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="restaurantStreet" class="form-label">Street</label>
+                                        <input type="text" class="form-control" id="restaurantStreet"
+                                               th:field="*{restaurantStreet}" placeholder="Enter street">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="restaurantBuildingNumber" class="form-label">Building Number</label>
+                                        <input type="text" class="form-control" id="restaurantBuildingNumber"
+                                               th:field="*{restaurantBuildingNumber}"
+                                               placeholder="Enter building number">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="restaurantUnitNumber" class="form-label">Unit Number</label>
+                                    <input type="text" class="form-control" id="restaurantUnitNumber"
+                                           th:field="*{restaurantUnitNumber}" placeholder="Enter unit number">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Image Modal -->
+            <div class="modal fade" id="editImageModal" tabindex="-1" aria-labelledby="editImageModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editImageModalLabel">Edit Restaurant Image</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="@{/owner-dashboard/restaurant-details/update-image}"
+                                  th:object="${restaurantDTO}"
+                                  method="post"
+                                  enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="imageData" class="form-label">Restaurant Image</label>
+                                    <input type="file" class="form-control" id="imageData" th:field="*{imageData}">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
+
+</div>
 </body>
 
 </html>

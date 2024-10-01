@@ -12,5 +12,15 @@ import lombok.NoArgsConstructor;
 public class RestaurantDTO {
 
     private String name;
+
+    private String restaurantCountry;
+    private String restaurantCity;
+    private String restaurantPostalCode;
+    private String restaurantStreet;
+    private String restaurantBuildingNumber;
+    private String restaurantUnitNumber;
+
+    private byte[] imageData;
+
     private boolean hasImage;
 }

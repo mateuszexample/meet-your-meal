@@ -15,8 +15,6 @@ import pl.molsztyn.meetyourmeal.domain.Restaurant;
 @Controller
 @AllArgsConstructor
 public class RestaurantController {
-
-//    private static final String RESTAURANTS_RESTAURANT_IMAGE = "/search-for-restaurants/restaurant/image/{name}";
     private static final String RESTAURANTS_RESTAURANT_IMAGE = "/restaurant-details/image/{name}";
 
     private final RestaurantService restaurantService;

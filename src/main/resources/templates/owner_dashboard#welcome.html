@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layouts/owner_dashboard_layout}">
+
+<head>
+    <title>Meet your meal</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div id="welcome">
+
+            <h2 th:if="${hasRestaurant}">
+                Welcome <span th:text="${#authentication.name}"></span> to your restaurant dashboard!
+            </h2>
+            <h2 th:unless="${hasRestaurant}">
+                Welcome <span th:text="${#authentication.name}"></span>, we noticed that you haven't added a restaurant yet. Please do so and earn some money :-)
+            </h2>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

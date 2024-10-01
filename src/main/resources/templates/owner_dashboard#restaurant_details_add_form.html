@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html   lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{fragments/layouts/owner_dashboard_layout}">
+
+<head>
+    <title>Meet your meal</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="card" style="border-radius: 1rem;">
+            <div class="card-body p-4">
+
+                <h1 class="mb-4 text-center">Add restaurant</h1>
+
+                <form action="#" th:action="@{/owner-dashboard/restaurant-details/add}" method="POST" th:object="${restaurantCreateRequestDTO}" enctype="multipart/form-data">
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Restaurant name"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="restaurantCountry" th:field="*{restaurantCountry}" class="form-control" placeholder="Country"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="restaurantCity" th:field="*{restaurantCity}" class="form-control" placeholder="City"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="restaurantPostalCode" th:field="*{restaurantPostalCode}" class="form-control" placeholder="Postal code"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="restaurantStreet" th:field="*{restaurantStreet}" class="form-control" placeholder="Street"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="restaurantBuildingNumber" th:field="*{restaurantBuildingNumber}" class="form-control" placeholder="Building number"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="restaurantUnitNumber" th:field="*{restaurantUnitNumber}" class="form-control" placeholder="Unit number"/>
+                    </div>
+                    <!-- Text input -->
+                    <div class="form-outline mb-4">
+                        <label for="image">Please add your restaurant image</label>
+                        <input type="file" id="image" name="image" class="form-control" accept="image/*"/>
+                    </div>
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-secondary btn-rounded btn-block">Confirm</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -3,11 +3,9 @@ package pl.molsztyn.meetyourmeal.api.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.molsztyn.meetyourmeal.api.dto.*;
@@ -15,13 +13,12 @@ import pl.molsztyn.meetyourmeal.api.dto.mapper.DeliveryAreaMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.FoodMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
 import pl.molsztyn.meetyourmeal.business.RestaurantDashboardService;
-import pl.molsztyn.meetyourmeal.domain.DeliveryAreaRequest;
-import pl.molsztyn.meetyourmeal.domain.FoodCategoryRequest;
-import pl.molsztyn.meetyourmeal.domain.FoodRequest;
-import pl.molsztyn.meetyourmeal.domain.RestaurantCreateRequest;
+import pl.molsztyn.meetyourmeal.domain.*;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
@@ -49,15 +46,40 @@ public class RestaurantOwnerController {
 
 
     @GetMapping(value = OWNER)
-    public String ownerDashboard() {
-        return "owner_dashboard";
+    public String ownerDashboard(Authentication authentication, Model model) {
+        model.addAttribute("hasRestaurant", hasRestaurant(authentication));
+        return "owner_dashboard#welcome";
     }
 
+    private boolean hasRestaurant(Authentication authentication) {
+        RestaurantOwner restaurantOwner = restaurantDashboardService.getCurrentlyLoggedInRestaurantOwner(authentication);
+        return Objects.nonNull(restaurantOwner.getRestaurant());
+    }
 
     @GetMapping(value = OWNER_RESTAURANT_DETAILS)
-    public String showRestaurantForm(Model model) {
-        model.addAttribute("restaurantCreateRequestDTO", new RestaurantCreateRequestDTO());
+    public String ownerRestaurantDetailsPage(Authentication authentication, Model model) {
+        return hasRestaurant(authentication)
+                ? showRestaurantDetails(authentication, model)
+                : showRestaurantForm(authentication, model);
+    }
+
+    private String showRestaurantDetails(Authentication authentication, Model model) {
+        Restaurant restaurant = restaurantDashboardService.getRestaurant(authentication);
+        RestaurantDTO restaurantDTO = restaurantMapper.mapToDTO(restaurant);
+        model.addAttribute("restaurantDTO", restaurantDTO);
+
+        if (restaurantDTO.isHasImage()) {
+            // gpt idea
+            String base64Image = Base64.getEncoder().encodeToString(restaurantDTO.getImageData());
+            model.addAttribute("base64Image", base64Image);
+        }
+
         return "owner_dashboard#restaurant_details";
+    }
+
+    private String showRestaurantForm(Authentication authentication, Model model) {
+        model.addAttribute("restaurantCreateRequestDTO", new RestaurantCreateRequestDTO());
+        return "owner_dashboard#restaurant_details_add_form";
     }
 
     @PostMapping(OWNER_RESTAURANT_DETAILS_ADD)
@@ -69,18 +91,21 @@ public class RestaurantOwnerController {
         RestaurantCreateRequest request = restaurantMapper.mapFromDTO(restaurantCreateRequestDTO);
 
         // image upload
-        if(!image.isEmpty()) {
+        if (!image.isEmpty()) {
             byte[] imageData = image.getBytes();
             request = request.withImageData(imageData);
         }
 
         restaurantDashboardService.create(request, authentication);
 
-        return "redirect:/owner-dashboard";
+        return "redirect:/owner-dashboard#welcome";
     }
 
     @GetMapping(value = OWNER_DELIVERY_AREAS)
-    public String ownerDeliveryAreasPage(Model model, Authentication authentication) {
+    public String ownerDeliveryAreasPage(Authentication authentication, Model model) {
+
+        if (!hasRestaurant(authentication)) return "owner_dashboard#please_add_restaurant_first";
+
         var deliveryAreas = restaurantDashboardService.getDeliveryAreas(authentication).stream()
                 .map(deliveryAreaMapper::mapToDTO)
                 .collect(Collectors.toSet());
@@ -118,7 +143,10 @@ public class RestaurantOwnerController {
     }
 
     @GetMapping(value = OWNER_FOOD_CATEGORIES)
-    public String ownerFoodCategoryPage(Model model, Authentication authentication) {
+    public String ownerFoodCategoryPage(Authentication authentication, Model model) {
+
+        if (!hasRestaurant(authentication)) return "owner_dashboard#please_add_restaurant_first";
+
         var foodCategories = restaurantDashboardService.getFoodCategories(authentication).stream()
                 .map(foodMapper::mapToDTO)
                 .collect(Collectors.toSet());
@@ -154,8 +182,12 @@ public class RestaurantOwnerController {
 
         return "redirect:/owner-dashboard/food-categories";
     }
+
     @GetMapping(value = OWNER_MENU)
-    public String ownerMenuPage(Model model, Authentication authentication) {
+    public String ownerMenuPage(Authentication authentication, Model model) {
+
+        if (!hasRestaurant(authentication)) return "owner_dashboard#please_add_restaurant_first";
+
         var menu = restaurantDashboardService.getMenu(authentication).stream()
                 .map(foodMapper::mapToDTO)
                 .collect(Collectors.toSet());
@@ -188,7 +220,7 @@ public class RestaurantOwnerController {
         FoodRequest foodRequest = foodMapper.mapFromDTO(foodRequestDTO);
 
         // image upload
-        if(!image.isEmpty()) {
+        if (!image.isEmpty()) {
             byte[] imageData = image.getBytes();
             foodRequest = foodRequest.withImageData(imageData);
         }

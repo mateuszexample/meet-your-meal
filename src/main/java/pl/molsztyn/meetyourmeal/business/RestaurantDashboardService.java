@@ -59,7 +59,7 @@ public class RestaurantDashboardService {
         return getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant().getDeliveryAreas();
     }
 
-    private RestaurantOwner getCurrentlyLoggedInRestaurantOwner(Authentication authentication) {
+    public RestaurantOwner getCurrentlyLoggedInRestaurantOwner(Authentication authentication) {
         String username = authentication.getName();
         Integer userId = meetYourMealUserDetailsService.getUserId(username);
         return restaurantOwnerService.findRestaurantOwner(userId);
@@ -176,4 +176,7 @@ public class RestaurantDashboardService {
                 .build();
     }
 
+    public Restaurant getRestaurant(Authentication authentication) {
+        return getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
+    }
 }

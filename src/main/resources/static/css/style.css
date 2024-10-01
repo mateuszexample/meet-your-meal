@@ -140,6 +140,16 @@ body {
     float: right;
 }
 
+#welcome h2 {
+    text-align: center;
+    margin: 20px
+}
+
+#addRestaurantFirst h1 {
+    text-align: center;
+    margin: 20px
+}
+
 .navbar {
     background-color: #fff;
     height: 80px;
