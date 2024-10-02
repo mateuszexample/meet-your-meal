@@ -17,7 +17,6 @@ import pl.molsztyn.meetyourmeal.domain.*;
 
 import java.io.IOException;
 import java.util.Base64;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -27,6 +26,9 @@ public class RestaurantOwnerController {
     private static final String OWNER = "/owner-dashboard";
     private static final String OWNER_RESTAURANT_DETAILS = "/owner-dashboard/restaurant-details";
     private static final String OWNER_RESTAURANT_DETAILS_ADD = "/owner-dashboard/restaurant-details/add";
+    private static final String OWNER_RESTAURANT_DETAILS_UPDATE_NAME = "/owner-dashboard/restaurant-details/update-name";
+    private static final String OWNER_RESTAURANT_DETAILS_UPDATE_ADDRESS = "/owner-dashboard/restaurant-details/update-address";
+    private static final String OWNER_RESTAURANT_DETAILS_UPDATE_IMAGE = "/owner-dashboard/restaurant-details/update-image";
     private static final String OWNER_DELIVERY_AREAS = "/owner-dashboard/delivery-areas";
     private static final String OWNER_DELIVERY_AREAS_ADD = "/owner-dashboard/delivery-areas/add";
     private static final String OWNER_DELIVERY_AREAS_DELETE = "/owner-dashboard/delivery-areas/delete/{id}";
@@ -60,13 +62,15 @@ public class RestaurantOwnerController {
     public String ownerRestaurantDetailsPage(Authentication authentication, Model model) {
         return hasRestaurant(authentication)
                 ? showRestaurantDetails(authentication, model)
-                : showRestaurantForm(authentication, model);
+                : showRestaurantForm(model);
     }
 
     private String showRestaurantDetails(Authentication authentication, Model model) {
         Restaurant restaurant = restaurantDashboardService.getRestaurant(authentication);
         RestaurantDTO restaurantDTO = restaurantMapper.mapToDTO(restaurant);
+
         model.addAttribute("restaurantDTO", restaurantDTO);
+        model.addAttribute("restaurantCreateRequestDTO", new RestaurantCreateRequestDTO());
 
         if (restaurantDTO.isHasImage()) {
             // gpt idea
@@ -77,7 +81,7 @@ public class RestaurantOwnerController {
         return "owner_dashboard#restaurant_details";
     }
 
-    private String showRestaurantForm(Authentication authentication, Model model) {
+    private String showRestaurantForm(Model model) {
         model.addAttribute("restaurantCreateRequestDTO", new RestaurantCreateRequestDTO());
         return "owner_dashboard#restaurant_details_add_form";
     }
@@ -98,7 +102,22 @@ public class RestaurantOwnerController {
 
         restaurantDashboardService.create(request, authentication);
 
-        return "redirect:/owner-dashboard#welcome";
+        return "redirect:/owner-dashboard";
+    }
+
+    @PostMapping(OWNER_RESTAURANT_DETAILS_UPDATE_NAME)
+    public String updateRestaurantName(
+            @ModelAttribute("restaurantCreateRequestDTO") RestaurantCreateRequestDTO restaurantCreateRequestDTO,
+            Authentication authentication
+    ) {
+        String newRestaurantName = restaurantCreateRequestDTO.getName();
+        RestaurantOwner restaurantOwner = restaurantDashboardService.getCurrentlyLoggedInRestaurantOwner(authentication);
+        Restaurant restaurantWithNewName = restaurantOwner.getRestaurant().withName(newRestaurantName);
+        RestaurantOwner restaurantOwnerWithRestaurantWithNewName = restaurantOwner.withRestaurant(restaurantWithNewName);
+
+        restaurantDashboardService.update(restaurantOwnerWithRestaurantWithNewName);
+
+        return "redirect:/owner-dashboard/restaurant-details";
     }
 
     @GetMapping(value = OWNER_DELIVERY_AREAS)
@@ -198,9 +217,9 @@ public class RestaurantOwnerController {
     }
 
     @GetMapping(value = OWNER_MENU_FOOD_ADD)
-    public String showAddFormFood(Model model) {
+    public String showAddFormFood(Authentication authentication, Model model) {
 
-        List<String> availableFoodCategories = restaurantDashboardService.getAvailableFoodCategories().stream()
+        var availableFoodCategories = restaurantDashboardService.getFoodCategories(authentication).stream()
                 .map(foodMapper::mapToDTO)
                 .map(FoodCategoryDTO::getCategory)
                 .toList();

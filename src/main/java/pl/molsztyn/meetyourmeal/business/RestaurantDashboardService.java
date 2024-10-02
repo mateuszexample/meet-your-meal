@@ -8,7 +8,6 @@ import pl.molsztyn.meetyourmeal.domain.*;
 import pl.molsztyn.meetyourmeal.domain.exception.NotFoundException;
 import pl.molsztyn.meetyourmeal.infrastructure.security.MeetYourMealUserDetailsService;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -31,6 +30,11 @@ public class RestaurantDashboardService {
         RestaurantOwner restaurantOwnerWithRestaurant = restaurantOwner.withRestaurant(restaurant);
 
         restaurantOwnerService.createRestaurant(restaurantOwnerWithRestaurant);
+    }
+
+    @Transactional
+    public void update(RestaurantOwner restaurantOwnerWithRestaurantWithNewData) {
+        restaurantOwnerService.createRestaurant(restaurantOwnerWithRestaurantWithNewData);
     }
 
     private Restaurant buildRestaurant(
@@ -145,10 +149,6 @@ public class RestaurantDashboardService {
                 .orElseThrow(() -> new RuntimeException("Food image not found"));
     }
 
-    public List<FoodCategory> getAvailableFoodCategories() {
-        return foodService.findAll();
-    }
-
     public void addFood(FoodRequest foodRequest, Authentication authentication) {
         Restaurant restaurant = getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
 
@@ -179,4 +179,6 @@ public class RestaurantDashboardService {
     public Restaurant getRestaurant(Authentication authentication) {
         return getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
     }
+
+
 }
