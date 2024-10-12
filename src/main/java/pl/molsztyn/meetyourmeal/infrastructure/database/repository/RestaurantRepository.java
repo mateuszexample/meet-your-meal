@@ -39,4 +39,9 @@ public class RestaurantRepository implements RestaurantDAO {
 
         return restaurantEntityMapper.mapFromEntity(restaurantEntity);
     }
+
+    @Override
+    public void deleteRestaurantByRestaurantId(Integer restaurantId) {
+        restaurantJpaRepository.deleteById(restaurantId);
+    }
 }

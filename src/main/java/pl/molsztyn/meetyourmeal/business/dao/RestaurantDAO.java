@@ -11,4 +11,6 @@ public interface RestaurantDAO {
     List<Restaurant> findRestaurantsByDeliveryAreaId(Integer deliveryAreaId);
 
     Restaurant findRestaurantByName(String restaurantName);
+
+    void deleteRestaurantByRestaurantId(Integer restaurantId);
 }

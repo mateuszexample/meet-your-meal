@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RestaurantOwnerController {
     private static final String OWNER = "/owner-dashboard";
+    private static final String OWNER_DELETE_RESTAURANT = "/owner-dashboard/delete-restaurant";
     private static final String OWNER_RESTAURANT_DETAILS = "/owner-dashboard/restaurant-details";
     private static final String OWNER_RESTAURANT_DETAILS_ADD = "/owner-dashboard/restaurant-details/add";
     private static final String OWNER_RESTAURANT_DETAILS_UPDATE_NAME = "/owner-dashboard/restaurant-details/update-name";
@@ -56,6 +57,18 @@ public class RestaurantOwnerController {
     private boolean hasRestaurant(Authentication authentication) {
         RestaurantOwner restaurantOwner = restaurantDashboardService.getCurrentlyLoggedInRestaurantOwner(authentication);
         return Objects.nonNull(restaurantOwner.getRestaurant());
+    }
+
+    @DeleteMapping(OWNER_DELETE_RESTAURANT)
+    public String ownerDeleteRestaurant(
+            Authentication authentication
+    ) {
+
+        if (hasRestaurant(authentication)) {
+            restaurantDashboardService.delete(authentication);
+        }
+
+        return "redirect:/owner-dashboard";
     }
 
     @GetMapping(value = OWNER_RESTAURANT_DETAILS)

@@ -33,8 +33,19 @@ public class RestaurantDashboardService {
     }
 
     @Transactional
-    public void update(RestaurantOwner restaurantOwnerWithRestaurantWithNewData) {
-        restaurantOwnerService.createRestaurant(restaurantOwnerWithRestaurantWithNewData);
+    public void update(RestaurantOwner restaurantOwnerWithNewData) {
+        restaurantOwnerService.createRestaurant(restaurantOwnerWithNewData);
+    }
+
+    @Transactional
+    public void delete(Authentication authentication) {
+        RestaurantOwner restaurantOwner = getCurrentlyLoggedInRestaurantOwner(authentication);
+        Integer restaurantId = restaurantOwner.getRestaurant().getRestaurantId();
+
+        RestaurantOwner restaurantOwnerWithoutRestaurant = restaurantOwner.withRestaurant(null);
+        update(restaurantOwnerWithoutRestaurant);
+
+        restaurantService.deleteRestaurant(restaurantId);
     }
 
     private Restaurant buildRestaurant(
@@ -179,6 +190,5 @@ public class RestaurantDashboardService {
     public Restaurant getRestaurant(Authentication authentication) {
         return getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
     }
-
 
 }

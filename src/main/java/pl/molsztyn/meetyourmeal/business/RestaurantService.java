@@ -26,4 +26,8 @@ public class RestaurantService {
     public Restaurant getRestaurantByName(String restaurantName) {
         return restaurantDAO.findRestaurantByName(restaurantName);
     }
+
+    public void deleteRestaurant(Integer restaurantId) {
+        restaurantDAO.deleteRestaurantByRestaurantId(restaurantId);
+    }
 }
