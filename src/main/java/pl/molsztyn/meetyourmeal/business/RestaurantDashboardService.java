@@ -8,6 +8,7 @@ import pl.molsztyn.meetyourmeal.domain.*;
 import pl.molsztyn.meetyourmeal.domain.exception.NotFoundException;
 import pl.molsztyn.meetyourmeal.infrastructure.security.MeetYourMealUserDetailsService;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -46,6 +47,23 @@ public class RestaurantDashboardService {
         update(restaurantOwnerWithoutRestaurant);
 
         restaurantService.deleteRestaurant(restaurantId);
+
+        cleanupUnusedFoodCategories();
+        cleanupUnusedDeliveryAreas();
+    }
+
+    private void cleanupUnusedFoodCategories() {
+        List<FoodCategory> notUsedFoodCategories = foodService.findNotUsedFoodCategories();
+        if (!notUsedFoodCategories.isEmpty()) {
+            foodService.deleteAll(notUsedFoodCategories);
+        }
+    }
+
+    private void cleanupUnusedDeliveryAreas() {
+        List<DeliveryArea> notUsedDeliveryAreas = deliveryAreaService.findNotUsedDeliveryAreas();
+        if (!notUsedDeliveryAreas.isEmpty()) {
+            deliveryAreaService.deleteAll(notUsedDeliveryAreas);
+        }
     }
 
     private Restaurant buildRestaurant(
@@ -111,6 +129,7 @@ public class RestaurantDashboardService {
         deliveryAreas.remove(deliveryAreaToDelete.get());
 
         restaurantService.updateRestaurant(restaurant.withDeliveryAreas(deliveryAreas));
+        cleanupUnusedDeliveryAreas();
     }
 
     public Set<FoodCategory> getFoodCategories(Authentication authentication) {
@@ -124,6 +143,7 @@ public class RestaurantDashboardService {
         FoodCategory foodCategory = foodCategoryOpt.orElseGet(() -> buildFoodCategory(foodCategoryRequest));
         Set<FoodCategory> foodCategories = restaurant.getFoodCategories();
         foodCategories.add(foodCategory);
+
         restaurantService.updateRestaurant(restaurant.withFoodCategories(foodCategories));
     }
 
@@ -146,6 +166,7 @@ public class RestaurantDashboardService {
         foodCategories.remove(foodCategoryToDelete.get());
 
         restaurantService.updateRestaurant(restaurant.withFoodCategories(foodCategories));
+        cleanupUnusedFoodCategories();
     }
 
     public Set<Food> getMenu(Authentication authentication) {

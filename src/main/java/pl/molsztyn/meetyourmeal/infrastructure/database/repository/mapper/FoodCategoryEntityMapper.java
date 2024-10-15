@@ -8,4 +8,6 @@ import pl.molsztyn.meetyourmeal.infrastructure.database.entity.FoodCategoryEntit
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface FoodCategoryEntityMapper {
     FoodCategory mapFromEntity(FoodCategoryEntity foodCategoryEntity);
+
+    FoodCategoryEntity mapToEntity(FoodCategory foodCategory);
 }

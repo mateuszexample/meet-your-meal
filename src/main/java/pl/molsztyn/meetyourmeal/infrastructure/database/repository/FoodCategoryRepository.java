@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import pl.molsztyn.meetyourmeal.business.dao.FoodCategoryDAO;
 import pl.molsztyn.meetyourmeal.domain.FoodCategory;
+import pl.molsztyn.meetyourmeal.infrastructure.database.entity.FoodCategoryEntity;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.jpa.FoodCategoryJpaRepository;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.mapper.FoodCategoryEntityMapper;
 
@@ -29,5 +30,20 @@ public class FoodCategoryRepository implements FoodCategoryDAO {
         return foodCategoryJpaRepository.findAll().stream()
                 .map(foodCategoryEntityMapper::mapFromEntity)
                 .toList();
+    }
+
+    @Override
+    public List<FoodCategory> findByRestaurantsIsEmpty() {
+        return foodCategoryJpaRepository.findByRestaurantsIsEmpty().stream()
+                .map(foodCategoryEntityMapper::mapFromEntity)
+                .toList();
+    }
+
+    @Override
+    public void deleteAll(List<FoodCategory> notUsedFoodCategories) {
+        List<FoodCategoryEntity> categoriesToDelete = notUsedFoodCategories.stream()
+                .map(foodCategoryEntityMapper::mapToEntity)
+                .toList();
+        foodCategoryJpaRepository.deleteAll(categoriesToDelete);
     }
 }

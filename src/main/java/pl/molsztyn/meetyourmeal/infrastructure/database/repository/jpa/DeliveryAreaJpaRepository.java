@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pl.molsztyn.meetyourmeal.infrastructure.database.entity.DeliveryAreaEntity;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,4 +22,6 @@ public interface DeliveryAreaJpaRepository extends JpaRepository<DeliveryAreaEnt
     Set<DeliveryAreaEntity> findPostalCodesByCountryAndCity(String country, String city);
 
     Set<DeliveryAreaEntity> findStreetsByCountryAndCityAndPostalCode(String country, String city, String postalCode);
+
+    List<DeliveryAreaEntity> findByRestaurantsIsEmpty();
 }

@@ -75,4 +75,19 @@ public class DeliveryAreaRepository implements DeliveryAreaDAO {
                 .map(DeliveryArea::getStreet)
                 .collect(Collectors.toSet());
     }
+
+    @Override
+    public List<DeliveryArea> findByRestaurantsIsEmpty() {
+        return deliveryAreaJpaRepository.findByRestaurantsIsEmpty().stream()
+                .map(deliveryAreaEntityMapper::mapFromEntity)
+                .toList();
+    }
+
+    @Override
+    public void deleteAll(List<DeliveryArea> notUsedDeliveryAreas) {
+        List<DeliveryAreaEntity> deliveryAreasToDelete = (List<DeliveryAreaEntity>) notUsedDeliveryAreas.stream()
+                .map(deliveryAreaEntityMapper::mapToEntity)
+                .toList();
+        deliveryAreaJpaRepository.deleteAll(deliveryAreasToDelete);
+    }
 }

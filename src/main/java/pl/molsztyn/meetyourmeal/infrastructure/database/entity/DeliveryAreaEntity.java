@@ -4,6 +4,8 @@ package pl.molsztyn.meetyourmeal.infrastructure.database.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 
 @Getter
 @Setter
@@ -32,4 +34,7 @@ public class DeliveryAreaEntity {
 
     @Column(name = "street")
     private String street;
+
+    @ManyToMany(mappedBy = "deliveryAreas", cascade = CascadeType.MERGE)
+    private Set<RestaurantEntity> restaurants;
 }

@@ -2,6 +2,7 @@ package pl.molsztyn.meetyourmeal.business;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.molsztyn.meetyourmeal.business.dao.DeliveryAreaDAO;
 import pl.molsztyn.meetyourmeal.domain.DeliveryArea;
 import pl.molsztyn.meetyourmeal.domain.DeliveryAreaRequest;
@@ -17,6 +18,7 @@ public class DeliveryAreaService {
 
     private final DeliveryAreaDAO deliveryAreaDAO;
 
+    @Transactional
     public Optional<DeliveryArea> findDeliveryArea(DeliveryAreaRequest deliveryAreaRequest) {
 
         return deliveryAreaDAO.findByCountryAndCityAndPostalCodeAndStreet(
@@ -27,23 +29,27 @@ public class DeliveryAreaService {
         );
     }
 
+    @Transactional
     public List<DeliveryArea> findAll() {
         return deliveryAreaDAO.findAll();
     }
 
-
+    @Transactional
     public Set<String> findCitiesByCountry(String country) {
         return deliveryAreaDAO.findCitiesByCountry(country);
     }
 
+    @Transactional
     public Set<String> findPostalCodesByCountryAndCity(String country, String city) {
         return deliveryAreaDAO.findPostalCodesByCountryAndCity(country, city);
     }
 
+    @Transactional
     public Set<String> findStreetsByCountryAndCityAndPostalCode(String country, String city, String postalCode) {
         return deliveryAreaDAO.findStreetsByCountryAndCityAndPostalCode(country, city, postalCode);
     }
 
+    @Transactional
     public Integer findDeliveryAreaId(DeliveryAreaRequest deliveryAreaRequest) {
         Optional<DeliveryArea> deliveryAreaOpt = findDeliveryArea(deliveryAreaRequest);
         if (deliveryAreaOpt.isEmpty()) {
@@ -52,4 +58,13 @@ public class DeliveryAreaService {
         return deliveryAreaOpt.get().getDeliveryAreaId();
     }
 
+    @Transactional
+    public List<DeliveryArea> findNotUsedDeliveryAreas() {
+        return deliveryAreaDAO.findByRestaurantsIsEmpty();
+    }
+
+    @Transactional
+    public void deleteAll(List<DeliveryArea> notUsedDeliveryAreas) {
+        deliveryAreaDAO.deleteAll(notUsedDeliveryAreas);
+    }
 }

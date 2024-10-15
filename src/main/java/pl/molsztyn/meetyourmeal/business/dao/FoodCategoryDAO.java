@@ -10,4 +10,7 @@ public interface FoodCategoryDAO {
     Optional<FoodCategory> findByCategory(String category);
 
     List<FoodCategory> findAll();
+    List<FoodCategory> findByRestaurantsIsEmpty();
+
+    void deleteAll(List<FoodCategory> notUsedFoodCategories);
 }

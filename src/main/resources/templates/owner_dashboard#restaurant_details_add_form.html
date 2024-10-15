@@ -19,27 +19,27 @@
                 <form action="#" th:action="@{/owner-dashboard/restaurant-details/add}" method="POST" th:object="${restaurantCreateRequestDTO}" enctype="multipart/form-data">
                     <!-- Text input -->
                     <div class="form-outline mb-4">
-                        <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Restaurant name"/>
+                        <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Restaurant name" required/>
                     </div>
                     <!-- Text input -->
                     <div class="form-outline mb-4">
-                        <input type="text" id="restaurantCountry" th:field="*{restaurantCountry}" class="form-control" placeholder="Country"/>
+                        <input type="text" id="restaurantCountry" th:field="*{restaurantCountry}" class="form-control" placeholder="Country" required/>
                     </div>
                     <!-- Text input -->
                     <div class="form-outline mb-4">
-                        <input type="text" id="restaurantCity" th:field="*{restaurantCity}" class="form-control" placeholder="City"/>
+                        <input type="text" id="restaurantCity" th:field="*{restaurantCity}" class="form-control" placeholder="City" required/>
                     </div>
                     <!-- Text input -->
                     <div class="form-outline mb-4">
-                        <input type="text" id="restaurantPostalCode" th:field="*{restaurantPostalCode}" class="form-control" placeholder="Postal code"/>
+                        <input type="text" id="restaurantPostalCode" th:field="*{restaurantPostalCode}" class="form-control" placeholder="Postal code" required/>
                     </div>
                     <!-- Text input -->
                     <div class="form-outline mb-4">
-                        <input type="text" id="restaurantStreet" th:field="*{restaurantStreet}" class="form-control" placeholder="Street"/>
+                        <input type="text" id="restaurantStreet" th:field="*{restaurantStreet}" class="form-control" placeholder="Street" required/>
                     </div>
                     <!-- Text input -->
                     <div class="form-outline mb-4">
-                        <input type="text" id="restaurantBuildingNumber" th:field="*{restaurantBuildingNumber}" class="form-control" placeholder="Building number"/>
+                        <input type="text" id="restaurantBuildingNumber" th:field="*{restaurantBuildingNumber}" class="form-control" placeholder="Building number" required/>
                     </div>
                     <!-- Text input -->
                     <div class="form-outline mb-4">

@@ -22,4 +22,8 @@ public interface DeliveryAreaDAO {
     Set<String> findPostalCodesByCountryAndCity(String country, String city);
 
     Set<String> findStreetsByCountryAndCityAndPostalCode(String country, String city, String postalCode);
+
+    List<DeliveryArea> findByRestaurantsIsEmpty();
+
+    void deleteAll(List<DeliveryArea> notUsedDeliveryAreas);
 }

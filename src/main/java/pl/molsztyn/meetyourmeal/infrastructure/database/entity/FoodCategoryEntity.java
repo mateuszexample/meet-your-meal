@@ -26,4 +26,7 @@ public class FoodCategoryEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "foodCategory")
     private Set<FoodEntity> foods;
+
+    @ManyToMany(mappedBy = "foodCategories", cascade = CascadeType.MERGE)
+    private Set<RestaurantEntity> restaurants;
 }

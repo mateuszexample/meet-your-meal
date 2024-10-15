@@ -25,4 +25,13 @@ public class FoodService {
         return foodCategoryDAO.findAll();
     }
 
+    @Transactional
+    public List<FoodCategory> findNotUsedFoodCategories() {
+        return foodCategoryDAO.findByRestaurantsIsEmpty();
+    }
+
+    @Transactional
+    public void deleteAll(List<FoodCategory> notUsedFoodCategories) {
+        foodCategoryDAO.deleteAll(notUsedFoodCategories);
+    }
 }
