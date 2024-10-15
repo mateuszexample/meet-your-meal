@@ -85,7 +85,7 @@ public class DeliveryAreaRepository implements DeliveryAreaDAO {
 
     @Override
     public void deleteAll(List<DeliveryArea> notUsedDeliveryAreas) {
-        List<DeliveryAreaEntity> deliveryAreasToDelete = (List<DeliveryAreaEntity>) notUsedDeliveryAreas.stream()
+        List<DeliveryAreaEntity> deliveryAreasToDelete = notUsedDeliveryAreas.stream()
                 .map(deliveryAreaEntityMapper::mapToEntity)
                 .toList();
         deliveryAreaJpaRepository.deleteAll(deliveryAreasToDelete);

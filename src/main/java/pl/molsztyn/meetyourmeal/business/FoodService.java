@@ -21,11 +21,6 @@ public class FoodService {
     }
 
     @Transactional
-    public List<FoodCategory> findAll() {
-        return foodCategoryDAO.findAll();
-    }
-
-    @Transactional
     public List<FoodCategory> findNotUsedFoodCategories() {
         return foodCategoryDAO.findByRestaurantsIsEmpty();
     }

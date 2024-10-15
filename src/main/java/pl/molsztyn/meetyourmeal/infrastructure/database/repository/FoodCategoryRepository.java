@@ -26,13 +26,6 @@ public class FoodCategoryRepository implements FoodCategoryDAO {
     }
 
     @Override
-    public List<FoodCategory> findAll() {
-        return foodCategoryJpaRepository.findAll().stream()
-                .map(foodCategoryEntityMapper::mapFromEntity)
-                .toList();
-    }
-
-    @Override
     public List<FoodCategory> findByRestaurantsIsEmpty() {
         return foodCategoryJpaRepository.findByRestaurantsIsEmpty().stream()
                 .map(foodCategoryEntityMapper::mapFromEntity)
