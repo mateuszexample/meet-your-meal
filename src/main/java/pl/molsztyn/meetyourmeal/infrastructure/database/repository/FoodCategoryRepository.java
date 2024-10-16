@@ -33,8 +33,8 @@ public class FoodCategoryRepository implements FoodCategoryDAO {
     }
 
     @Override
-    public void deleteAll(List<FoodCategory> notUsedFoodCategories) {
-        List<FoodCategoryEntity> categoriesToDelete = notUsedFoodCategories.stream()
+    public void deleteAll(List<FoodCategory> unusedFoodCategories) {
+        List<FoodCategoryEntity> categoriesToDelete = unusedFoodCategories.stream()
                 .map(foodCategoryEntityMapper::mapToEntity)
                 .toList();
         foodCategoryJpaRepository.deleteAll(categoriesToDelete);

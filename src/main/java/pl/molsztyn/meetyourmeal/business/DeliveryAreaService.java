@@ -59,12 +59,12 @@ public class DeliveryAreaService {
     }
 
     @Transactional
-    public List<DeliveryArea> findNotUsedDeliveryAreas() {
+    public List<DeliveryArea> findUnusedDeliveryAreas() {
         return deliveryAreaDAO.findByRestaurantsIsEmpty();
     }
 
     @Transactional
-    public void deleteAll(List<DeliveryArea> notUsedDeliveryAreas) {
-        deliveryAreaDAO.deleteAll(notUsedDeliveryAreas);
+    public void deleteAll(List<DeliveryArea> unusedDeliveryAreas) {
+        deliveryAreaDAO.deleteAll(unusedDeliveryAreas);
     }
 }

@@ -21,6 +21,7 @@ public class RestaurantDashboardService {
     private final RestaurantService restaurantService;
     private final DeliveryAreaService deliveryAreaService;
     private final FoodService foodService;
+    private final AddressService addressService;
 
     @Transactional
     public void create(RestaurantCreateRequest request, Authentication authentication) {
@@ -53,16 +54,16 @@ public class RestaurantDashboardService {
     }
 
     private void cleanupUnusedFoodCategories() {
-        List<FoodCategory> notUsedFoodCategories = foodService.findNotUsedFoodCategories();
-        if (!notUsedFoodCategories.isEmpty()) {
-            foodService.deleteAll(notUsedFoodCategories);
+        List<FoodCategory> unusedFoodCategories = foodService.findUnusedFoodCategories();
+        if (!unusedFoodCategories.isEmpty()) {
+            foodService.deleteAll(unusedFoodCategories);
         }
     }
 
     private void cleanupUnusedDeliveryAreas() {
-        List<DeliveryArea> notUsedDeliveryAreas = deliveryAreaService.findNotUsedDeliveryAreas();
-        if (!notUsedDeliveryAreas.isEmpty()) {
-            deliveryAreaService.deleteAll(notUsedDeliveryAreas);
+        List<DeliveryArea> unusedDeliveryAreas = deliveryAreaService.findUnusedDeliveryAreas();
+        if (!unusedDeliveryAreas.isEmpty()) {
+            deliveryAreaService.deleteAll(unusedDeliveryAreas);
         }
     }
 
@@ -212,4 +213,7 @@ public class RestaurantDashboardService {
         return getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
     }
 
+    public void deleteOldAddress(Integer addressId) {
+        addressService.deleteAddressById(addressId);
+    }
 }

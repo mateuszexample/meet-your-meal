@@ -7,8 +7,6 @@ import pl.molsztyn.meetyourmeal.api.dto.RestaurantDTO;
 import pl.molsztyn.meetyourmeal.domain.Restaurant;
 import pl.molsztyn.meetyourmeal.domain.RestaurantCreateRequest;
 
-import java.util.Arrays;
-
 @Mapper(componentModel = "spring")
 public interface RestaurantMapper {
 

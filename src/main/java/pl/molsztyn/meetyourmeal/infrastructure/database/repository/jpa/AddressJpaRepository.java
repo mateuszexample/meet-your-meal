@@ -6,4 +6,6 @@ import pl.molsztyn.meetyourmeal.infrastructure.database.entity.AddressEntity;
 
 @Repository
 public interface AddressJpaRepository extends JpaRepository<AddressEntity, Integer> {
+    @Override
+    void deleteById(Integer addressId);
 }

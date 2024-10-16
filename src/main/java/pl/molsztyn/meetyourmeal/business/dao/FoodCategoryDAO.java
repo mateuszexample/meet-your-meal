@@ -11,5 +11,5 @@ public interface FoodCategoryDAO {
 
     List<FoodCategory> findByRestaurantsIsEmpty();
 
-    void deleteAll(List<FoodCategory> notUsedFoodCategories);
+    void deleteAll(List<FoodCategory> unusedFoodCategories);
 }

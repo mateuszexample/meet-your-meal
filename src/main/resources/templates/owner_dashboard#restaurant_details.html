@@ -25,8 +25,14 @@
 
             <!-- Restaurant Address Section -->
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <p th:text="${restaurantDTO.restaurantStreet + ' ' + restaurantDTO.restaurantBuildingNumber + ', ' + restaurantDTO.restaurantCity + ', ' + restaurantDTO.restaurantCountry + ' - ' + restaurantDTO.restaurantPostalCode}">
-                    Restaurant Address
+                <p>
+                    <span th:text="${restaurantDTO.restaurantCountry}"></span> <br>
+                    <span th:text="${restaurantDTO.restaurantPostalCode}"></span>
+                    <span th:text="${restaurantDTO.restaurantCity}"></span> <br>
+                    ul. <span th:text="${restaurantDTO.restaurantStreet}"></span>
+                    <span th:text="${restaurantDTO.restaurantBuildingNumber}"></span>
+                    <span th:if="${restaurantDTO.restaurantUnitNumber != null && !#strings.isEmpty(restaurantDTO.restaurantUnitNumber)}"
+                          th:text="' / ' + ${restaurantDTO.restaurantUnitNumber}"></span>
                 </p>
                 <a href="#" data-bs-toggle="modal" data-bs-target="#editAddressModal">
                     <i class="material-icons">edit</i>
@@ -144,7 +150,7 @@
                                   enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Restaurant Image</label>
-<!--                                    <input type="file" class="form-control" id="image" th:field="*{image}">-->
+                                    <!--                                    <input type="file" class="form-control" id="image" th:field="*{image}">-->
                                     <input type="file" id="image" name="image" class="form-control" accept="image/*"/>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Save Changes</button>

@@ -21,12 +21,12 @@ public class FoodService {
     }
 
     @Transactional
-    public List<FoodCategory> findNotUsedFoodCategories() {
+    public List<FoodCategory> findUnusedFoodCategories() {
         return foodCategoryDAO.findByRestaurantsIsEmpty();
     }
 
     @Transactional
-    public void deleteAll(List<FoodCategory> notUsedFoodCategories) {
-        foodCategoryDAO.deleteAll(notUsedFoodCategories);
+    public void deleteAll(List<FoodCategory> unusedFoodCategories) {
+        foodCategoryDAO.deleteAll(unusedFoodCategories);
     }
 }

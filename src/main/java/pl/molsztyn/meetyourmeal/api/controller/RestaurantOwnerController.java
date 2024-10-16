@@ -126,9 +126,32 @@ public class RestaurantOwnerController {
         String newRestaurantName = restaurantCreateRequestDTO.getName();
         RestaurantOwner restaurantOwner = restaurantDashboardService.getCurrentlyLoggedInRestaurantOwner(authentication);
         Restaurant restaurantWithNewName = restaurantOwner.getRestaurant().withName(newRestaurantName);
-        RestaurantOwner restaurantOwnerWithRestaurantWithNewName = restaurantOwner.withRestaurant(restaurantWithNewName);
+        RestaurantOwner ownerWithRestaurantWithNewName = restaurantOwner.withRestaurant(restaurantWithNewName);
 
-        restaurantDashboardService.update(restaurantOwnerWithRestaurantWithNewName);
+        restaurantDashboardService.update(ownerWithRestaurantWithNewName);
+
+        return "redirect:/owner-dashboard/restaurant-details";
+    }
+
+    @PostMapping(OWNER_RESTAURANT_DETAILS_UPDATE_ADDRESS)
+    public String updateRestaurantAddress(
+            @ModelAttribute("restaurantCreateRequestDTO") RestaurantCreateRequestDTO restaurantCreateRequestDTO,
+            Authentication authentication
+    ) {
+        RestaurantOwner restaurantOwner = restaurantDashboardService.getCurrentlyLoggedInRestaurantOwner(authentication);
+        Integer addressId = restaurantOwner.getRestaurant().getAddress().getAddressId(); // mam id?
+        Restaurant restaurantWithNewAddress = restaurantOwner.getRestaurant().withAddress(Address.builder()
+                .country(restaurantCreateRequestDTO.getRestaurantCountry())
+                .city(restaurantCreateRequestDTO.getRestaurantCity())
+                .postalCode(restaurantCreateRequestDTO.getRestaurantPostalCode())
+                .street(restaurantCreateRequestDTO.getRestaurantStreet())
+                .buildingNumber(restaurantCreateRequestDTO.getRestaurantBuildingNumber())
+                .unitNumber(restaurantCreateRequestDTO.getRestaurantUnitNumber())
+                .build());
+        RestaurantOwner ownerWithRestaurantWithNewAddress = restaurantOwner.withRestaurant(restaurantWithNewAddress);
+
+        restaurantDashboardService.update(ownerWithRestaurantWithNewAddress);
+        restaurantDashboardService.deleteOldAddress(addressId);
 
         return "redirect:/owner-dashboard/restaurant-details";
     }
