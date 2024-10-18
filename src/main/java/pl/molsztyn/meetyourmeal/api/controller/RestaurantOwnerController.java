@@ -105,15 +105,14 @@ public class RestaurantOwnerController {
             @RequestParam("image") MultipartFile image,
             Authentication authentication
     ) throws IOException {
-        RestaurantCreateRequest request = restaurantMapper.mapFromDTO(restaurantCreateRequestDTO);
+        RestaurantCreateRequest restaurantCreateRequest = restaurantMapper.mapFromDTO(restaurantCreateRequestDTO);
 
         // image upload
         if (!image.isEmpty()) {
             byte[] imageData = image.getBytes();
-            request = request.withImageData(imageData);
+            restaurantDashboardService.create(restaurantCreateRequest.withImageData(imageData), authentication);
         }
 
-        restaurantDashboardService.create(request, authentication);
 
         return "redirect:/owner-dashboard";
     }
@@ -152,6 +151,22 @@ public class RestaurantOwnerController {
 
         restaurantDashboardService.update(ownerWithRestaurantWithNewAddress);
         restaurantDashboardService.deleteOldAddress(addressId);
+
+        return "redirect:/owner-dashboard/restaurant-details";
+    }
+
+    @PostMapping(OWNER_RESTAURANT_DETAILS_UPDATE_IMAGE)
+    public String updateRestaurantImage(
+            @RequestParam("image") MultipartFile image,
+            Authentication authentication
+    ) throws IOException {
+        RestaurantOwner restaurantOwner = restaurantDashboardService.getCurrentlyLoggedInRestaurantOwner(authentication);
+
+        if (!image.isEmpty()) {
+            byte[] imageData = image.getBytes();
+            Restaurant restaurantWithNewImage = restaurantOwner.getRestaurant().withImageData(imageData);
+            restaurantDashboardService.update(restaurantOwner.withRestaurant(restaurantWithNewImage));
+        }
 
         return "redirect:/owner-dashboard/restaurant-details";
     }
@@ -277,10 +292,8 @@ public class RestaurantOwnerController {
         // image upload
         if (!image.isEmpty()) {
             byte[] imageData = image.getBytes();
-            foodRequest = foodRequest.withImageData(imageData);
+            restaurantDashboardService.addFood(foodRequest.withImageData(imageData), authentication);
         }
-
-        restaurantDashboardService.addFood(foodRequest, authentication);
 
         return "redirect:/owner-dashboard/menu";
     }
