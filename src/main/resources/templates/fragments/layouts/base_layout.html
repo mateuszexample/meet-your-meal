@@ -28,7 +28,17 @@
                     <a th:href="@{/}" class="navbar-brand me-auto">meet your meal</a>
 
                     <a sec:authorize="!isAuthenticated()" class="login-button" th:href="@{/login}">Login</a>
-                    <a sec:authorize="isAuthenticated()" class="login-button" th:href="@{/logout}">Logout</a>
+
+                    <div sec:authorize="isAuthenticated()" class="dropdown">
+                        <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #009970;">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" th:href="@{/owner-dashboard}">Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/logout}">Log out</a></li>
+                        </ul>
+                    </div>
 
                 </div>
             </nav>

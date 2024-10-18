@@ -166,6 +166,9 @@ public class RestaurantOwnerController {
             byte[] imageData = image.getBytes();
             Restaurant restaurantWithNewImage = restaurantOwner.getRestaurant().withImageData(imageData);
             restaurantDashboardService.update(restaurantOwner.withRestaurant(restaurantWithNewImage));
+        } else {
+            Restaurant restaurantWithNoImage = restaurantOwner.getRestaurant().withImageData(null);
+            restaurantDashboardService.update(restaurantOwner.withRestaurant(restaurantWithNoImage));
         }
 
         return "redirect:/owner-dashboard/restaurant-details";
