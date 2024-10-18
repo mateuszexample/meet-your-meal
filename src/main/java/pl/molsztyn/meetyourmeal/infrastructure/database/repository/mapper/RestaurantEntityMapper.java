@@ -39,7 +39,7 @@ public interface RestaurantEntityMapper {
     @Named("mapMenuToEntity")
     default Set<FoodEntity> mapMenuToEntity(Set<Food> menu) {
         return menu.stream().map(this::mapToEntity).collect(Collectors.toSet());
-    };
+    }
 
     @Mapping(target = "restaurant.menu", ignore = true)
     @Mapping(target = "restaurant.address", ignore = true)

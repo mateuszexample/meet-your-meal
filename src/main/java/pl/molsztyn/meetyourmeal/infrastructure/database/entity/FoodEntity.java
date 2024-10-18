@@ -33,7 +33,7 @@ public class FoodEntity {
     @Column(name = "image_data", columnDefinition="bytea")
     private byte[] imageData;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_category_id")
     private FoodCategoryEntity foodCategory;
 

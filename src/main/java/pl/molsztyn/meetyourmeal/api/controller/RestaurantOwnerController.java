@@ -139,7 +139,7 @@ public class RestaurantOwnerController {
             Authentication authentication
     ) {
         RestaurantOwner restaurantOwner = restaurantDashboardService.getCurrentlyLoggedInRestaurantOwner(authentication);
-        Integer addressId = restaurantOwner.getRestaurant().getAddress().getAddressId(); // mam id?
+        Integer addressId = restaurantOwner.getRestaurant().getAddress().getAddressId();
         Restaurant restaurantWithNewAddress = restaurantOwner.getRestaurant().withAddress(Address.builder()
                 .country(restaurantCreateRequestDTO.getRestaurantCountry())
                 .city(restaurantCreateRequestDTO.getRestaurantCity())
@@ -293,13 +293,13 @@ public class RestaurantOwnerController {
                 .body(imageData);
     }
 
-//    @DeleteMapping(OWNER_MENU_FOOD_DELETE)
-//    public String deleteFood(
-//            @PathVariable Integer id,
-//            Authentication authentication
-//    ) {
-//        restaurantDashboardService.deleteFood(id, authentication);
-//
-//        return "redirect:/owner-dashboard/food-categories";
-//    }
+    @DeleteMapping(OWNER_MENU_FOOD_DELETE)
+    public String deleteFood(
+            @PathVariable Integer id,
+            Authentication authentication
+    ) {
+        restaurantDashboardService.deleteFood(id, authentication);
+
+        return "redirect:/owner-dashboard/menu";
+    }
 }

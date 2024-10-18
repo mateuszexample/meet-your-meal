@@ -25,5 +25,5 @@ public interface DeliveryAreaDAO {
 
     List<DeliveryArea> findByRestaurantsIsEmpty();
 
-    void deleteAll(List<DeliveryArea> unusedDeliveryAreas);
+    void deleteAllById(Set<Integer> deliveryAreasToDelete);
 }

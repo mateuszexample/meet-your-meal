@@ -11,6 +11,7 @@ import pl.molsztyn.meetyourmeal.infrastructure.security.MeetYourMealUserDetailsS
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -55,15 +56,21 @@ public class RestaurantDashboardService {
 
     private void cleanupUnusedFoodCategories() {
         List<FoodCategory> unusedFoodCategories = foodService.findUnusedFoodCategories();
+        Set<Integer> foodCategoriesToDelete = unusedFoodCategories.stream()
+                .map(FoodCategory::getFoodCategoryId)
+                .collect(Collectors.toSet());
         if (!unusedFoodCategories.isEmpty()) {
-            foodService.deleteAll(unusedFoodCategories);
+            foodService.deleteAllFoodCategoriesById(foodCategoriesToDelete);
         }
     }
 
     private void cleanupUnusedDeliveryAreas() {
         List<DeliveryArea> unusedDeliveryAreas = deliveryAreaService.findUnusedDeliveryAreas();
+        Set<Integer> deliveryAreasToDelete = unusedDeliveryAreas.stream()
+                .map(DeliveryArea::getDeliveryAreaId)
+                .collect(Collectors.toSet());
         if (!unusedDeliveryAreas.isEmpty()) {
-            deliveryAreaService.deleteAll(unusedDeliveryAreas);
+            deliveryAreaService.deleteAllDeliveryAreasById(deliveryAreasToDelete);
         }
     }
 
@@ -164,9 +171,21 @@ public class RestaurantDashboardService {
         if (foodCategoryToDelete.isEmpty()) {
             throw new NotFoundException("Could not find food category by id: [%s]".formatted(id));
         }
+
+        Set<Food> foodSetToDelete = restaurant.getMenu().stream()
+                .filter(food -> foodCategoryToDelete.get().equals(food.getFoodCategory()))
+                .collect(Collectors.toSet());
+        Set<Integer> foodIdSetToDelete = restaurant.getMenu().stream()
+                .filter(food -> foodCategoryToDelete.get().equals(food.getFoodCategory()))
+                .map(Food::getFoodId)
+                .collect(Collectors.toSet());
+        Set<Food> menu = restaurant.getMenu();
+
+        menu.removeAll(foodSetToDelete);
         foodCategories.remove(foodCategoryToDelete.get());
 
         restaurantService.updateRestaurant(restaurant.withFoodCategories(foodCategories));
+        foodService.deleteAllFoodById(foodIdSetToDelete);
         cleanupUnusedFoodCategories();
     }
 
@@ -215,5 +234,21 @@ public class RestaurantDashboardService {
 
     public void deleteOldAddress(Integer addressId) {
         addressService.deleteAddressById(addressId);
+    }
+
+    public void deleteFood(Integer id, Authentication authentication) {
+        Restaurant restaurant = getCurrentlyLoggedInRestaurantOwner(authentication).getRestaurant();
+        Set<Food> menu = restaurant.getMenu();
+        Optional<Food> foodToDelete = menu.stream()
+                .filter(food -> id.equals(food.getFoodId()))
+                .findFirst();
+
+        if (foodToDelete.isEmpty()) {
+            throw new NotFoundException("Could not find food by id: [%s]".formatted(id));
+        }
+        menu.remove(foodToDelete.get());
+
+        restaurantService.updateRestaurant(restaurant.withMenu(menu));
+        foodService.deleteFood(foodToDelete.get().getFoodId());
     }
 }

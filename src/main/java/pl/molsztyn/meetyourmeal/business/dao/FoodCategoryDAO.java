@@ -4,6 +4,7 @@ import pl.molsztyn.meetyourmeal.domain.FoodCategory;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface FoodCategoryDAO {
 
@@ -11,5 +12,5 @@ public interface FoodCategoryDAO {
 
     List<FoodCategory> findByRestaurantsIsEmpty();
 
-    void deleteAll(List<FoodCategory> unusedFoodCategories);
+    void deleteAllById(Set<Integer> foodCategoriesToDelete);
 }

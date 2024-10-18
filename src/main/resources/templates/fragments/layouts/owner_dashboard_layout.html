@@ -51,8 +51,6 @@
                                 <span>Food categories</span></a>
                             <a th:href="@{/owner-dashboard/delivery-areas}" class="list-group-item list-group-item-action py-2 ripple">
                                 <span>Delivery areas</span></a>
-<!--                            <a th:href="@{/owner-dashboard/delete-restaurant}" class="list-group-item list-group-item-action py-2 ripple mt-4">-->
-<!--                                <span>Delete restaurant</span></a>-->
                             <form th:action="@{/owner-dashboard/delete-restaurant}" th:method="DELETE" class="mt-4">
                                 <button type="button" class="list-group-item list-group-item-action py-2 ripple"
                                         data-bs-toggle="modal" data-bs-target="#deleteRestaurantModal">
