@@ -29,7 +29,7 @@ UPDATE customer SET user_id = 7 WHERE phone = '654987321';
 insert into meet_your_meal_role (role_id, role) values (1, 'RESTAURANT_OWNER'), (2, 'CUSTOMER'), (3, 'REST_API');
 
 insert into meet_your_meal_user_role (user_id, role_id) values (1, 1), (2, 1), (3, 1), (4, 1);
-insert into meet_your_meal_user_role (user_id, role_id) values (1, 2), (2, 2), (3, 2), (4, 2);
+--insert into meet_your_meal_user_role (user_id, role_id) values (1, 2), (2, 2), (3, 2), (4, 2);
 insert into meet_your_meal_user_role (user_id, role_id) values (5, 2), (6, 2), (7, 2);
 insert into meet_your_meal_user_role (user_id, role_id) values (8, 3);
 

@@ -111,8 +111,9 @@ public class RestaurantOwnerController {
         if (!image.isEmpty()) {
             byte[] imageData = image.getBytes();
             restaurantDashboardService.create(restaurantCreateRequest.withImageData(imageData), authentication);
+        } else {
+            restaurantDashboardService.create(restaurantCreateRequest, authentication);
         }
-
 
         return "redirect:/owner-dashboard";
     }
@@ -296,6 +297,8 @@ public class RestaurantOwnerController {
         if (!image.isEmpty()) {
             byte[] imageData = image.getBytes();
             restaurantDashboardService.addFood(foodRequest.withImageData(imageData), authentication);
+        } else {
+            restaurantDashboardService.addFood(foodRequest, authentication);
         }
 
         return "redirect:/owner-dashboard/menu";

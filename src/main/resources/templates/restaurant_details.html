@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/layouts/base_layout}">
 
@@ -23,11 +24,6 @@
         </div>
         <div class="card-body">
             <h5 class="card-title" th:text="${restaurantDTO.name}"></h5>
-<!--            <p class="card-text">-->
-<!--                Some quick example text to build on the card-->
-<!--                title and make up the bulk of the card's content.-->
-<!--            </p>-->
-<!--            <a href="#" class="btn btn-primary">Go Somewhere</a>-->
         </div>
     </div>
 
@@ -53,6 +49,7 @@
             <div th:each="foodDTO : ${menuDTO}">
 
                 <div class="card m-2" id="menuForAllCard">
+
                     <div class="row g-0">
                         <div class="col-md-4">
                             <img th:if="${foodDTO.hasImage}"
@@ -61,13 +58,33 @@
                                  alt="Food image"/>
                             <span th:unless="${foodDTO.hasImage}">No image</span>
                         </div>
-                        <div class="col-md-8">
+
+                        <div class="col-md-6">
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${foodDTO.name}"></h5>
                                 <p class="card-text" th:text="${foodDTO.description}"></p>
                                 <h6 class="card-text" th:text="${foodDTO.price} + ' zł'"></h6>
                             </div>
                         </div>
+
+                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+
+                            <div sec:authorize="!hasAuthority('CUSTOMER')">
+                                <button type="button" class="add-to-cart-btn" data-bs-toggle="modal"
+                                        data-bs-target="#authModal">
+                                    Add to Cart
+                                </button>
+                            </div>
+
+                            <div sec:authorize="hasAuthority('CUSTOMER')">
+                                <button type="button" class="add-to-cart-btn" data-bs-toggle="modal"
+                                        data-bs-target="#cartModal">
+                                    Add to Cart
+                                </button>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
 
@@ -75,8 +92,51 @@
         </div>
     </div>
 
-</div>
+    <!-- Modal for non-CUSTOMER users or not logged in -->
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Access Restricted</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Only customers can place orders. Please log in as a customer to proceed.
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{/login}" class="btn btn-light">Log in</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Modal for CUSTOMER users showing cart status -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Cart Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Display the current cart details (this should be populated dynamically from backend) -->
+                    <p>Your current cart status:</p>
+                    <ul>
+                        <li>Food Item 1 - Quantity: 2</li>
+                        <li>Food Item 2 - Quantity: 1</li>
+                        <!-- Dynamically list cart items here -->
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Proceed to Checkout</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Shopping</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 </body>
 
