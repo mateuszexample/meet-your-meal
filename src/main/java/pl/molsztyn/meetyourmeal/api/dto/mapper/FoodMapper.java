@@ -19,6 +19,7 @@ public interface FoodMapper {
     FoodCategoryRequest mapFromDTO(FoodCategoryRequestDTO foodCategoryRequestDTO);
 
     @Mapping(target = "hasImage", expression = "java(food.getImageData() != null && food.getImageData().length > 0)")
+    @Mapping(target = "category", expression = "java(food.getFoodCategory().getCategory())")
     FoodDTO mapToDTO(Food food);
 
     @Mapping(target = "imageData", ignore = true)

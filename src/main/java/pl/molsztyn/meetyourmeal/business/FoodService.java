@@ -42,4 +42,9 @@ public class FoodService {
     public void deleteAllFoodCategoriesById(Set<Integer> foodCategoriesToDelete) {
         foodCategoryDAO.deleteAllById(foodCategoriesToDelete);
     }
+
+    @Transactional
+    public byte[] getFoodImage(Integer id) {
+        return foodDAO.findFoodById(id).getImageData();
+    }
 }

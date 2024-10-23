@@ -19,7 +19,7 @@
         <div>
             <div th:each="restaurant : ${restaurantDTOs}">
 
-                <a th:href="@{'/restaurant-details/' + ${restaurant.name}}" class="card m-2" id="restaurantCard">
+                <a th:href="@{'/restaurant-details/' + ${restaurant.name} + '/menu/category/All'}" class="card m-2" id="restaurantCard">
                     <div class="row g-0">
                         <div class="col-md-4">
                             <img th:if="${restaurant.hasImage}"

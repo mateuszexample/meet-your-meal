@@ -12,27 +12,71 @@
 
 <div layout:fragment="contentHero">
 
-    <div id="containerRestaurantDetails">
+    <div id="containerRestaurantDetailsForAll">
 
         <div class="card">
             <img th:if="${restaurantDTO.hasImage}"
-                 th:src="@{image/{name}(name=${restaurantDTO.name})}"
+                 th:src="@{/restaurant-details/{name}/image(name=${restaurantDTO.name})}"
                  class="img-fluid rounded-start"
                  alt="Restaurant image"/>
             <span th:unless="${restaurantDTO.hasImage}">No image</span>
         </div>
-            <div class="card-body">
-                <h5 class="card-title" th:text="${restaurantDTO.name}"></h5>
-                <p class="card-text">
-                    Some quick example text to build on the card
-                    title and make up the bulk of the card's content.
-                </p>
-                <a href="#" class="btn btn-primary">Go Somewhere</a>
-            </div>
+        <div class="card-body">
+            <h5 class="card-title" th:text="${restaurantDTO.name}"></h5>
+<!--            <p class="card-text">-->
+<!--                Some quick example text to build on the card-->
+<!--                title and make up the bulk of the card's content.-->
+<!--            </p>-->
+<!--            <a href="#" class="btn btn-primary">Go Somewhere</a>-->
         </div>
+    </div>
+
+    <div id="containerMenuCategory">
+
+        <nav class="nav nav-pills justify-content-center">
+            <a class="nav-link"
+               th:href="@{/restaurant-details/{name}/menu/category/All(name=${restaurantDTO.name})}"
+               th:classappend="${selectedCategory == 'All'} ? 'active'"
+               th:text="'All'">
+            </a>
+            <a class="nav-link"
+               th:href="@{/restaurant-details/{name}/menu/category/{category}(name=${restaurantDTO.name}, category=${category.category})}"
+               th:each="category : ${foodCategories}" th:text="${category.category}"
+               th:classappend="${selectedCategory == category.category} ? 'active'">
+            </a>
+        </nav>
 
     </div>
+
+    <div id="containerMenuForAll">
+        <div>
+            <div th:each="foodDTO : ${menuDTO}">
+
+                <div class="card m-2" id="menuForAllCard">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img th:if="${foodDTO.hasImage}"
+                                 th:src="@{/restaurant-details/{name}/menu/image/{id}(name=${restaurantDTO.name}, id=${foodDTO.foodId})}"
+                                 class="img-fluid rounded-start"
+                                 alt="Food image"/>
+                            <span th:unless="${foodDTO.hasImage}">No image</span>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${foodDTO.name}"></h5>
+                                <p class="card-text" th:text="${foodDTO.description}"></p>
+                                <h6 class="card-text" th:text="${foodDTO.price} + ' zł'"></h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>
+
 
 </body>
 

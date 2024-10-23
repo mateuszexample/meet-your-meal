@@ -63,7 +63,6 @@ public class HomeController {
         Integer deliveryAreaId = deliveryAreaService.findDeliveryAreaId(deliveryAreaRequest);
 
         List<Restaurant> restaurantList = restaurantService.getRestaurantsByDeliveryAreaId(deliveryAreaId);
-
         List<RestaurantDTO> restaurantDTOList = restaurantList.stream()
                 .map(restaurantMapper::mapToDTO)
                 .toList();

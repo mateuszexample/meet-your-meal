@@ -66,12 +66,13 @@ body {
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
 
+
+/* ---------------------------------------------------------------------- restaurants near you ---------------------- */
 #containerRestaurants {
     position: absolute;
     width: auto;
     max-width: 70vw;
     left: 50%;
-    /*transform: translate(-50%);*/
     transform: translateX(-50%);
 }
 
@@ -90,22 +91,67 @@ body {
     width: 100%;
     margin: .8rem !important;
 }
+/* ------------------------------------------------------------------------------------------------------------------ */
 
-/* ---------------------------------------------------------------------- restaurant_details ------------------------ */
-#containerRestaurantDetails .card {
+
+/* ------------------------------------------------------------- restaurant details & menu 4 all -------------------- */
+#containerRestaurantDetailsForAll .card {
     width: 100%;
     max-height: 500px;
     border-radius: 0;
 }
-#containerRestaurantDetails .card .img-fluid {
+#containerRestaurantDetailsForAll .card .img-fluid {
     width: 100%;
     max-height: 250px;
     border-radius: 0 !important;
 }
-#containerRestaurantDetails .card-body {
+#containerRestaurantDetailsForAll .card-body {
+    padding: 20px;
+    background-color: white;
+}
 
+#containerMenuCategory {
+    padding: 10px;
+    background-color: white;
+    font-size: 17px;
+    font-weight: 500;
+}
+#containerMenuCategory .nav-link {
+    color: #009970;
+    border-radius: 15px;
+}
+#containerMenuCategory .nav-link:hover {
+    background-color: #58c8aa;
+    color: white;
+    border-radius: 15px;
+}
+#containerMenuCategory .nav-link.active {
+    color: white;
+    background-color: #009970;
+}
+
+#containerMenuForAll {
+    position: absolute;
+    width: 65%;
+    max-width: 70vw;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#containerMenuForAll h2 {
+    color: white;
+    text-align: center;
+    margin: 20px;
+}
+#menuForAllCard .img-fluid {
+    max-height: 200px;
+    width: 100%;
+}
+#menuForAllCard {
+    width: 100%;
+    margin: .8rem !important;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
+
 
 #containerLeft {
     float: left;
@@ -153,58 +199,45 @@ body {
     margin: 20px
 }
 
+
+/* ------------------------------------------------------------- top navbar ----------------------------------------- */
 .navbar {
     background-color: #fff;
     height: 80px;
 }
-
 .navbar .navbar-brand {
     color: #009970;
     font-weight: 500;
     font-size: 24px;
     margin-left: 20px;
 }
-
 .navbar .navbar-brand:hover {
-    color: #009970;
+    color: #00b383;
 }
-
 .login-button {
     background-color: #009970;
     color: #fff;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 500;
     margin-right: 20px;
     padding: 8px 20px;
     border-radius: 50px;
     text-decoration: none;
     transition: background-color 0.3s;
 }
-
 .login-button:hover {
     background-color: #00b383;
 }
+/* ------------------------------------------------------------------------------------------------------------------ */
 
-.table-responsive {
-   /* position: absolute;
-    top: 4%;
-    left: 4%;
-    right: 4%;
-    bottom: 4%;
-    overflow: auto;*/
-}
 
 .table-wrapper {
-    /*width: 700px;*/
-/*    margin: 30px auto;
-    background: #fff;
-    padding: 20px;*/
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
     position: absolute;
     top: 4%;
     left: 4%;
     right: 4%;
     bottom: 4%;
-    /*overflow: overlay;*/
 }
 .table-title {
     padding-bottom: 10px;
