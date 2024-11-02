@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layouts/base_layout}">
+
+<head>
+    <title>Meet your meal</title>
+</head>
+
+<body>
+
+<div layout:fragment="contentHero">
+
+    <div id="containerRestaurantDetailsForAll">
+
+        <div class="card">
+            <img th:if="${restaurantDTO.hasImage}"
+                 th:src="@{/restaurant-details/{name}/image(name=${restaurantDTO.name})}"
+                 class="img-fluid rounded-start"
+                 alt="Restaurant image"/>
+            <span th:unless="${restaurantDTO.hasImage}">No image</span>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title" th:text="${restaurantDTO.name}"></h5>
+        </div>
+    </div>
+
+    <div id="containerMenuCategory">
+
+        <nav class="nav nav-pills justify-content-center">
+            <a class="nav-link"
+               th:href="@{/restaurant-details/{name}/menu/category/All(name=${restaurantDTO.name})}"
+               th:classappend="${selectedCategory == 'All'} ? 'active'"
+               th:text="'All'">
+            </a>
+            <a class="nav-link"
+               th:href="@{/restaurant-details/{name}/menu/category/{category}(name=${restaurantDTO.name}, category=${category.category})}"
+               th:each="category : ${foodCategories}" th:text="${category.category}"
+               th:classappend="${selectedCategory == category.category} ? 'active'">
+            </a>
+        </nav>
+
+    </div>
+
+    <div id="containerMenuForAll">
+        <div th:each="foodDTO : ${menuDTO}">
+
+            <div class="card m-2" id="menuForAllCard">
+
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img th:if="${foodDTO.hasImage}"
+                             th:src="@{/restaurant-details/{name}/menu/image/{id}(name=${restaurantDTO.name}, id=${foodDTO.foodId})}"
+                             class="img-fluid rounded-start"
+                             alt="Food image"/>
+                        <span th:unless="${foodDTO.hasImage}">No image</span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${foodDTO.name}"></h5>
+                            <p class="card-text" th:text="${foodDTO.description}"></p>
+                            <h6 class="card-text" th:text="${foodDTO.price} + ' zł'"></h6>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 d-flex align-items-center justify-content-center">
+
+                        <div sec:authorize="!hasAuthority('CUSTOMER')">
+                            <button type="button" class="add-to-cart-btn" data-bs-toggle="modal"
+                                    data-bs-target="#authModal">
+                                Add to Cart
+                            </button>
+                        </div>
+
+                        <div sec:authorize="hasAuthority('CUSTOMER')">
+                            <form action="#"
+                                  th:action="@{/restaurant-details/{name}/cart/add-to-cart/{id}(name=${restaurantDTO.name}, id=${foodDTO.foodId})}"
+                                  th:method="POST">
+                                <input type="hidden" name="selectedCategory" th:value="${selectedCategory}"/>
+                                <!--                                    <input type="hidden" name="cartId" th:value="${cartId}"/>-->
+                                <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for non-CUSTOMER users or not logged in -->
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Access Restricted</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Only customers can place orders. Please log in as a customer to proceed.
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{/login}" class="btn btn-light">Log in</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div id="cartModal" class="modal fade" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
+                    <a th:href="@{/restaurant-details/{name}/menu/category/{category}(name=${restaurantDTO.name}, category=${selectedCategory})}"
+                       class="btn-close" aria-label="Close"></a>
+                </div>
+                <div class="modal-body">
+                    <!-- Your existing cart items content -->
+                    <div th:each="item : ${cartItems}"
+                         class="cart-item d-flex align-items-center justify-content-between mb-3">
+
+
+                        <div class="cart-item-name" th:text="${item.foodName}"></div>
+
+                        <!-- Quantity adjustment forms -->
+                        <div class="cart-item-quantity d-flex align-items-center">
+                            <form th:action="@{/cart/updateQuantity}" method="post" th:if="${item.quantity > 1}"
+                                  class="me-2">
+                                <!--                        <input type="hidden" name="itemId" th:value="${item.foodId}"/>-->
+                                <input type="hidden" name="cartId" th:value="${cartId}"/>
+                                <input type="hidden" name="action" value="decrease"/>
+                                <button type="submit" class="btn btn-light p-1 quantity-control">&minus;</button>
+                            </form>
+                            <form th:action="@{/cart/removeItem}" method="post" th:if="${item.quantity == 1}"
+                                  class="me-2">
+                                <!--                        <input type="hidden" name="itemId" th:value="${item.foodId}"/>-->
+                                <input type="hidden" name="cartId" th:value="${cartId}"/>
+                                <button type="submit" class="btn btn-light p-1 quantity-control">
+                                    <i class="bi bi-trash"></i> <!-- Trash icon -->
+                                </button>
+                            </form>
+
+                            <!-- Quantity display -->
+                            <input type="text" class="form-control quantity-input text-center" style="width: 60px;"
+                                   th:value="${item.quantity}" readonly/>
+
+                            <!-- Plus button -->
+                            <form th:action="@{/cart/updateQuantity}" method="post" class="ms-2">
+                                <!--                        <input type="hidden" name="itemId" th:value="${item.foodId}"/>-->
+                                <input type="hidden" name="cartId" th:value="${cartId}"/>
+                                <input type="hidden" name="action" value="increase"/>
+                                <button type="submit" class="btn btn-light p-1 quantity-control">&plus;</button>
+                            </form>
+                        </div>
+
+                        <!-- Item price -->
+                        <div class="cart-item-price" th:text="${item.foodPrice} + ' zł'"></div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Proceed to Checkout</button>
+                    <a th:href="@{/restaurant-details/{name}/menu/category/{category}(name=${restaurantDTO.name}, category=${selectedCategory})}"
+                       class="btn btn-secondary">Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

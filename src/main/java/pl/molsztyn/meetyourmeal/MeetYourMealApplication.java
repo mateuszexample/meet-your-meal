@@ -8,6 +8,6 @@ public class MeetYourMealApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MeetYourMealApplication.class, args);
-	}
+    }
 
 }

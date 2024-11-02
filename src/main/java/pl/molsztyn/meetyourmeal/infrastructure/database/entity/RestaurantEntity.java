@@ -31,6 +31,12 @@ public class RestaurantEntity {
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "restaurant")
+    private Set<FoodEntity> menu;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    private RestaurantOwnerEntity restaurantOwner;
+
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "restaurant_delivery_area",
@@ -47,9 +53,4 @@ public class RestaurantEntity {
     )
     private Set<FoodCategoryEntity> foodCategories;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "restaurant")
-    private Set<FoodEntity> menu;
-
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    private RestaurantOwnerEntity restaurantOwner;
 }

@@ -3,19 +3,27 @@ package pl.molsztyn.meetyourmeal.api.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.molsztyn.meetyourmeal.api.dto.FoodCategoryDTO;
 import pl.molsztyn.meetyourmeal.api.dto.FoodDTO;
+import pl.molsztyn.meetyourmeal.api.dto.OrderItemDTO;
 import pl.molsztyn.meetyourmeal.api.dto.RestaurantDTO;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.FoodMapper;
+import pl.molsztyn.meetyourmeal.api.dto.mapper.OrderMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
 import pl.molsztyn.meetyourmeal.business.FoodService;
+import pl.molsztyn.meetyourmeal.business.OrderService;
 import pl.molsztyn.meetyourmeal.business.RestaurantService;
+import pl.molsztyn.meetyourmeal.domain.Cart;
+import pl.molsztyn.meetyourmeal.domain.Customer;
 import pl.molsztyn.meetyourmeal.domain.Food;
 import pl.molsztyn.meetyourmeal.domain.Restaurant;
+import pl.molsztyn.meetyourmeal.domain.exception.NotFoundException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -33,6 +41,11 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
     private final FoodService foodService;
 
+
+    private final OrderService orderService;
+    private final OrderMapper orderMapper;
+
+
     private final RestaurantMapper restaurantMapper;
     private final FoodMapper foodMapper;
 
@@ -40,6 +53,9 @@ public class RestaurantController {
     public String showRestaurantDetails(
             @PathVariable("name") String restaurantName,
             @PathVariable("category") String category,
+            @RequestParam(value = "cartId", required = false) Integer cartId,
+            @RequestParam(value = "cartModal", required = false) String cartModal,
+            Authentication authentication,
             Model model
     ) {
         Restaurant restaurant = restaurantService.getRestaurantByName(restaurantName);
@@ -71,7 +87,24 @@ public class RestaurantController {
         model.addAttribute("foodCategories", foodCategories);
         model.addAttribute("selectedCategory", category);
 
-        return "restaurant_details";
+        if(cartId != null) {
+            Customer customer = orderService.getCurrentlyLoggedInCustomer(authentication);
+            Cart cart = customer.getCarts().stream()
+                    .filter(c -> cartId.equals(c.getCartId()))
+                    .findFirst()
+                    .orElseThrow(() -> new NotFoundException("Could not find cart by id: [%s]".formatted(cartId)));
+
+            Set<OrderItemDTO> cartItems = cart.getOrderItems().stream()
+                    .map(orderMapper::mapToDTO)
+                    .collect(Collectors.toSet());
+
+            model.addAttribute("cartItems", cartItems);
+            model.addAttribute("cartId", cartId);
+        }
+
+        model.addAttribute("cartModal", cartModal != null && cartModal.equals("true"));
+
+        return "restaurant_details#menu";
     }
 
     @GetMapping(RESTAURANTS_RESTAURANT_IMAGE)

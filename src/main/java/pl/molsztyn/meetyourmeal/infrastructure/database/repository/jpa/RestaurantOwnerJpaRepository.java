@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface RestaurantOwnerJpaRepository extends JpaRepository<RestaurantOwnerEntity, Integer> {
 
-    Optional<RestaurantOwnerEntity> findByPesel(String pesel);
     Optional<RestaurantOwnerEntity> findByUserId(Integer userId);
 }
