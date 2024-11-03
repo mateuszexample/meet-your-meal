@@ -22,4 +22,10 @@ public class CartRepository implements CartDAO {
         CartEntity cartSaved = cartJpaRepository.saveAndFlush(cartToSave);
         return cartEntityMapper.mapFromEntity(cartSaved);
     }
+
+    @Override
+    public void updateCart(Cart cartToUpdate) {
+        CartEntity cartToSave = cartEntityMapper.mapToEntity(cartToUpdate);
+        cartJpaRepository.saveAndFlush(cartToSave);
+    }
 }

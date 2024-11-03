@@ -16,5 +16,4 @@ public class OrderItemDTO {
     private Integer quantity;
     private BigDecimal orderItemValue;
     private String foodName;
-    private BigDecimal foodPrice;
 }

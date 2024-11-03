@@ -17,7 +17,7 @@ import pl.molsztyn.meetyourmeal.api.dto.mapper.FoodMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.OrderMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
 import pl.molsztyn.meetyourmeal.business.FoodService;
-import pl.molsztyn.meetyourmeal.business.OrderService;
+import pl.molsztyn.meetyourmeal.business.CartService;
 import pl.molsztyn.meetyourmeal.business.RestaurantService;
 import pl.molsztyn.meetyourmeal.domain.Cart;
 import pl.molsztyn.meetyourmeal.domain.Customer;
@@ -41,10 +41,8 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
     private final FoodService foodService;
 
-
-    private final OrderService orderService;
+    private final CartService cartService;
     private final OrderMapper orderMapper;
-
 
     private final RestaurantMapper restaurantMapper;
     private final FoodMapper foodMapper;
@@ -88,7 +86,7 @@ public class RestaurantController {
         model.addAttribute("selectedCategory", category);
 
         if(cartId != null) {
-            Customer customer = orderService.getCurrentlyLoggedInCustomer(authentication);
+            Customer customer = cartService.getCurrentlyLoggedInCustomer(authentication);
             Cart cart = customer.getCarts().stream()
                     .filter(c -> cartId.equals(c.getCartId()))
                     .findFirst()

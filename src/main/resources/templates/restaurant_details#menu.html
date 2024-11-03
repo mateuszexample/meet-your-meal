@@ -111,7 +111,7 @@
         </div>
     </div>
 
-        <div id="cartModal" class="modal fade" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div id="cartModal" class="modal fade" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
 
         <div class="modal-dialog">
             <div class="modal-content">
@@ -151,8 +151,9 @@
                                    th:value="${item.quantity}" readonly/>
 
                             <!-- Plus button -->
-                            <form th:action="@{/cart/updateQuantity}" method="post" class="ms-2">
-                                <!--                        <input type="hidden" name="itemId" th:value="${item.foodId}"/>-->
+                            <form th:action="@{/restaurant-details/{name}/cart/update-quantity(name=${restaurantDTO.name})}" method="post" class="ms-2">
+                                <input type="hidden" name="selectedCategory" th:value="${selectedCategory}"/>
+                                <input type="hidden" name="itemName" th:value="${item.foodName}"/>
                                 <input type="hidden" name="cartId" th:value="${cartId}"/>
                                 <input type="hidden" name="action" value="increase"/>
                                 <button type="submit" class="btn btn-light p-1 quantity-control">&plus;</button>
@@ -160,7 +161,7 @@
                         </div>
 
                         <!-- Item price -->
-                        <div class="cart-item-price" th:text="${item.foodPrice} + ' zł'"></div>
+                        <div class="cart-item-price" th:text="${item.orderItemValue} + ' zł'"></div>
 
                     </div>
                 </div>

@@ -14,7 +14,7 @@
 
     <div id="containerRestaurants">
 
-        <h2>There are x restaurants near You!</h2>
+        <h2 th:text="'There are ' + ${restaurantDTOs.size()} + ' restaurants near You!'"></h2>
 
         <div>
             <div th:each="restaurant : ${restaurantDTOs}">

@@ -9,6 +9,5 @@ import pl.molsztyn.meetyourmeal.domain.OrderItem;
 public interface OrderMapper {
 
     @Mapping(target = "foodName", expression = "java(orderItem.getFood().getName())")
-    @Mapping(target = "foodPrice", expression = "java(orderItem.getFood().getPrice())")
     OrderItemDTO mapToDTO(OrderItem orderItem);
 }

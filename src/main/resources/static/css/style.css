@@ -75,18 +75,26 @@ body {
     left: 50%;
     transform: translateX(-50%);
 }
-
+#containerRestaurants a {
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+#containerRestaurants .card {
+    transition: transform 0.3s; /* Smooth transition for scaling */
+}
+#containerRestaurants .card:hover {
+    background-color: #f5efef; /* Darken the card on hover */
+    transform: scale(1.02); /* Slightly scale the card up */
+}
 #containerRestaurants h2 {
     color: white;
     text-align: center;
     margin: 20px;
 }
-
 #restaurantCard .img-fluid {
     max-height: 200px;
     width: 100%;
 }
-
 #restaurantCard {
     width: 100%;
     margin: .8rem !important;
