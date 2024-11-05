@@ -11,6 +11,9 @@ import pl.molsztyn.meetyourmeal.infrastructure.database.entity.CartEntity;
 import pl.molsztyn.meetyourmeal.infrastructure.database.entity.CustomerEntity;
 import pl.molsztyn.meetyourmeal.infrastructure.database.entity.OrderItemEntity;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,8 +36,11 @@ public interface CustomerEntityMapper {
     Cart mapFromEntity(CartEntity cartEntity);
 
     @Named("mapOrderItemsFromEntity")
-    default Set<OrderItem> mapOrderItemsFromEntity(Set<OrderItemEntity> orderItemEntities) {
-        return orderItemEntities.stream().map(this::mapFromEntity).collect(Collectors.toSet());
+    default List<OrderItem> mapOrderItemsFromEntity(Set<OrderItemEntity> orderItemEntities) {
+        return orderItemEntities.stream()
+                .map(this::mapFromEntity)
+                .sorted(Comparator.comparing(OrderItem::getOrderItemId))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Mapping(target = "cart", ignore = true)

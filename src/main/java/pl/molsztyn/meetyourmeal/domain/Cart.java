@@ -3,9 +3,9 @@ package pl.molsztyn.meetyourmeal.domain;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @With
 @Value
@@ -18,9 +18,9 @@ public class Cart {
     BigDecimal totalPrice;
     Customer customer;
     Restaurant restaurant;
-    Set<OrderItem> orderItems;
+    List<OrderItem> orderItems;
 
-    public Set<OrderItem> getOrderItems() {
-        return Objects.isNull(orderItems) ? new HashSet<>() : orderItems;
+    public List<OrderItem> getOrderItems() {
+        return Objects.isNull(orderItems) ? new ArrayList<>() : orderItems;
     }
 }

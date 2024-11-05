@@ -126,7 +126,7 @@
                          class="cart-item d-flex align-items-center justify-content-between mb-3">
 
 
-                        <div class="cart-item-name" th:text="${item.foodName}"></div>
+                        <div class="cart-item-name" style="width: 27%;" th:text="${item.foodName}"></div>
 
                         <!-- Quantity adjustment forms -->
                         <div class="cart-item-quantity d-flex align-items-center">
@@ -161,7 +161,7 @@
                         </div>
 
                         <!-- Item price -->
-                        <div class="cart-item-price" th:text="${item.orderItemValue} + ' zł'"></div>
+                        <div class="cart-item-price text-end" style="width: 18%;" th:text="${item.orderItemValue} + ' zł'"></div>
 
                     </div>
                 </div>

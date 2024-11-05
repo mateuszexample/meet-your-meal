@@ -5,9 +5,9 @@ import pl.molsztyn.meetyourmeal.infrastructure.database.entity.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @With
 @Value
@@ -24,9 +24,9 @@ public class OrderDetails {
     OrderStatus orderStatus;
     Customer customer;
     Restaurant restaurant;
-    Set<OrderItem> orderItems;
+    List<OrderItem> orderItems;
 
-    public Set<OrderItem> getOrderItems() {
-        return Objects.isNull(orderItems) ? new HashSet<>() : orderItems;
+    public List<OrderItem> getOrderItems() {
+        return Objects.isNull(orderItems) ? new ArrayList<>() : orderItems;
     }
 }

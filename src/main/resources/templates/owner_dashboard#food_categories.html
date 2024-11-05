@@ -31,9 +31,11 @@
                     <tbody>
                         <tr th:each="foodCategory : ${foodCategoryDTOs}">
                             <td th:text="${foodCategory.category}"></td>
-                            <td>
-                                <button class="btn" title="Delete" data-toggle="tooltip"
-                                        data-bs-toggle="modal" th:data-bs-target="'#deleteModal' + ${foodCategory.foodCategoryId}">
+                            <td style="text-align: center;">
+                                <button class="btn" title="Delete"
+                                        data-toggle="tooltip"
+                                        data-bs-toggle="modal"
+                                        th:data-bs-target="'#deleteModal' + ${foodCategory.foodCategoryId}">
                                     <i class="material-icons">&#xE872;</i>
                                 </button>
                             </td>

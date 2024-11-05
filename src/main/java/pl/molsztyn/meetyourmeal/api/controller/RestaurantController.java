@@ -16,8 +16,8 @@ import pl.molsztyn.meetyourmeal.api.dto.RestaurantDTO;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.FoodMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.OrderMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
-import pl.molsztyn.meetyourmeal.business.FoodService;
 import pl.molsztyn.meetyourmeal.business.CartService;
+import pl.molsztyn.meetyourmeal.business.FoodService;
 import pl.molsztyn.meetyourmeal.business.RestaurantService;
 import pl.molsztyn.meetyourmeal.domain.Cart;
 import pl.molsztyn.meetyourmeal.domain.Customer;
@@ -92,9 +92,9 @@ public class RestaurantController {
                     .findFirst()
                     .orElseThrow(() -> new NotFoundException("Could not find cart by id: [%s]".formatted(cartId)));
 
-            Set<OrderItemDTO> cartItems = cart.getOrderItems().stream()
+            List<OrderItemDTO> cartItems = cart.getOrderItems().stream()
                     .map(orderMapper::mapToDTO)
-                    .collect(Collectors.toSet());
+                    .toList();
 
             model.addAttribute("cartItems", cartItems);
             model.addAttribute("cartId", cartId);
