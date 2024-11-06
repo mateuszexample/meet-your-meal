@@ -98,6 +98,7 @@ public class RestaurantController {
 
             model.addAttribute("cartItems", cartItems);
             model.addAttribute("cartId", cartId);
+            model.addAttribute("totalPrice", cart.getTotalPrice());
         }
 
         model.addAttribute("cartModal", cartModal != null && cartModal.equals("true"));

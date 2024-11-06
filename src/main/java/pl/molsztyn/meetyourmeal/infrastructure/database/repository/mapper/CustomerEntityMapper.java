@@ -43,7 +43,10 @@ public interface CustomerEntityMapper {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Mapping(target = "cart", ignore = true)
+    @Mapping(target = "cart.totalPrice", ignore = true)
+    @Mapping(target = "cart.customer", ignore = true)
+    @Mapping(target = "cart.restaurant", ignore = true)
+    @Mapping(target = "cart.orderItems", ignore = true)
     @Mapping(target = "food.restaurant", ignore = true)
     OrderItem mapFromEntity(OrderItemEntity orderItemEntity);
 }

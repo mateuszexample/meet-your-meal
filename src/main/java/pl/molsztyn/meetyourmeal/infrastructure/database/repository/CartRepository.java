@@ -28,4 +28,9 @@ public class CartRepository implements CartDAO {
         CartEntity cartToSave = cartEntityMapper.mapToEntity(cartToUpdate);
         cartJpaRepository.saveAndFlush(cartToSave);
     }
+
+    @Override
+    public void deleteCartById(Integer cartId) {
+        cartJpaRepository.deleteById(cartId);
+    }
 }

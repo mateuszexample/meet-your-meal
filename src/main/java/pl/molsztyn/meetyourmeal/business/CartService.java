@@ -24,14 +24,60 @@ public class CartService {
     private final OrderItemDAO orderItemDAO;
 
     @Transactional
-    public Integer createCart(String restaurantName, Integer foodId, Customer customer) {
+    public Integer create(String restaurantName, Integer foodId, Customer customer) {
         Restaurant restaurant = restaurantService.getRestaurantByName(restaurantName);
 
-        Cart cart = createEmptyCart(restaurant, customer);
         Food food = findFoodInRestaurant(restaurant, foodId);
-        OrderItem orderItem = buildOrderItem(cart, food);
+        Cart cart = createEmptyCart(restaurant, customer);
+        Integer cartId = cart.getCartId();
+        OrderItem orderItem = buildOrderItem(cartId, food);
+        cart.getOrderItems().add(orderItem);
 
         orderItemDAO.createOrderItem(orderItem);
+        cartCalculateTotalPriceAndUpdate(cart);
+
+        return cartId;
+    }
+
+    @Transactional
+    public Integer update(String restaurantName, Integer foodId, String action, Customer customer) {
+        Cart cart = customer.getCarts().stream()
+                .filter(c -> restaurantName.equals(c.getRestaurant().getName()))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Something is not yes, could not find the cart"));
+
+        Optional<OrderItem> optionalOrderItem = cart.getOrderItems().stream()
+                .filter(orderItem -> foodId.equals(orderItem.getFood().getFoodId()))
+                .findFirst();
+
+        if ("addOrIncrease".equals(action)) {
+            action = optionalOrderItem.isEmpty() ? "add" : "increase";
+        }
+
+        return switch (action) {
+            case "add" -> cartAddNewItem(restaurantName, foodId, cart);
+            case "increase" -> cartUpdateQuantity(cart, optionalOrderItem.get(), 1);
+            case "decrease" -> cartUpdateQuantity(cart, optionalOrderItem.get(), -1);
+            case "remove" -> cartRemoveItem(cart, optionalOrderItem.get());
+            default -> throw new RuntimeException("Something is not yes with action value");
+        };
+    }
+
+    @Transactional
+    private void delete(Cart cart) {
+        cartDAO.deleteCartById(cart.getCartId());
+    }
+
+    private Integer cartUpdateQuantity(Cart cart, OrderItem item, int value) {
+        int updatedQuantity = item.getQuantity() + value;
+        BigDecimal updatedItemValue = item.getFood().getPrice().multiply(BigDecimal.valueOf(updatedQuantity));
+        OrderItem updatedOrderItem = item.withQuantity(updatedQuantity).withOrderItemValue(updatedItemValue);
+
+        cart.getOrderItems().remove(item);
+        cart.getOrderItems().add(updatedOrderItem);
+
+        orderItemDAO.createOrderItem(updatedOrderItem);
+        cartCalculateTotalPriceAndUpdate(cart);
 
         return cart.getCartId();
     }
@@ -42,12 +88,12 @@ public class CartService {
                 .findFirst().orElseThrow(() -> new NotFoundException("Could not find food by id: [%s]".formatted(foodId)));
     }
 
-    private OrderItem buildOrderItem(Cart cart, Food food) {
+    private OrderItem buildOrderItem(Integer cartId, Food food) {
         return OrderItem.builder()
                 .quantity(1)
                 .orderItemValue(food.getPrice())
                 .food(food)
-                .cart(cart)
+                .cart(Cart.builder().cartId(cartId).build())
                 .build();
     }
 
@@ -66,61 +112,38 @@ public class CartService {
         return customerService.getCustomer(authentication);
     }
 
-    public void updateCart(String itemName, Integer cartId, String action, Authentication authentication) {
-        Customer customer = getCurrentlyLoggedInCustomer(authentication);
-        Cart cart = customer.getCarts().stream()
-                .filter(c -> cartId.equals(c.getCartId()))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Could not find cart by id: [%s]".formatted(cartId)));
+    private Integer cartRemoveItem(Cart cart, OrderItem item) {
+        cart.getOrderItems().remove(item);
 
-        OrderItem item = cart.getOrderItems().stream()
-                .filter(orderItem -> itemName.equals(orderItem.getFood().getName()))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Could not find food by item name: [%s]".formatted(itemName)));
-
-        switch (action) {
-            case "increase" -> cartIncreaseQuantity(cart, item);
-//            case "decrease" -> cartDecreaseQuantity(cart, itemName);
-            default -> throw new RuntimeException("Something is not yes with action value");
+        if (!cart.getOrderItems().isEmpty()) {
+            cartCalculateTotalPriceAndUpdate(cart);
+            orderItemDAO.deleteOrderItemById(item.getOrderItemId());
+            return cart.getCartId();
+        } else {
+            orderItemDAO.deleteOrderItemById(item.getOrderItemId());
+            delete(cart);
+            return null;
         }
     }
 
-    @Transactional
-    private void cartIncreaseQuantity(Cart cart, OrderItem item) {
-        int increasedQuantity = item.getQuantity() + 1;
-        BigDecimal increasedItemValue = item.getFood().getPrice().multiply(BigDecimal.valueOf(increasedQuantity));
-        OrderItem updatedOrderItem = item.withQuantity(increasedQuantity).withOrderItemValue(increasedItemValue);
-
-        cart.getOrderItems().remove(item);
-        cart.getOrderItems().add(updatedOrderItem);
-
+    private void cartCalculateTotalPriceAndUpdate(Cart cart) {
         BigDecimal cartTotalPrice = cart.getOrderItems().stream()
                 .map(OrderItem::getOrderItemValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         Cart updatedCart = cart.withTotalPrice(cartTotalPrice);
 
-        orderItemDAO.createOrderItem(updatedOrderItem.withCart(updatedCart));
         cartDAO.updateCart(updatedCart);
     }
 
-    public void updateCart(String restaurantName, Integer foodId, Cart cart) {
-        Optional<OrderItem> optionalOrderItem = cart.getOrderItems().stream()
-                .filter(orderItem -> foodId.equals(orderItem.getFood().getFoodId()))
-                .findFirst();
 
-        if (optionalOrderItem.isEmpty()) {
-            cartAddNewItem(restaurantName, foodId, cart);
-        }
-        else {
-            cartIncreaseQuantity(cart, optionalOrderItem.get());
-        }
-    }
-
-    private void cartAddNewItem(String restaurantName, Integer foodId, Cart cart) {
+    private Integer cartAddNewItem(String restaurantName, Integer foodId, Cart cart) {
         Restaurant restaurant = restaurantService.getRestaurantByName(restaurantName);
         Food food = findFoodInRestaurant(restaurant, foodId);
-        OrderItem item = buildOrderItem(cart, food);
+        OrderItem item = buildOrderItem(cart.getCartId(), food);
+        cart.getOrderItems().add(item);
         orderItemDAO.createOrderItem(item);
+        cartCalculateTotalPriceAndUpdate(cart);
+        return cart.getCartId();
     }
 }

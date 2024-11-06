@@ -6,12 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import pl.molsztyn.meetyourmeal.api.dto.mapper.OrderMapper;
 import pl.molsztyn.meetyourmeal.business.CartService;
 import pl.molsztyn.meetyourmeal.domain.Cart;
 import pl.molsztyn.meetyourmeal.domain.Customer;
-import pl.molsztyn.meetyourmeal.domain.exception.NotFoundException;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -21,8 +20,6 @@ public class CartController {
     private static final String CART_UPDATE_QUANTITY = "/restaurant-details/{name}/cart/update-quantity";
 
     private final CartService cartService;
-
-    private final OrderMapper orderMapper;
 
     @PostMapping(CART_ADD_TO_CART)
     public String cartAddToCart(
@@ -35,19 +32,12 @@ public class CartController {
 
         Integer cartId;
         if (customer.getCarts().isEmpty() || !hasCartInThisRestaurant(customer, restaurantName)) {
-            cartId = cartService.createCart(restaurantName, foodId, customer);
-            return "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory + "?cartModal=true&cartId=" + cartId;
-
+            cartId = cartService.create(restaurantName, foodId, customer);
         } else {
-            Cart cart = customer.getCarts().stream()
-                    .filter(c -> restaurantName.equals(c.getRestaurant().getName()))
-                    .findFirst()
-                    .orElseThrow(() -> new NotFoundException("Something is not yes, could not find the cart"));
-            cartService.updateCart(restaurantName, foodId, cart);
-            cartId = cart.getCartId();
+            String action = "addOrIncrease";
+            cartId = cartService.update(restaurantName, foodId, action, customer);
         }
 
-        System.out.println("addToCart");
         return "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory + "?cartModal=true&cartId=" + cartId;
     }
 
@@ -62,12 +52,15 @@ public class CartController {
     public String cartUpdateQuantity(
             @PathVariable("name") String restaurantName,
             @RequestParam("selectedCategory") String selectedCategory,
-            @RequestParam("itemName") String itemName,
-            @RequestParam("cartId") Integer cartId,
+            @RequestParam("foodId") Integer foodId,
             @RequestParam("action") String action,
             Authentication authentication
     ) {
-        cartService.updateCart(itemName, cartId, action, authentication);
-        return "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory + "?cartModal=true&cartId=" + cartId;
+        Customer customer = cartService.getCurrentlyLoggedInCustomer(authentication);
+        Integer cartId = cartService.update(restaurantName, foodId, action, customer);
+
+        return Objects.isNull(cartId)
+        ? "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory
+        : "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory + "?cartModal=true&cartId=" + cartId;
     }
 }

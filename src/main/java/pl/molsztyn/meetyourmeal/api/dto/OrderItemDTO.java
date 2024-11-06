@@ -15,5 +15,6 @@ public class OrderItemDTO {
 
     private Integer quantity;
     private BigDecimal orderItemValue;
+    private Integer foodId;
     private String foodName;
 }
