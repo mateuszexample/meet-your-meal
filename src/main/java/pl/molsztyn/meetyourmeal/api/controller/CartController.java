@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pl.molsztyn.meetyourmeal.business.CartService;
 import pl.molsztyn.meetyourmeal.domain.Cart;
 import pl.molsztyn.meetyourmeal.domain.Customer;
+import pl.molsztyn.meetyourmeal.domain.enums.CartAction;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -34,8 +35,7 @@ public class CartController {
         if (customer.getCarts().isEmpty() || !hasCartInThisRestaurant(customer, restaurantName)) {
             cartId = cartService.create(restaurantName, foodId, customer);
         } else {
-            String action = "addOrIncrease";
-            cartId = cartService.update(restaurantName, foodId, action, customer);
+            cartId = cartService.update(restaurantName, foodId, CartAction.ADD_OR_INCREASE, customer);
         }
 
         return "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory + "?cartModal=true&cartId=" + cartId;
@@ -53,13 +53,14 @@ public class CartController {
             @PathVariable("name") String restaurantName,
             @RequestParam("selectedCategory") String selectedCategory,
             @RequestParam("foodId") Integer foodId,
-            @RequestParam("action") String action,
+            @RequestParam("action") CartAction action,
             Authentication authentication
     ) {
         Customer customer = cartService.getCurrentlyLoggedInCustomer(authentication);
         Integer cartId = cartService.update(restaurantName, foodId, action, customer);
+        boolean isCartDeleted = Objects.isNull(cartId);
 
-        return Objects.isNull(cartId)
+        return isCartDeleted
         ? "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory
         : "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory + "?cartModal=true&cartId=" + cartId;
     }

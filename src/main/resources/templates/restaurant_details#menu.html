@@ -134,7 +134,7 @@
                                 <input type="hidden" name="selectedCategory" th:value="${selectedCategory}"/>
                                 <input type="hidden" name="foodId" th:value="${item.foodId}"/>
 <!--                                <input type="hidden" name="cartId" th:value="${cartId}"/>-->
-                                <input type="hidden" name="action" value="decrease"/>
+                                <input type="hidden" name="action" value="DECREASE"/>
                                 <button type="submit" class="btn btn-light p-1 quantity-control">&minus;</button>
                             </form>
                             <form th:action="@{/restaurant-details/{name}/cart/update-quantity(name=${restaurantDTO.name})}"
@@ -142,7 +142,7 @@
                                 <input type="hidden" name="selectedCategory" th:value="${selectedCategory}"/>
                                 <input type="hidden" name="foodId" th:value="${item.foodId}"/>
 <!--                                <input type="hidden" name="cartId" th:value="${cartId}"/>-->
-                                <input type="hidden" name="action" value="remove"/>
+                                <input type="hidden" name="action" value="REMOVE"/>
                                 <button type="submit" class="btn btn-light p-1 quantity-control">
                                     <i class="bi bi-trash"></i> <!-- Trash icon -->
                                 </button>
@@ -158,7 +158,7 @@
                                 <input type="hidden" name="selectedCategory" th:value="${selectedCategory}"/>
                                 <input type="hidden" name="foodId" th:value="${item.foodId}"/>
 <!--                                <input type="hidden" name="cartId" th:value="${cartId}"/>-->
-                                <input type="hidden" name="action" value="increase"/>
+                                <input type="hidden" name="action" value="INCREASE"/>
                                 <button type="submit" class="btn btn-light p-1 quantity-control">&plus;</button>
                             </form>
                         </div>
@@ -188,8 +188,6 @@
     </div>
 </div>
 
-
-</div>
 
 </body>
 

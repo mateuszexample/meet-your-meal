@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.molsztyn.meetyourmeal.business.dao.CartDAO;
 import pl.molsztyn.meetyourmeal.business.dao.OrderItemDAO;
 import pl.molsztyn.meetyourmeal.domain.*;
+import pl.molsztyn.meetyourmeal.domain.enums.CartAction;
 import pl.molsztyn.meetyourmeal.domain.exception.NotFoundException;
 
 import java.math.BigDecimal;
@@ -40,7 +41,7 @@ public class CartService {
     }
 
     @Transactional
-    public Integer update(String restaurantName, Integer foodId, String action, Customer customer) {
+    public Integer update(String restaurantName, Integer foodId, CartAction action, Customer customer) {
         Cart cart = customer.getCarts().stream()
                 .filter(c -> restaurantName.equals(c.getRestaurant().getName()))
                 .findFirst()
@@ -50,15 +51,18 @@ public class CartService {
                 .filter(orderItem -> foodId.equals(orderItem.getFood().getFoodId()))
                 .findFirst();
 
-        if ("addOrIncrease".equals(action)) {
-            action = optionalOrderItem.isEmpty() ? "add" : "increase";
+        if (CartAction.ADD_OR_INCREASE.equals(action) && optionalOrderItem.isEmpty()) {
+           return cartAddNewItem(restaurantName, foodId, cart);
+        } else if (CartAction.ADD_OR_INCREASE.equals(action)) {
+            action = CartAction.INCREASE;
         }
 
+        OrderItem item = optionalOrderItem.orElseThrow(() -> new NotFoundException("Could not find the item in cart"));
+
         return switch (action) {
-            case "add" -> cartAddNewItem(restaurantName, foodId, cart);
-            case "increase" -> cartUpdateQuantity(cart, optionalOrderItem.get(), 1);
-            case "decrease" -> cartUpdateQuantity(cart, optionalOrderItem.get(), -1);
-            case "remove" -> cartRemoveItem(cart, optionalOrderItem.get());
+            case INCREASE -> cartUpdateQuantity(cart, item, 1);
+            case DECREASE -> cartUpdateQuantity(cart, item, -1);
+            case REMOVE -> cartRemoveItem(cart, item);
             default -> throw new RuntimeException("Something is not yes with action value");
         };
     }
