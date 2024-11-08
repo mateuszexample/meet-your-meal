@@ -7,12 +7,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.molsztyn.meetyourmeal.business.CartService;
-import pl.molsztyn.meetyourmeal.domain.Cart;
 import pl.molsztyn.meetyourmeal.domain.Customer;
 import pl.molsztyn.meetyourmeal.domain.enums.CartAction;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -30,23 +28,16 @@ public class CartController {
             Authentication authentication
     ) {
         Customer customer = cartService.getCurrentlyLoggedInCustomer(authentication);
+        boolean hasCartInThisRestaurant = customer.getCarts().stream()
+                .anyMatch(cart -> restaurantName.equals(cart.getRestaurant().getName()));
 
-        Integer cartId;
-        if (customer.getCarts().isEmpty() || !hasCartInThisRestaurant(customer, restaurantName)) {
-            cartId = cartService.create(restaurantName, foodId, customer);
-        } else {
-            cartId = cartService.update(restaurantName, foodId, CartAction.ADD_OR_INCREASE, customer);
-        }
+        Integer cartId = hasCartInThisRestaurant
+                ? cartService.update(restaurantName, foodId, CartAction.ADD_OR_INCREASE, customer)
+                : cartService.create(restaurantName, foodId, customer);
 
         return "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory + "?cartModal=true&cartId=" + cartId;
     }
 
-    private boolean hasCartInThisRestaurant(Customer customer, String restaurantName) {
-        Optional<Cart> cartOptional = customer.getCarts().stream()
-                .filter(cart -> restaurantName.equals(cart.getRestaurant().getName()))
-                .findFirst();
-        return cartOptional.isPresent();
-    }
 
     @PostMapping(CART_UPDATE_QUANTITY)
     public String cartUpdateQuantity(
