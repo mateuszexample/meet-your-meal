@@ -1,7 +1,7 @@
 package pl.molsztyn.meetyourmeal.domain;
 
 import lombok.*;
-import pl.molsztyn.meetyourmeal.infrastructure.database.entity.OrderStatus;
+import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;

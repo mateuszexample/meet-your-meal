@@ -8,6 +8,8 @@ import pl.molsztyn.meetyourmeal.infrastructure.database.entity.CartEntity;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.jpa.CartJpaRepository;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.mapper.CartEntityMapper;
 
+import java.util.Optional;
+
 @Repository
 @AllArgsConstructor
 public class CartRepository implements CartDAO {
@@ -32,5 +34,11 @@ public class CartRepository implements CartDAO {
     @Override
     public void deleteCartById(Integer cartId) {
         cartJpaRepository.deleteById(cartId);
+    }
+
+    @Override
+    public Optional<Cart> findCartById(Integer cartId) {
+        return cartJpaRepository.findById(cartId)
+                .map(cartEntityMapper::mapFromEntity);
     }
 }

@@ -1,4 +1,4 @@
-package pl.molsztyn.meetyourmeal.infrastructure.database.entity;
+package pl.molsztyn.meetyourmeal.domain.enums;
 
 public enum OrderStatus {
     PENDING,

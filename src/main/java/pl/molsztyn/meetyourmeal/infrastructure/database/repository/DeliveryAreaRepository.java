@@ -28,12 +28,8 @@ public class DeliveryAreaRepository implements DeliveryAreaDAO {
             String postalCode,
             String street
     ) {
-        return deliveryAreaJpaRepository.findByCountryAndCityAndPostalCodeAndStreet(
-                country,
-                city,
-                postalCode,
-                street
-        ).map(deliveryAreaEntityMapper::mapFromEntity);
+        return deliveryAreaJpaRepository.findByCountryAndCityAndPostalCodeAndStreet(country, city, postalCode, street)
+                .map(deliveryAreaEntityMapper::mapFromEntity);
     }
 
     @Override

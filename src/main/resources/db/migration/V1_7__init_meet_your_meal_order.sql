@@ -1,5 +1,3 @@
-CREATE TYPE order_status_type AS ENUM ('PENDING', 'CANCELLED', 'DELIVERED');
-
 CREATE TABLE cart
 (
     cart_id             SERIAL              NOT NULL,
@@ -22,7 +20,7 @@ CREATE TABLE order_details
     received_time       TIMESTAMP WITH TIME ZONE                        NOT NULL,
     to_cancel_time      TIMESTAMP WITH TIME ZONE                        NOT NULL,
     order_value         NUMERIC(19, 2)                                  NOT NULL,
-    order_status        order_status_type                               NOT NULL,
+    order_status        VARCHAR                                         NOT NULL,
     customer_id         INT                                             NOT NULL,
     restaurant_id       INT                                             NOT NULL,
     PRIMARY KEY (order_details_id),

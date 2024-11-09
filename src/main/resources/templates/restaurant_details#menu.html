@@ -133,7 +133,6 @@
                                   method="post" th:if="${item.quantity > 1}" class="me-2">
                                 <input type="hidden" name="selectedCategory" th:value="${selectedCategory}"/>
                                 <input type="hidden" name="foodId" th:value="${item.foodId}"/>
-<!--                                <input type="hidden" name="cartId" th:value="${cartId}"/>-->
                                 <input type="hidden" name="action" value="DECREASE"/>
                                 <button type="submit" class="btn btn-light p-1 quantity-control">&minus;</button>
                             </form>
@@ -141,7 +140,6 @@
                                   method="post" th:if="${item.quantity == 1}" class="me-2">
                                 <input type="hidden" name="selectedCategory" th:value="${selectedCategory}"/>
                                 <input type="hidden" name="foodId" th:value="${item.foodId}"/>
-<!--                                <input type="hidden" name="cartId" th:value="${cartId}"/>-->
                                 <input type="hidden" name="action" value="REMOVE"/>
                                 <button type="submit" class="btn btn-light p-1 quantity-control">
                                     <i class="bi bi-trash"></i> <!-- Trash icon -->
@@ -157,7 +155,6 @@
                                   method="post" class="ms-2">
                                 <input type="hidden" name="selectedCategory" th:value="${selectedCategory}"/>
                                 <input type="hidden" name="foodId" th:value="${item.foodId}"/>
-<!--                                <input type="hidden" name="cartId" th:value="${cartId}"/>-->
                                 <input type="hidden" name="action" value="INCREASE"/>
                                 <button type="submit" class="btn btn-light p-1 quantity-control">&plus;</button>
                             </form>
@@ -175,11 +172,14 @@
                         <div><strong>Total price:</strong></div>
                         <div class="text-end" th:text="${totalPrice} + ' zł'"></div>
                     </div>
-                    <div>
-                        <button type="button" class="btn btn-success">Proceed to Checkout</button>
-                        <a th:href="@{/restaurant-details/{name}/menu/category/{category}(name=${restaurantDTO.name}, category=${selectedCategory})}"
-                           class="btn btn-secondary">Continue Shopping</a>
-                    </div>
+                    <form th:action="@{/restaurant-details/{name}/cart/place-order(name=${restaurantDTO.name})}"
+                          method="post">
+                        <input type="hidden" name="selectedCategory" th:value="${selectedCategory}"/>
+                        <input type="hidden" name="cartId" th:value="${cartId}"/>
+                        <button type="submit" class="btn btn-success">Proceed to Checkout</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Shopping</button>
+
                 </div>
 
             </div>

@@ -2,6 +2,7 @@ package pl.molsztyn.meetyourmeal.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;

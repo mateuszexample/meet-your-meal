@@ -68,7 +68,7 @@ public class CartService {
     }
 
     @Transactional
-    private void delete(Cart cart) {
+    public void delete(Cart cart) {
         cartDAO.deleteCartById(cart.getCartId());
     }
 
@@ -149,5 +149,10 @@ public class CartService {
         orderItemDAO.createOrderItem(item);
         cartCalculateTotalPriceAndUpdate(cart);
         return cart.getCartId();
+    }
+
+    public Cart getCartById(Integer cartId) {
+        return cartDAO.findCartById(cartId)
+                .orElseThrow(() -> new NotFoundException("Could not find cart by id: [%s]".formatted(cartId)));
     }
 }

@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.molsztyn.meetyourmeal.business.CartService;
+import pl.molsztyn.meetyourmeal.business.OrderService;
+import pl.molsztyn.meetyourmeal.domain.Cart;
 import pl.molsztyn.meetyourmeal.domain.Customer;
+import pl.molsztyn.meetyourmeal.domain.OrderDetails;
 import pl.molsztyn.meetyourmeal.domain.enums.CartAction;
 
 import java.util.Objects;
@@ -17,8 +20,10 @@ import java.util.Objects;
 public class CartController {
     private static final String CART_ADD_TO_CART = "/restaurant-details/{name}/cart/add-to-cart/{id}";
     private static final String CART_UPDATE_QUANTITY = "/restaurant-details/{name}/cart/update-quantity";
+    private static final String CART_PLACE_ORDER = "/restaurant-details/{name}/cart/place-order";
 
     private final CartService cartService;
+    private final OrderService orderService;
 
     @PostMapping(CART_ADD_TO_CART)
     public String cartAddToCart(
@@ -52,7 +57,20 @@ public class CartController {
         boolean isCartDeleted = Objects.isNull(cartId);
 
         return isCartDeleted
-        ? "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory
-        : "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory + "?cartModal=true&cartId=" + cartId;
+                ? "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory
+                : "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory + "?cartModal=true&cartId=" + cartId;
+    }
+
+    @PostMapping(CART_PLACE_ORDER)
+    public String cartPlaceOrder(
+            @PathVariable("name") String restaurantName,
+            @RequestParam("selectedCategory") String selectedCategory,
+            @RequestParam("cartId") Integer cartId,
+            Authentication authentication
+    ){
+        Cart cart = cartService.getCartById(cartId);
+        OrderDetails orderDetails = orderService.create(cart, authentication);
+        System.out.println(orderDetails);
+        return "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory;
     }
 }
