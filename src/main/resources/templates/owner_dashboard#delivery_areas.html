@@ -42,9 +42,10 @@
                                         th:action="@{/owner-dashboard/delivery-areas/delete/{id}(id=${deliveryArea.deliveryAreaId})}"
                                         th:method="DELETE"
                                         style="text-align: center;">
-                                    <button class="btn" title="Delete" data-toggle="tooltip">
-                                        <i class="material-icons">&#xE872;</i>
+                                    <button type="submit" title="Delete" class="btn btn-light p-1">
+                                        <i class="bi bi-trash"></i> <!-- Trash icon -->
                                     </button>
+
                                 </form>
                             </td>
                         </tr>

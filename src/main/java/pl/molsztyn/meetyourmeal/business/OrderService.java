@@ -14,7 +14,9 @@ import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
 import pl.molsztyn.meetyourmeal.domain.exception.ProcessingException;
 
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -47,13 +49,16 @@ public class OrderService {
     }
 
     private OrderDetails buildOrder(Cart cart) {
-        OffsetDateTime receivedTime = OffsetDateTime.now();
+        OffsetDateTime now = OffsetDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
+
+        OffsetDateTime receivedTime = OffsetDateTime.parse(now.format(formatter));
         OffsetDateTime toCancelTime = receivedTime.plusMinutes(20);
 
         List<OrderItem> orderItems = cart.getOrderItems().stream().map(orderItem -> orderItem.withCart(null)).toList();
 
         return OrderDetails.builder()
-                .orderNumber(UUID.randomUUID().toString())
+                .orderNumber(UUID.randomUUID().toString().substring(0, 8))
                 .receivedTime(receivedTime)
                 .toCancelTime(toCancelTime)
                 .orderValue(cart.getTotalPrice())
@@ -77,4 +82,7 @@ public class OrderService {
         return customerService.getCustomer(authentication);
     }
 
+    public Set<OrderDetails> getAllOrdersForRestaurant(Integer restaurantId) {
+        return orderDetailsDAO.findAllByRestaurantId(restaurantId);
+    }
 }

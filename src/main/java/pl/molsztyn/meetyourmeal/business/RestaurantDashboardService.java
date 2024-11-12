@@ -23,6 +23,7 @@ public class RestaurantDashboardService {
     private final DeliveryAreaService deliveryAreaService;
     private final FoodService foodService;
     private final AddressService addressService;
+    private final OrderService orderService;
 
     @Transactional
     public void create(RestaurantCreateRequest request, Authentication authentication) {
@@ -250,5 +251,10 @@ public class RestaurantDashboardService {
 
         restaurantService.updateRestaurant(restaurant.withMenu(menu));
         foodService.deleteFood(foodToDelete.get().getFoodId());
+    }
+
+    public Set<OrderDetails> getAllOrdersForRestaurant(Authentication authentication) {
+        Integer restaurantId = getRestaurant(authentication).getRestaurantId();
+        return orderService.getAllOrdersForRestaurant(restaurantId);
     }
 }

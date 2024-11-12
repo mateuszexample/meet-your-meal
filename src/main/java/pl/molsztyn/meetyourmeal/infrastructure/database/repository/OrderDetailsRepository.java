@@ -8,6 +8,9 @@ import pl.molsztyn.meetyourmeal.infrastructure.database.entity.OrderDetailsEntit
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.jpa.OrderDetailsJpaRepository;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.mapper.OrderDetailsEntityMapper;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Repository
 @AllArgsConstructor
 public class OrderDetailsRepository implements OrderDetailsDAO {
@@ -22,5 +25,14 @@ public class OrderDetailsRepository implements OrderDetailsDAO {
         OrderDetailsEntity orderSaved = orderDetailsJpaRepository.saveAndFlush(orderToSave);
 
         return orderDetailsEntityMapper.mapFromEntity(orderSaved);
+    }
+
+    @Override
+    public Set<OrderDetails> findAllByRestaurantId(Integer restaurantId) {
+        Set<OrderDetailsEntity> orderDetailsEntities = orderDetailsJpaRepository.findByRestaurantRestaurantId(restaurantId);
+
+        return orderDetailsEntities.stream()
+                .map(orderDetailsEntityMapper::mapFromEntity)
+                .collect(Collectors.toSet());
     }
 }

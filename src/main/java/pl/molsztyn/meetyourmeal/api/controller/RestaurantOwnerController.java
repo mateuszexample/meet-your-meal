@@ -11,13 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.molsztyn.meetyourmeal.api.dto.*;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.DeliveryAreaMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.FoodMapper;
+import pl.molsztyn.meetyourmeal.api.dto.mapper.OrderMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
 import pl.molsztyn.meetyourmeal.business.RestaurantDashboardService;
 import pl.molsztyn.meetyourmeal.domain.*;
 
 import java.io.IOException;
-import java.util.Base64;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -40,12 +40,14 @@ public class RestaurantOwnerController {
     private static final String OWNER_MENU_FOOD_ADD = "/owner-dashboard/menu/add";
     private static final String OWNER_MENU_FOOD_DELETE = "/owner-dashboard/menu/delete/{id}";
     private static final String OWNER_MENU_FOOD_IMAGE = "/owner-dashboard/menu/image/{id}";
+    private static final String OWNER_ORDERS = "/owner-dashboard/orders";
 
     private final RestaurantDashboardService restaurantDashboardService;
 
     private final RestaurantMapper restaurantMapper;
     private final DeliveryAreaMapper deliveryAreaMapper;
     private final FoodMapper foodMapper;
+    private final OrderMapper orderMapper;
 
 
     @GetMapping(value = OWNER)
@@ -320,5 +322,22 @@ public class RestaurantOwnerController {
         restaurantDashboardService.deleteFood(id, authentication);
 
         return "redirect:/owner-dashboard/menu";
+    }
+
+    @GetMapping(OWNER_ORDERS)
+    public String ownerOrdersPage(
+            Authentication authentication,
+            Model model
+    ) {
+        if (!hasRestaurant(authentication)) return "owner_dashboard#please_add_restaurant_first";
+
+        Set<OrderDetails> allOrdersForRestaurant = restaurantDashboardService.getAllOrdersForRestaurant(authentication);
+        Set<OrderDetailsDTO> orderDetailsDTOs = allOrdersForRestaurant.stream()
+                .map(orderMapper::mapToDTO)
+                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(OrderDetailsDTO::getReceivedTime))));
+
+        model.addAttribute("orderDetailsDTOs", orderDetailsDTOs);
+
+        return "owner_dashboard#orders";
     }
 }

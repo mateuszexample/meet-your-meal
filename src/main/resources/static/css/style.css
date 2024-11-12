@@ -318,7 +318,7 @@ table.table td a.add {
 table.table td a.edit {
     color: #FFC107;
 }
-
+/*
 .material-icons {
     font-size: 24px !important;
     color: #E34724;
@@ -331,7 +331,7 @@ table.table td button.btn {
 
 table.table td i {
     font-size: 19px;
-}
+}*/
 table.table td a.add i {
     font-size: 24px;
     margin-right: -1px;

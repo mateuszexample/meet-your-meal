@@ -1,0 +1,22 @@
+package pl.molsztyn.meetyourmeal.api.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
+
+import java.math.BigDecimal;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderDetailsDTO {
+
+    private String orderNumber;
+    private String receivedTime;
+    private String toCancelTime;
+    private BigDecimal orderValue;
+    private OrderStatus orderStatus;
+}

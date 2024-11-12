@@ -32,11 +32,12 @@
                         <tr th:each="foodCategory : ${foodCategoryDTOs}">
                             <td th:text="${foodCategory.category}"></td>
                             <td style="text-align: center;">
-                                <button class="btn" title="Delete"
+                                <button class="btn btn-light p-1"
+                                        title="Delete"
                                         data-toggle="tooltip"
                                         data-bs-toggle="modal"
                                         th:data-bs-target="'#deleteModal' + ${foodCategory.foodCategoryId}">
-                                    <i class="material-icons">&#xE872;</i>
+                                    <i class="bi bi-trash"></i>
                                 </button>
                             </td>
                         </tr>
@@ -50,15 +51,17 @@
              tabindex="-1" th:aria-labelledby="'deleteModalLabel' + ${foodCategory.foodCategoryId}" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
+
                     <div class="modal-header">
                         <h5 class="modal-title" th:id="'deleteModalLabel' + ${foodCategory.foodCategoryId}">Confirm Deletion</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
                     <div class="modal-body">
                         Are you sure you want to delete this category? <b>This action will also delete all items in this category and cannot be undone.</b>
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <form th:action="@{/owner-dashboard/food-categories/delete/{id}(id=${foodCategory.foodCategoryId})}"
                               th:method="DELETE">
                             <button type="submit" class="btn btn-danger">Delete Category</button>
