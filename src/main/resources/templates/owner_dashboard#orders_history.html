@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layouts/owner_dashboard_layout}" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Meet your meal</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2><b>Orders</b></h2></div>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Order number</th>
+                    <th>Received time</th>
+                    <th>To cancel time</th>
+                    <th>Order value</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orderDetailsDTOs}">
+                    <td th:text="${order.orderNumber}"></td>
+                    <td th:text="${order.receivedTime}"></td>
+                    <td th:text="${order.toCancelTime}"></td>
+                    <td th:text="${order.orderValue} + ' zł'" style="text-align: center;"></td>
+                    <td th:text="${order.orderStatus}"
+                        th:classappend="${order.orderStatus == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).DELIVERED ? 'text-success' :
+                        (order.orderStatus == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCELLED ? 'text-danger' : '')}">
+                    </td>
+                    <td>
+                        <!-- Details Button -->
+                        <a th:href="@{/owner-dashboard/order/details/{id}(id=${order.orderNumber})}"
+                           class="btn btn-light p-1"
+                           title="Details">
+                            <i class="bi bi-eye"></i>
+                        </a>
+
+                        <!-- Edit Status Button -->
+                        <button type="button"
+                                class="btn btn-light p-1"
+                                title="Edit status"
+                                data-bs-toggle="modal"
+                                th:data-bs-target="'#editStatusModal' + ${order.orderNumber}">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div th:each="order : ${orderDetailsDTOs}" class="modal fade"
+         th:id="'editStatusModal' + ${order.orderNumber}"
+         tabindex="-1" role="dialog"
+         th:aria-labelledby="'editStatusModalLabel' + ${order.orderNumber}"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" th:id="'editStatusModalLabel' + ${order.orderNumber}">Edit Order Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form th:action="@{/owner-dashboard/order/update-status}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="orderNumber" th:value="${order.orderNumber}"/>
+
+                        <label for="orderStatusSelect">Order Status</label>
+                        <select name="orderStatus" class="form-control" id="orderStatusSelect">
+                            <option th:each="status : ${T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).values()}"
+                                    th:value="${status}"
+                                    th:text="${status}"
+                                    th:classappend="${status == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).DELIVERED ? 'text-success' :
+                                    (status == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCELLED ? 'text-danger' : '')}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

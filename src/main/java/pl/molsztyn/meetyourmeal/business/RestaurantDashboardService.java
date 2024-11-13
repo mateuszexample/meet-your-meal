@@ -259,7 +259,7 @@ public class RestaurantDashboardService {
         return orderService.getAllOrdersForRestaurant(restaurantId);
     }
 
-    public void updateOrderStatus(String orderNumber, OrderStatus orderStatus, Authentication authentication) {
+    public OrderStatus updateOrderStatus(String orderNumber, OrderStatus orderStatus, Authentication authentication) {
         Integer restaurantId = getRestaurant(authentication).getRestaurantId();
         Set<OrderDetails> allOrdersForRestaurant = orderService.getAllOrdersForRestaurant(restaurantId);
 
@@ -272,5 +272,6 @@ public class RestaurantDashboardService {
 
         OrderDetails orderToUpdate = optionalOrderDetails.get();
         orderService.update(orderToUpdate.withOrderStatus(orderStatus));
+        return orderToUpdate.getOrderStatus();
     }
 }

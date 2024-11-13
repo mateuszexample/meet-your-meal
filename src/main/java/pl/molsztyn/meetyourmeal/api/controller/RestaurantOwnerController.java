@@ -42,6 +42,7 @@ public class RestaurantOwnerController {
     private static final String OWNER_MENU_FOOD_DELETE = "/owner-dashboard/menu/delete/{id}";
     private static final String OWNER_MENU_FOOD_IMAGE = "/owner-dashboard/menu/image/{id}";
     private static final String OWNER_ORDERS = "/owner-dashboard/orders";
+    private static final String OWNER_ORDERS_HISTORY = "/owner-dashboard/orders-history";
     private static final String OWNER_ORDER_UPDATE_STATUS = "/owner-dashboard/order/update-status";
 
     private final RestaurantDashboardService restaurantDashboardService;
@@ -335,6 +336,7 @@ public class RestaurantOwnerController {
 
         Set<OrderDetails> allOrdersForRestaurant = restaurantDashboardService.getAllOrdersForRestaurant(authentication);
         Set<OrderDetailsDTO> orderDetailsDTOs = allOrdersForRestaurant.stream()
+                .filter(orderDetails -> OrderStatus.PENDING.equals(orderDetails.getOrderStatus()))
                 .map(orderMapper::mapToDTO)
                 .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(OrderDetailsDTO::getReceivedTime))));
 
@@ -343,13 +345,34 @@ public class RestaurantOwnerController {
         return "owner_dashboard#orders";
     }
 
+    @GetMapping(OWNER_ORDERS_HISTORY)
+    public String ownerOrdersHistoryPage(
+            Authentication authentication,
+            Model model
+    ) {
+        if (!hasRestaurant(authentication)) return "owner_dashboard#please_add_restaurant_first";
+
+        Set<OrderDetails> allOrdersForRestaurant = restaurantDashboardService.getAllOrdersForRestaurant(authentication);
+        Set<OrderDetailsDTO> orderDetailsDTOs = allOrdersForRestaurant.stream()
+                .filter(orderDetails -> !OrderStatus.PENDING.equals(orderDetails.getOrderStatus()))
+                .map(orderMapper::mapToDTO)
+                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(OrderDetailsDTO::getReceivedTime))));
+
+        model.addAttribute("orderDetailsDTOs", orderDetailsDTOs);
+
+        return "owner_dashboard#orders_history";
+    }
+
     @PostMapping(OWNER_ORDER_UPDATE_STATUS)
     public String ownerOrderUpdateStatus(
             @RequestParam("orderNumber") String orderNumber,
             @RequestParam("orderStatus") OrderStatus orderStatus,
             Authentication authentication
     ) {
-        restaurantDashboardService.updateOrderStatus(orderNumber, orderStatus, authentication);
-        return "redirect:/owner-dashboard/orders";
+        OrderStatus oldStatus = restaurantDashboardService.updateOrderStatus(orderNumber, orderStatus, authentication);
+
+        return OrderStatus.PENDING.equals(oldStatus)
+                ? "redirect:/owner-dashboard/orders"
+                : "redirect:/owner-dashboard/orders-history";
     }
 }
