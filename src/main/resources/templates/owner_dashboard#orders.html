@@ -72,17 +72,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form th:action="@{/owner-dashboard/order/updateStatus}" method="post">
+                <form th:action="@{/owner-dashboard/order/update-status}" method="post">
                     <div class="modal-body">
                         <input type="hidden" name="orderNumber" th:value="${order.orderNumber}" />
 
-                        <div class="form-group mb-3">
                             <label for="orderStatusSelect">Order Status</label>
                             <select name="orderStatus" class="form-control" id="orderStatusSelect">
                                 <option th:each="status : ${T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).values()}"
                                         th:value="${status}" th:text="${status}"></option>
                             </select>
-                        </div>
                     </div>
 
                     <div class="modal-footer">

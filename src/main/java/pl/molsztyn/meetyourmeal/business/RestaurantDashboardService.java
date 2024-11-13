@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.molsztyn.meetyourmeal.domain.*;
+import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
 import pl.molsztyn.meetyourmeal.domain.exception.NotFoundException;
 import pl.molsztyn.meetyourmeal.infrastructure.security.MeetYourMealUserDetailsService;
 
@@ -256,5 +257,20 @@ public class RestaurantDashboardService {
     public Set<OrderDetails> getAllOrdersForRestaurant(Authentication authentication) {
         Integer restaurantId = getRestaurant(authentication).getRestaurantId();
         return orderService.getAllOrdersForRestaurant(restaurantId);
+    }
+
+    public void updateOrderStatus(String orderNumber, OrderStatus orderStatus, Authentication authentication) {
+        Integer restaurantId = getRestaurant(authentication).getRestaurantId();
+        Set<OrderDetails> allOrdersForRestaurant = orderService.getAllOrdersForRestaurant(restaurantId);
+
+        Optional<OrderDetails> optionalOrderDetails = allOrdersForRestaurant.stream()
+                .filter(orderDetails -> orderNumber.equals(orderDetails.getOrderNumber()))
+                .findFirst();
+        if (optionalOrderDetails.isEmpty()) {
+            throw new NotFoundException("Could not find order by orderNumber: [%s]".formatted(orderNumber));
+        }
+
+        OrderDetails orderToUpdate = optionalOrderDetails.get();
+        orderService.update(orderToUpdate.withOrderStatus(orderStatus));
     }
 }

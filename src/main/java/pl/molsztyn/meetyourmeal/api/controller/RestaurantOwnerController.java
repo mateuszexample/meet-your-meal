@@ -15,6 +15,7 @@ import pl.molsztyn.meetyourmeal.api.dto.mapper.OrderMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.RestaurantMapper;
 import pl.molsztyn.meetyourmeal.business.RestaurantDashboardService;
 import pl.molsztyn.meetyourmeal.domain.*;
+import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
 
 import java.io.IOException;
 import java.util.*;
@@ -41,6 +42,7 @@ public class RestaurantOwnerController {
     private static final String OWNER_MENU_FOOD_DELETE = "/owner-dashboard/menu/delete/{id}";
     private static final String OWNER_MENU_FOOD_IMAGE = "/owner-dashboard/menu/image/{id}";
     private static final String OWNER_ORDERS = "/owner-dashboard/orders";
+    private static final String OWNER_ORDER_UPDATE_STATUS = "/owner-dashboard/order/update-status";
 
     private final RestaurantDashboardService restaurantDashboardService;
 
@@ -339,5 +341,15 @@ public class RestaurantOwnerController {
         model.addAttribute("orderDetailsDTOs", orderDetailsDTOs);
 
         return "owner_dashboard#orders";
+    }
+
+    @PostMapping(OWNER_ORDER_UPDATE_STATUS)
+    public String ownerOrderUpdateStatus(
+            @RequestParam("orderNumber") String orderNumber,
+            @RequestParam("orderStatus") OrderStatus orderStatus,
+            Authentication authentication
+    ) {
+        restaurantDashboardService.updateOrderStatus(orderNumber, orderStatus, authentication);
+        return "redirect:/owner-dashboard/orders";
     }
 }

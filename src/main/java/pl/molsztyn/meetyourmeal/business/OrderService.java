@@ -48,6 +48,11 @@ public class OrderService {
         return orderDetailsSaved.withOrderItems(orderItems);
     }
 
+    @Transactional
+    public void update(OrderDetails orderDetails) {
+        orderDetailsDAO.create(orderDetails);
+    }
+
     private OrderDetails buildOrder(Cart cart) {
         OffsetDateTime now = OffsetDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");

@@ -27,7 +27,8 @@ public class Restaurant {
     }
     public Set<FoodCategory> getFoodCategories() {
         return Objects.isNull(foodCategories) ? new HashSet<>() : foodCategories;
-    }  public Set<Food> getMenu() {
+    }
+    public Set<Food> getMenu() {
         return Objects.isNull(menu) ? new HashSet<>() : menu;
     }
 }
