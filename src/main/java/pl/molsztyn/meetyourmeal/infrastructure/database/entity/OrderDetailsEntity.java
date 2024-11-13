@@ -6,7 +6,7 @@ import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -48,6 +48,6 @@ public class OrderDetailsEntity {
     @JoinColumn(name = "restaurant_id")
     private RestaurantEntity restaurant;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderDetails")
-    private Set<OrderItemEntity> orderItems;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "orderDetails")
+    private List<OrderItemEntity> orderItems;
 }

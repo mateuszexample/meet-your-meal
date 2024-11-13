@@ -4,20 +4,19 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.molsztyn.meetyourmeal.business.dao.CartItemDAO;
 import pl.molsztyn.meetyourmeal.business.dao.OrderDetailsDAO;
-import pl.molsztyn.meetyourmeal.business.dao.OrderItemDAO;
-import pl.molsztyn.meetyourmeal.domain.Cart;
-import pl.molsztyn.meetyourmeal.domain.Customer;
-import pl.molsztyn.meetyourmeal.domain.OrderDetails;
-import pl.molsztyn.meetyourmeal.domain.OrderItem;
+import pl.molsztyn.meetyourmeal.domain.*;
 import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
 import pl.molsztyn.meetyourmeal.domain.exception.ProcessingException;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,25 +26,34 @@ public class OrderService {
     private final CartService cartService;
 
     private final OrderDetailsDAO orderDetailsDAO;
-    private final OrderItemDAO orderItemDAO;
+    private final CartItemDAO cartItemDAO;
 
     @Transactional
     public OrderDetails create(Cart cart, Authentication authentication) {
         validateCustomer(cart, authentication);
+
         OrderDetails orderDetails = buildOrder(cart);
         OrderDetails orderDetailsSaved = orderDetailsDAO.create(orderDetails);
 
-        List<OrderItem> orderItems = orderDetailsSaved.getOrderItems().stream()
-                .map(orderItem ->
-                        orderItem.withOrderDetails(OrderDetails.builder()
-                                .orderDetailsId(orderDetailsSaved.getOrderDetailsId())
-                                .build()))
-                .toList();
+        List<CartItem> cartItems = cart.getCartItems();
+        List<OrderItem> orderItems = cartItems.stream()
+                .map(cartItem -> buildOrderItem(cartItem, orderDetailsSaved))
+                .collect(Collectors.toCollection(ArrayList::new));
 
-        orderItems.forEach(orderItemDAO::createOrderItem);
+        update(orderDetailsSaved.withOrderItems(orderItems));
 
         cartService.delete(cart);
-        return orderDetailsSaved.withOrderItems(orderItems);
+
+        return orderDetailsSaved;
+    }
+
+    private OrderItem buildOrderItem(CartItem cartItem, OrderDetails orderDetailsSaved) {
+        return OrderItem.builder()
+                .foodName(cartItem.getFood().getName())
+                .quantity(cartItem.getQuantity())
+                .orderItemValue(cartItem.getCartItemValue())
+                .orderDetails(orderDetailsSaved)
+                .build();
     }
 
     @Transactional
@@ -60,8 +68,6 @@ public class OrderService {
         OffsetDateTime receivedTime = OffsetDateTime.parse(now.format(formatter));
         OffsetDateTime toCancelTime = receivedTime.plusMinutes(20);
 
-        List<OrderItem> orderItems = cart.getOrderItems().stream().map(orderItem -> orderItem.withCart(null)).toList();
-
         return OrderDetails.builder()
                 .orderNumber(UUID.randomUUID().toString().substring(0, 8))
                 .receivedTime(receivedTime)
@@ -70,7 +76,7 @@ public class OrderService {
                 .orderStatus(OrderStatus.PENDING)
                 .customer(cart.getCustomer())
                 .restaurant(cart.getRestaurant())
-                .orderItems(orderItems)
+                .orderItems(new ArrayList<>())
                 .build();
     }
 

@@ -5,9 +5,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import pl.molsztyn.meetyourmeal.domain.Cart;
-import pl.molsztyn.meetyourmeal.domain.OrderItem;
+import pl.molsztyn.meetyourmeal.domain.CartItem;
 import pl.molsztyn.meetyourmeal.infrastructure.database.entity.CartEntity;
-import pl.molsztyn.meetyourmeal.infrastructure.database.entity.OrderItemEntity;
+import pl.molsztyn.meetyourmeal.infrastructure.database.entity.CartItemEntity;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,14 +31,14 @@ public interface CartEntityMapper {
     @Mapping(target = "restaurant.deliveryAreas", ignore = true)
     @Mapping(target = "restaurant.foodCategories", ignore = true)
     @Mapping(target = "restaurant.menu", ignore = true)
-    @Mapping(source = "orderItems", target = "orderItems", qualifiedByName = "mapOrderItemsFromEntity")
+    @Mapping(source = "cartItems", target = "cartItems", qualifiedByName = "mapCartItemsFromEntity")
     Cart mapFromEntity(CartEntity cartSaved);
 
-    @Named("mapOrderItemsFromEntity")
-    default List<OrderItem> mapOrderItemsFromEntity(Set<OrderItemEntity> orderItemEntities) {
-        return orderItemEntities.stream()
+    @Named("mapCartItemsFromEntity")
+    default List<CartItem> mapCartItemsFromEntity(Set<CartItemEntity> cartItemEntities) {
+        return cartItemEntities.stream()
                 .map(this::mapFromEntity)
-                .sorted(Comparator.comparing(OrderItem::getOrderItemId))
+                .sorted(Comparator.comparing(CartItem::getCartItemId))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -46,6 +46,6 @@ public interface CartEntityMapper {
     @Mapping(target = "cart.totalPrice", ignore = true)
     @Mapping(target = "cart.customer", ignore = true)
     @Mapping(target = "cart.restaurant", ignore = true)
-    @Mapping(target = "cart.orderItems", ignore = true)
-    OrderItem mapFromEntity(OrderItemEntity orderItemEntity);
+    @Mapping(target = "cart.cartItems", ignore = true)
+    CartItem mapFromEntity(CartItemEntity cartItemEntity);
 }

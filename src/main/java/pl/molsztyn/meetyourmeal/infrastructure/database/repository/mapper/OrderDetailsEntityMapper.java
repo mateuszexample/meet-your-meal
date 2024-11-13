@@ -12,7 +12,6 @@ import pl.molsztyn.meetyourmeal.infrastructure.database.entity.OrderItemEntity;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -33,21 +32,16 @@ public interface OrderDetailsEntityMapper {
     @Mapping(target = "restaurant.foodCategories", ignore = true)
     @Mapping(target = "restaurant.menu", ignore = true)
     @Mapping(source = "orderItems", target = "orderItems", qualifiedByName = "mapOrderItemsFromEntity")
-    OrderDetails mapFromEntity(OrderDetailsEntity orderDetailsEntitySaved);
+    OrderDetails mapFromEntity(OrderDetailsEntity orderDetailsEntity);
 
     @Named("mapOrderItemsFromEntity")
-    default List<OrderItem> mapOrderItemsFromEntity(Set<OrderItemEntity> orderItemEntities) {
+    default List<OrderItem> mapOrderItemsFromEntity(List<OrderItemEntity> orderItemEntities) {
         return orderItemEntities.stream()
                 .map(this::mapFromEntity)
                 .sorted(Comparator.comparing(OrderItem::getOrderItemId))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Mapping(target = "food.restaurant", ignore = true)
-    @Mapping(target = "cart.totalPrice", ignore = true)
-    @Mapping(target = "cart.customer", ignore = true)
-    @Mapping(target = "cart.restaurant", ignore = true)
-    @Mapping(target = "cart.orderItems", ignore = true)
     @Mapping(target = "orderDetails.orderNumber", ignore = true)
     @Mapping(target = "orderDetails.receivedTime", ignore = true)
     @Mapping(target = "orderDetails.toCancelTime", ignore = true)
@@ -60,6 +54,6 @@ public interface OrderDetailsEntityMapper {
     OrderItem mapFromEntity(OrderItemEntity orderItemEntity);
 
 //    @Named("mapOrderDetailsFromEntity")
-//    OrderDetails mapOrderDetailsFromEntity(OrderDetailsEntity orderDetailsEntitySaved);
+//    OrderDetails mapOrderDetailsFromEntity(OrderDetailsEntity orderDetailsEntity);
 
 }

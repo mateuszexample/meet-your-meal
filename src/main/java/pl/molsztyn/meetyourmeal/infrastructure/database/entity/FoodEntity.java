@@ -43,5 +43,5 @@ public class FoodEntity {
     private RestaurantEntity restaurant;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "food")
-    private Set<OrderItemEntity> orders;
+    private Set<CartItemEntity> orders;
 }

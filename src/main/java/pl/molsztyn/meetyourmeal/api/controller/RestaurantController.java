@@ -9,9 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import pl.molsztyn.meetyourmeal.api.dto.CartItemDTO;
 import pl.molsztyn.meetyourmeal.api.dto.FoodCategoryDTO;
 import pl.molsztyn.meetyourmeal.api.dto.FoodDTO;
-import pl.molsztyn.meetyourmeal.api.dto.OrderItemDTO;
 import pl.molsztyn.meetyourmeal.api.dto.RestaurantDTO;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.FoodMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.OrderMapper;
@@ -92,7 +92,7 @@ public class RestaurantController {
                     .findFirst()
                     .orElseThrow(() -> new NotFoundException("Could not find cart by id: [%s]".formatted(cartId)));
 
-            List<OrderItemDTO> cartItems = cart.getOrderItems().stream()
+            List<CartItemDTO> cartItems = cart.getCartItems().stream()
                     .map(orderMapper::mapToDTO)
                     .toList();
 

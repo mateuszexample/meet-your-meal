@@ -33,21 +33,30 @@ CREATE TABLE order_details
             REFERENCES restaurant (restaurant_id)
 );
 
+CREATE TABLE cart_item
+(
+    cart_item_id        SERIAL              NOT NULL,
+    quantity            INT                 NOT NULL,
+    cart_item_value     NUMERIC(19, 2)      NOT NULL,
+    food_id             INT                 NOT NULL,
+    cart_id             INT,
+    PRIMARY KEY (cart_item_id),
+    CONSTRAINT fk_cart_item_food
+        FOREIGN KEY (food_id)
+            REFERENCES food (food_id),
+    CONSTRAINT fk_cart_item_cart
+        FOREIGN KEY (cart_id)
+            REFERENCES cart (cart_id)
+);
+
 CREATE TABLE order_item
 (
     order_item_id       SERIAL              NOT NULL,
+    food_name           VARCHAR(32)         NOT NULL,
     quantity            INT                 NOT NULL,
     order_item_value    NUMERIC(19, 2)      NOT NULL,
-    food_id             INT                 NOT NULL,
-    cart_id             INT,
-    order_details_id    INT,
+    order_details_id    INT                 NOT NULL,
     PRIMARY KEY (order_item_id),
-    CONSTRAINT fk_order_item_food
-        FOREIGN KEY (food_id)
-            REFERENCES food (food_id),
-    CONSTRAINT fk_order_item_cart
-        FOREIGN KEY (cart_id)
-            REFERENCES cart (cart_id),
     CONSTRAINT fk_order_item_order_details
         FOREIGN KEY (order_details_id)
             REFERENCES order_details (order_details_id)

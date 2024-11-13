@@ -18,9 +18,9 @@ public class Cart {
     BigDecimal totalPrice;
     Customer customer;
     Restaurant restaurant;
-    List<OrderItem> orderItems;
+    List<CartItem> cartItems;
 
-    public List<OrderItem> getOrderItems() {
-        return Objects.isNull(orderItems) ? new ArrayList<>() : orderItems;
+    public List<CartItem> getCartItems() {
+        return Objects.isNull(cartItems) ? new ArrayList<>() : cartItems;
     }
 }

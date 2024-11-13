@@ -8,13 +8,12 @@ import java.math.BigDecimal;
 @Value
 @Builder
 @EqualsAndHashCode(of = "orderItemId")
-@ToString(of = {"orderItemId", "quantity", "orderItemValue"})
+@ToString(of = {"orderItemId", "foodName", "quantity", "orderItemValue"})
 public class OrderItem {
 
     Integer orderItemId;
+    String foodName;
     Integer quantity;
     BigDecimal orderItemValue;
-    Food food;
-    Cart cart;
     OrderDetails orderDetails;
 }

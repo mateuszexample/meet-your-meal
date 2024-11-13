@@ -5,11 +5,11 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import pl.molsztyn.meetyourmeal.domain.Cart;
+import pl.molsztyn.meetyourmeal.domain.CartItem;
 import pl.molsztyn.meetyourmeal.domain.Customer;
-import pl.molsztyn.meetyourmeal.domain.OrderItem;
 import pl.molsztyn.meetyourmeal.infrastructure.database.entity.CartEntity;
+import pl.molsztyn.meetyourmeal.infrastructure.database.entity.CartItemEntity;
 import pl.molsztyn.meetyourmeal.infrastructure.database.entity.CustomerEntity;
-import pl.molsztyn.meetyourmeal.infrastructure.database.entity.OrderItemEntity;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -32,21 +32,21 @@ public interface CustomerEntityMapper {
     @Mapping(target = "restaurant.address", ignore = true)
     @Mapping(target = "restaurant.menu", ignore = true)
     @Mapping(target = "restaurant.restaurantOwner", ignore = true)
-    @Mapping(source = "orderItems", target = "orderItems", qualifiedByName = "mapOrderItemsFromEntity")
+    @Mapping(source = "cartItems", target = "cartItems", qualifiedByName = "mapCartItemsFromEntity")
     Cart mapFromEntity(CartEntity cartEntity);
 
-    @Named("mapOrderItemsFromEntity")
-    default List<OrderItem> mapOrderItemsFromEntity(Set<OrderItemEntity> orderItemEntities) {
-        return orderItemEntities.stream()
+    @Named("mapCartItemsFromEntity")
+    default List<CartItem> mapCartItemsFromEntity(Set<CartItemEntity> cartItemEntities) {
+        return cartItemEntities.stream()
                 .map(this::mapFromEntity)
-                .sorted(Comparator.comparing(OrderItem::getOrderItemId))
+                .sorted(Comparator.comparing(CartItem::getCartItemId))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Mapping(target = "cart.totalPrice", ignore = true)
     @Mapping(target = "cart.customer", ignore = true)
     @Mapping(target = "cart.restaurant", ignore = true)
-    @Mapping(target = "cart.orderItems", ignore = true)
+    @Mapping(target = "cart.cartItems", ignore = true)
     @Mapping(target = "food.restaurant", ignore = true)
-    OrderItem mapFromEntity(OrderItemEntity orderItemEntity);
+    CartItem mapFromEntity(CartItemEntity cartItemEntity);
 }
