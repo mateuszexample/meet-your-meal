@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.molsztyn.meetyourmeal.business.dao.CartItemDAO;
 import pl.molsztyn.meetyourmeal.business.dao.OrderDetailsDAO;
 import pl.molsztyn.meetyourmeal.domain.*;
 import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
@@ -26,7 +25,6 @@ public class OrderService {
     private final CartService cartService;
 
     private final OrderDetailsDAO orderDetailsDAO;
-    private final CartItemDAO cartItemDAO;
 
     @Transactional
     public OrderDetails create(Cart cart, Authentication authentication) {
@@ -45,15 +43,6 @@ public class OrderService {
         cartService.delete(cart);
 
         return orderDetailsSaved;
-    }
-
-    private OrderItem buildOrderItem(CartItem cartItem, OrderDetails orderDetailsSaved) {
-        return OrderItem.builder()
-                .foodName(cartItem.getFood().getName())
-                .quantity(cartItem.getQuantity())
-                .orderItemValue(cartItem.getCartItemValue())
-                .orderDetails(orderDetailsSaved)
-                .build();
     }
 
     @Transactional
@@ -77,6 +66,15 @@ public class OrderService {
                 .customer(cart.getCustomer())
                 .restaurant(cart.getRestaurant())
                 .orderItems(new ArrayList<>())
+                .build();
+    }
+
+    private OrderItem buildOrderItem(CartItem cartItem, OrderDetails orderDetailsSaved) {
+        return OrderItem.builder()
+                .foodName(cartItem.getFood().getName())
+                .quantity(cartItem.getQuantity())
+                .orderItemValue(cartItem.getCartItemValue())
+                .orderDetails(orderDetailsSaved)
                 .build();
     }
 

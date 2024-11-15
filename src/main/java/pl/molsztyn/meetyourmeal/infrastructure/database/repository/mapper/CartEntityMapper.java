@@ -17,7 +17,22 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CartEntityMapper {
+    @Mapping(source = "cartItems", target = "cartItems", qualifiedByName = "mapCartItemsToEntity")
     CartEntity mapToEntity(Cart cart);
+
+    @Named("mapCartItemsToEntity")
+    default Set<CartItemEntity> mapCartItemsToEntity(List<CartItem> cartItems) {
+        return cartItems.stream()
+                .map(this::mapToEntity)
+                .collect(Collectors.toSet());
+    }
+
+    @Mapping(target = "cart.totalPrice", ignore = true)
+    @Mapping(target = "cart.customer", ignore = true)
+    @Mapping(target = "cart.restaurant", ignore = true)
+    @Mapping(target = "cart.cartItems", ignore = true)
+    CartItemEntity mapToEntity(CartItem cartItem);
+
 
     @Mapping(target = "customer.name", ignore = true)
     @Mapping(target = "customer.surname", ignore = true)
@@ -41,7 +56,6 @@ public interface CartEntityMapper {
                 .sorted(Comparator.comparing(CartItem::getCartItemId))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-
     @Mapping(target = "food.restaurant", ignore = true)
     @Mapping(target = "cart.totalPrice", ignore = true)
     @Mapping(target = "cart.customer", ignore = true)

@@ -33,6 +33,6 @@ public class CartEntity {
     @JoinColumn(name = "restaurant_id")
     private RestaurantEntity restaurant;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "cart")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cart")
     private Set<CartItemEntity> cartItems;
 }

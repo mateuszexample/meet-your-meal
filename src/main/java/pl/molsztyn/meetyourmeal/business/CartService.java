@@ -30,14 +30,10 @@ public class CartService {
 
         Food food = findFoodInRestaurant(restaurant, foodId);
         Cart cart = createEmptyCart(restaurant, customer);
-        Integer cartId = cart.getCartId();
-        CartItem cartItem = buildCartItem(cartId, food);
+        CartItem cartItem = buildCartItem(cart, food);
         cart.getCartItems().add(cartItem);
 
-        cartItemDAO.createCartItem(cartItem);
-        cartCalculateTotalPriceAndUpdate(cart);
-
-        return cartId;
+        return cartCalculateTotalPriceUpdateAndReturnCartId(cart);
     }
 
     @Transactional
@@ -52,7 +48,7 @@ public class CartService {
                 .findFirst();
 
         if (CartAction.ADD_OR_INCREASE.equals(action) && optionalCartItem.isEmpty()) {
-           return cartAddNewItem(restaurantName, foodId, cart);
+            return cartAddNewItem(restaurantName, foodId, cart);
         } else if (CartAction.ADD_OR_INCREASE.equals(action)) {
             action = CartAction.INCREASE;
         }
@@ -80,10 +76,7 @@ public class CartService {
         cart.getCartItems().remove(item);
         cart.getCartItems().add(updatedCartItem);
 
-        cartItemDAO.createCartItem(updatedCartItem);
-        cartCalculateTotalPriceAndUpdate(cart);
-
-        return cart.getCartId();
+        return cartCalculateTotalPriceUpdateAndReturnCartId(cart);
     }
 
     private Food findFoodInRestaurant(Restaurant restaurant, Integer foodId) {
@@ -92,12 +85,12 @@ public class CartService {
                 .findFirst().orElseThrow(() -> new NotFoundException("Could not find food by id: [%s]".formatted(foodId)));
     }
 
-    private CartItem buildCartItem(Integer cartId, Food food) {
+    private CartItem buildCartItem(Cart cart, Food food) {
         return CartItem.builder()
                 .quantity(1)
                 .cartItemValue(food.getPrice())
                 .food(food)
-                .cart(Cart.builder().cartId(cartId).build())
+                .cart(cart)
                 .build();
     }
 
@@ -120,17 +113,15 @@ public class CartService {
         cart.getCartItems().remove(item);
 
         if (!cart.getCartItems().isEmpty()) {
-            cartCalculateTotalPriceAndUpdate(cart);
             cartItemDAO.deleteCartItemById(item.getCartItemId());
-            return cart.getCartId();
+            return cartCalculateTotalPriceUpdateAndReturnCartId(cart);
         } else {
-            cartItemDAO.deleteCartItemById(item.getCartItemId());
             delete(cart);
             return null;
         }
     }
 
-    private void cartCalculateTotalPriceAndUpdate(Cart cart) {
+    private Integer cartCalculateTotalPriceUpdateAndReturnCartId(Cart cart) {
         BigDecimal cartTotalPrice = cart.getCartItems().stream()
                 .map(CartItem::getCartItemValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -138,17 +129,17 @@ public class CartService {
         Cart updatedCart = cart.withTotalPrice(cartTotalPrice);
 
         cartDAO.updateCart(updatedCart);
+
+        return cart.getCartId();
     }
 
 
     private Integer cartAddNewItem(String restaurantName, Integer foodId, Cart cart) {
         Restaurant restaurant = restaurantService.getRestaurantByName(restaurantName);
         Food food = findFoodInRestaurant(restaurant, foodId);
-        CartItem item = buildCartItem(cart.getCartId(), food);
+        CartItem item = buildCartItem(cart, food);
         cart.getCartItems().add(item);
-        cartItemDAO.createCartItem(item);
-        cartCalculateTotalPriceAndUpdate(cart);
-        return cart.getCartId();
+        return cartCalculateTotalPriceUpdateAndReturnCartId(cart);
     }
 
     public Cart getCartById(Integer cartId) {
