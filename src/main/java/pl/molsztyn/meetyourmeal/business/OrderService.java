@@ -94,4 +94,5 @@ public class OrderService {
     public Set<OrderDetails> getAllOrdersForRestaurant(Integer restaurantId) {
         return orderDetailsDAO.findAllByRestaurantId(restaurantId);
     }
+
 }

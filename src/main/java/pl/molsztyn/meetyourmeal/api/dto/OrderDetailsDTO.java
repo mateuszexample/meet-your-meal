@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Builder
@@ -19,4 +20,5 @@ public class OrderDetailsDTO {
     private String toCancelTime;
     private BigDecimal orderValue;
     private OrderStatus orderStatus;
+    private List<OrderItemDTO> orderItems;
 }
