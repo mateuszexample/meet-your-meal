@@ -106,7 +106,7 @@ public class CartService {
     }
 
     public Customer getCurrentlyLoggedInCustomer(Authentication authentication) {
-        return customerService.getCustomer(authentication);
+        return customerService.findCustomer(authentication);
     }
 
     private Integer cartRemoveItem(Cart cart, CartItem item) {

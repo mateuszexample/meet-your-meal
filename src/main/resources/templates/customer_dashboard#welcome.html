@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layouts/customer_dashboard_layout}">
+
+<head>
+    <title>Meet your meal</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div id="welcome">
+
+            <h2>
+                Welcome <span th:text="${#authentication.name}"></span> to your account dashboard!
+            </h2>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layouts/customer_dashboard_layout}">
+<head>
+    <title>Customer Details - Meet Your Meal</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <h2 class="text-center mb-4">Customer Details</h2>
+
+    <!-- Customer Details Container -->
+    <div class="row g-4">
+        <!-- Name Section -->
+        <div class="col-md-6">
+            <div class="card border-light shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="card-title text-muted">Name</h5>
+                            <h4 class="fw-bold" th:text="${customerDTO.name + ' ' + customerDTO.surname}">Customer
+                                Name</h4>
+                        </div>
+                        <button class="btn btn-outline-dark btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#editNameModal">
+                            <i class="bi bi-pencil-fill"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Section -->
+        <div class="col-md-6">
+            <div class="card border-light shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="card-title text-muted">Address</h5>
+                            <p class="mb-0" th:if="${customerDTO.address != null}">
+                                <span th:text="${customerDTO.address.country}"></span> <br>
+                                <span th:text="${customerDTO.address.postalCode}"></span>,
+                                <span th:text="${customerDTO.address.city}"></span> <br>
+                                ul. <span th:text="${customerDTO.address.street}"></span>
+                                <span th:text="${customerDTO.address.buildingNumber}"></span>
+                                <span th:if="${customerDTO.address.unitNumber != null && !#strings.isEmpty(customerDTO.address.unitNumber)}"
+                                      th:text="' / ' + ${customerDTO.address.unitNumber}"></span>
+                            </p>
+                        </div>
+                        <button class="btn btn-outline-dark btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#editAddressModal">
+                            <i class="bi bi-pencil-fill"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Details Section -->
+    <div class="row g-4 mt-4">
+        <!-- Contact Info -->
+        <div class="col-md-6">
+            <div class="card border-light shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="card-title text-muted">Contact</h5>
+                            <p class="fw-bold mb-1" th:text="${customerDTO.phone}">+123456789</p>
+                        </div>
+                        <button class="btn btn-outline-dark btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#editPhoneModal">
+                            <i class="bi bi-pencil-fill"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Placeholder for future extensions -->
+        <div class="col-md-6">
+            <div class="card border-light shadow-sm">
+                <div class="card-body text-center">
+                    <!--                    <h5 class="card-title text-muted">More Details</h5>-->
+                    <!--                    <p class="text-muted">Add additional features here, such as preferences, membership details,-->
+                    <!--                        etc.</p>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals for Editing Information -->
+
+    <!-- Edit Name Modal -->
+    <div class="modal fade" id="editNameModal" tabindex="-1" aria-labelledby="editNameModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editNameModalLabel">Edit Customer Name</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/customer-dashboard/customer-details/update-name}"
+                      th:object="${customerDTO}" method="post">
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Customer Name</label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}"
+                                   placeholder="Enter customer name">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Address Modal -->
+    <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAddressModalLabel">Edit Customer Address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form th:action="@{/customer-dashboard/customer-details/update-address}"
+                      th:object="${addressDTO}" method="post">
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="country" class="form-label">Country</label>
+                                <input type="text" class="form-control" id="country"
+                                       th:field="*{country}" placeholder="Enter country">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city"
+                                       th:field="*{city}" placeholder="Enter city">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="postalCode" class="form-label">Postal Code</label>
+                                <input type="text" class="form-control" id="postalCode"
+                                       th:field="*{postalCode}" placeholder="Enter postal code">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="street" class="form-label">Street</label>
+                                <input type="text" class="form-control" id="street"
+                                       th:field="*{street}" placeholder="Enter street">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="buildingNumber" class="form-label">Building Number</label>
+                                <input type="text" class="form-control" id="buildingNumber"
+                                       th:field="*{buildingNumber}"
+                                       placeholder="Enter building number">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="unitNumber" class="form-label">Unit Number</label>
+                            <input type="text" class="form-control" id="unitNumber"
+                                   th:field="*{unitNumber}" placeholder="Enter unit number">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Phone Modal -->
+    <div class="modal fade" id="editPhoneModal" tabindex="-1" aria-labelledby="editPhoneModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPhoneModalLabel">Edit Customer Phone</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/customer-dashboard/customer-details/update-phone}"
+                      th:object="${customerDTO}" method="post">
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Customer Phone</label>
+                            <input type="text" class="form-control" id="phone" th:field="*{phone}"
+                                   placeholder="Enter customer phone">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>

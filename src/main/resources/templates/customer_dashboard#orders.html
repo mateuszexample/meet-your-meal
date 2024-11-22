@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layouts/customer_dashboard_layout}">
+
+<head>
+    <title>Meet your meal</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2><b>Orders</b></h2></div>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Order number</th>
+                    <th>Received time</th>
+                    <th>To cancel time</th>
+                    <th>Order value</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orderDetailsDTOs}">
+                    <td th:text="${order.orderNumber}"></td>
+                    <td th:text="${order.receivedTime}"></td>
+                    <td th:text="${order.toCancelTime}"></td>
+                    <td th:text="${order.orderValue} + ' zł'" style="text-align: center;"></td>
+                    <td class="text-warning" th:text="${order.orderStatus}" style="text-align: center;"></td>
+                    <td style="text-align: center;">
+
+                        <!-- Details Modal Button -->
+                        <button type="button"
+                                class="btn btn-light p-1"
+                                title="Details"
+                                data-bs-toggle="modal"
+                                th:data-bs-target="'#orderDetailsModal' + ${order.orderNumber}">
+                            <i class="bi bi-eye"></i>
+                        </button>
+
+                        <!-- Edit Status Button -->
+                        <button type="button"
+                                class="btn btn-light p-1"
+                                title="Edit status"
+                                data-bs-toggle="modal"
+                                th:data-bs-target="'#editStatusModal' + ${order.orderNumber}">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div th:each="order : ${orderDetailsDTOs}" class="modal fade"
+         th:id="'orderDetailsModal' + ${order.orderNumber}"
+         tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Order Details - #<span th:text="${order.orderNumber}"></span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- Order Summary -->
+                    <div class="mb-5">
+                        <h5 class="fw-bold text-dark border-bottom pb-2">
+                            <i class="bi bi-card-list me-2 text-primary"></i> Order Information
+                        </h5>
+
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <b>Order Number:</b> <span th:text="${order.orderNumber}"></span>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Received Time:</b> <span th:text="${order.receivedTime}"></span>
+                            </li>
+                            <li class="list-group-item">
+                                <b>To Cancel Time:</b> <span th:text="${order.toCancelTime}"></span>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Order Value:</b> <span th:text="${order.orderValue} + ' zł'"></span>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Status:</b>
+                                <span th:text="${order.orderStatus}"
+                                      th:classappend="${
+                                      order.orderStatus == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).DELIVERED
+                                        ? 'text-success'
+                                        : (order.orderStatus == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCELLED
+                                            ? 'text-danger'
+                                            : 'text-warning')}">
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div>
+                        <h5 class="fw-bold text-dark border-bottom pb-2">
+                            <i class="bi bi-basket2 me-2 text-success"></i> Ordered Items
+                        </h5>
+                        <table class="table table-sm">
+                            <thead class="table-light">
+
+                            <tr>
+                                <th>Food Name</th>
+                                <th>Quantity</th>
+                                <th>Item Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="item : ${order.orderItems}">
+                                <td th:text="${item.foodName}"></td>
+                                <td th:text="${item.quantity}"></td>
+                                <td th:text="${item.orderItemValue} + ' zł'" style="text-align: center;"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Status Edit Modal -->
+    <div th:each="order : ${orderDetailsDTOs}" class="modal fade"
+         th:id="'editStatusModal' + ${order.orderNumber}"
+         tabindex="-1" role="dialog"
+         th:aria-labelledby="'editStatusModalLabel' + ${order.orderNumber}"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" th:id="'editStatusModalLabel' + ${order.orderNumber}">Edit Order Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form th:action="@{/customer-dashboard/order/update-status}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="orderNumber" th:value="${order.orderNumber}"/>
+
+                        <label for="orderStatusSelect">Order Status</label>
+                        <select name="orderStatus" class="form-control text-danger" id="orderStatusSelect">
+                            <option th:value="${T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCELLED}"
+                                    th:text="${T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCELLED}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancellation Expired Modal -->
+    <div th:data-cancellation-expired-modal="${cancellationExpiredModal}"
+         class="modal fade"
+         id="cancellationExpiredModal"
+         tabindex="-1"
+         aria-labelledby="cancellationExpiredModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancellationExpiredModalLabel">Cancellation Expired</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    The cancellation window for this order has expired. Please contact support for further assistance.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

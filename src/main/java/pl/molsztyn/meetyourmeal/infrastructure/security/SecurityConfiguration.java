@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/fetch-cities", "/fetch-postal-codes", "/fetch-streets").permitAll()
                 .requestMatchers("/search-for-restaurants/**", "/restaurant-details/**").permitAll()
                 .requestMatchers("/owner-dashboard/**").hasAnyAuthority("RESTAURANT_OWNER")
+                .requestMatchers("/customer-dashboard/**").hasAnyAuthority("CUSTOMER")
                 .and()
                 .formLogin()
                 .permitAll()

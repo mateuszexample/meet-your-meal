@@ -35,7 +35,10 @@
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" th:href="@{/owner-dashboard}">Dashboard</a></li>
+                            <li>
+                                <a sec:authorize="hasAuthority('CUSTOMER')" class="dropdown-item" th:href="@{/customer-dashboard}">Dashboard</a>
+                                <a sec:authorize="!hasAuthority('CUSTOMER')" class="dropdown-item" th:href="@{/owner-dashboard}">Dashboard</a>
+                            </li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" th:href="@{/logout}">Log out</a></li>
                         </ul>

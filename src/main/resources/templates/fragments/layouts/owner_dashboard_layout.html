@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html   lang="en"
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -18,97 +18,112 @@
 </head>
 
 <body>
-    <div id="wrapper">
-        <div id="header">
-    <!--    <header>-->
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg fixed-top">
-                <div class="container-fluid">
+<div id="wrapper">
+    <div id="header">
+        <!--    <header>-->
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container-fluid">
 
-                    <a th:href="@{/}" class="navbar-brand me-auto">meet your meal</a>
+                <a th:href="@{/}" class="navbar-brand me-auto">meet your meal</a>
 
-                    <a sec:authorize="!isAuthenticated()" class="login-button" th:href="@{/login}">Login</a>
+                <a sec:authorize="!isAuthenticated()" class="login-button" th:href="@{/login}">Login</a>
 
-                    <div sec:authorize="isAuthenticated()" class="dropdown">
-                        <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #009970;">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" th:href="@{/owner-dashboard}">Dashboard</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" th:href="@{/logout}">Log out</a></li>
-                        </ul>
+                <div sec:authorize="isAuthenticated()" class="dropdown">
+                    <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="color: #009970;">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/owner-dashboard}">Dashboard</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" th:href="@{/logout}">Log out</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <!--    </header>-->
+    </div>
+    <div id="main" style="display: flex;">
+        <div id="containerLeft">
+            <!-- Sidebar -->
+            <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+                <div class="position-sticky">
+                    <div class="list-group list-group-flush mx-3 mt-4">
+
+                        <a th:href="@{/owner-dashboard/restaurant-details}"
+                           class="list-group-item list-group-item-action py-2 ripple">
+                            <span>Restaurant details</span></a>
+                        <a th:href="@{/owner-dashboard/orders}"
+                           class="list-group-item list-group-item-action py-2 ripple">
+                            <span>Orders</span></a>
+                        <a th:href="@{/owner-dashboard/orders-history}"
+                           class="list-group-item list-group-item-action py-2 ripple">
+                            <span>Orders history</span></a>
+                        <a th:href="@{/owner-dashboard/food-categories}"
+                           class="list-group-item list-group-item-action py-2 ripple">
+                            <span>Food categories</span></a>
+                        <a th:href="@{/owner-dashboard/menu}"
+                           class="list-group-item list-group-item-action py-2 ripple">
+                            <span>Menu</span></a>
+                        <a th:href="@{/owner-dashboard/delivery-areas}"
+                           class="list-group-item list-group-item-action py-2 ripple">
+                            <span>Delivery areas</span></a>
+                        <form th:action="@{/owner-dashboard/delete-restaurant}" th:method="DELETE" class="mt-4">
+                            <button type="button" class="list-group-item list-group-item-action py-2 ripple"
+                                    data-bs-toggle="modal" data-bs-target="#deleteRestaurantModal">
+                                <span>Delete restaurant</span>
+                            </button>
+                        </form>
+
+
                     </div>
-
                 </div>
             </nav>
-            <!-- End Navbar -->
-    <!--    </header>-->
+            <!-- End Sidebar -->
         </div>
-        <div id="main">
-            <div id="containerLeft">
-                <!-- Sidebar -->
-                <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
-                    <div class="position-sticky">
-                        <div class="list-group list-group-flush mx-3 mt-4">
 
-                            <a th:href="@{/owner-dashboard/restaurant-details}" class="list-group-item list-group-item-action py-2 ripple">
-                                <span>Restaurant details</span></a>
-                            <a th:href="@{/owner-dashboard/orders}" class="list-group-item list-group-item-action py-2 ripple">
-                                <span>Orders</span></a>
-                            <a th:href="@{/owner-dashboard/orders-history}" class="list-group-item list-group-item-action py-2 ripple">
-                                <span>Orders history</span></a>
-                            <a th:href="@{/owner-dashboard/food-categories}" class="list-group-item list-group-item-action py-2 ripple">
-                                <span>Food categories</span></a>
-                            <a th:href="@{/owner-dashboard/menu}" class="list-group-item list-group-item-action py-2 ripple">
-                                <span>Menu</span></a>
-                            <a th:href="@{/owner-dashboard/delivery-areas}" class="list-group-item list-group-item-action py-2 ripple">
-                                <span>Delivery areas</span></a>
-                            <form th:action="@{/owner-dashboard/delete-restaurant}" th:method="DELETE" class="mt-4">
-                                <button type="button" class="list-group-item list-group-item-action py-2 ripple"
-                                        data-bs-toggle="modal" data-bs-target="#deleteRestaurantModal">
-                                    <span>Delete restaurant</span>
-                                </button>
-                            </form>
+        <div id="containerRight">
+            <div class="card shadow-sm border-0 h-100" style="border-radius: 1rem;">
+                <div class="card-body">
+                    <div layout:fragment="content">
 
-
-
-                        </div>
-                    </div>
-                </nav>
-                <!-- End Sidebar -->
-            </div>
-
-            <div id="containerRight" layout:fragment="content">
-
-            </div>
-
-            <div class="modal fade" id="deleteRestaurantModal" tabindex="-1" aria-labelledby="deleteRestaurantModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="deleteRestaurantModalLabel">Confirm Deletion</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            Are you sure you want to delete this restaurant? This action cannot be undone.
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <form th:action="@{/owner-dashboard/delete-restaurant}" th:method="DELETE">
-                                <button type="submit" class="btn btn-danger">Delete Restaurant</button>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
+
+        <div class="modal fade" id="deleteRestaurantModal" tabindex="-1" aria-labelledby="deleteRestaurantModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteRestaurantModalLabel">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this restaurant? This action cannot be undone.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form th:action="@{/owner-dashboard/delete-restaurant}" th:method="DELETE">
+                            <button type="submit" class="btn btn-danger">Delete Restaurant</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous">
-    </script>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
 </body>
 
 </html>

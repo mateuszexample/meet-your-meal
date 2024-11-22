@@ -17,17 +17,15 @@ public class CustomerService {
     private final MeetYourMealUserDetailsService meetYourMealUserDetailsService;
     private final CustomerDAO customerDAO;
 
-    public Customer findCustomer(Integer userId) {
+    public Customer findCustomer(Authentication authentication) {
+        String username = authentication.getName();
+        Integer userId = meetYourMealUserDetailsService.getUserId(username);
+
         Optional<Customer> customer = customerDAO.findByUserId(userId);
         if (customer.isEmpty()) {
             throw new NotFoundException("Could not find customer by user id: [%s]".formatted(userId));
         }
-        return customer.get();
-    }
 
-    public Customer getCustomer(Authentication authentication) {
-        String username = authentication.getName();
-        Integer userId = meetYourMealUserDetailsService.getUserId(username);
-        return findCustomer(userId);
+        return customer.get();
     }
 }

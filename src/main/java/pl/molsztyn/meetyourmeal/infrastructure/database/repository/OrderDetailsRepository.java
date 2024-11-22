@@ -8,6 +8,7 @@ import pl.molsztyn.meetyourmeal.infrastructure.database.entity.OrderDetailsEntit
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.jpa.OrderDetailsJpaRepository;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.mapper.OrderDetailsEntityMapper;
 
+import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,5 +35,19 @@ public class OrderDetailsRepository implements OrderDetailsDAO {
         return orderDetailsEntities.stream()
                 .map(orderDetailsEntityMapper::mapFromEntity)
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<OrderDetails> findAllByCustomerId(Integer customerId) {
+        Set<OrderDetailsEntity> orderDetailsEntities = orderDetailsJpaRepository.findByCustomerCustomerId(customerId);
+
+        return orderDetailsEntities.stream()
+                .map(orderDetailsEntityMapper::mapFromEntity)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public OffsetDateTime findToCancelTime(String orderNumber) {
+        return orderDetailsJpaRepository.findToCancelTimeByOrderNumber(orderNumber);
     }
 }

@@ -18,8 +18,9 @@
         <div class="card">
             <img th:if="${restaurantDTO.hasImage}"
                  th:src="@{/restaurant-details/{name}/image(name=${restaurantDTO.name})}"
-                 class="img-fluid rounded-start"
-                 alt="Restaurant image"/>
+                 alt="Restaurant Image"
+                 class="img-fluid rounded w-100"
+                 style="object-fit: cover;">
             <span th:unless="${restaurantDTO.hasImage}">No image</span>
         </div>
         <div class="card-body">
@@ -54,7 +55,8 @@
                         <img th:if="${foodDTO.hasImage}"
                              th:src="@{/restaurant-details/{name}/menu/image/{id}(name=${restaurantDTO.name}, id=${foodDTO.foodId})}"
                              class="img-fluid rounded-start"
-                             alt="Food image"/>
+                             alt="Food image"
+                             style="object-fit: cover;"/>
                         <span th:unless="${foodDTO.hasImage}">No image</span>
                     </div>
 

@@ -69,8 +69,9 @@ public class RestaurantController {
         if("All".equals(category)) {
             menuByCategory = restaurant.getMenu().stream()
                     .map(foodMapper::mapToDTO)
-                    .sorted(Comparator.comparing(FoodDTO::getName))
-                    .sorted(Comparator.comparing(FoodDTO::getCategory))
+                    .sorted(Comparator.comparing(FoodDTO::getCategory).thenComparing(FoodDTO::getName))
+//                    .sorted(Comparator.comparing(FoodDTO::getName))
+//                    .sorted(Comparator.comparing(FoodDTO::getCategory))
                     .toList();
         } else {
             menuByCategory = restaurant.getMenu().stream()

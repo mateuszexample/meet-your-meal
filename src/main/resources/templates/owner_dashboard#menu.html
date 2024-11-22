@@ -27,7 +27,7 @@
                             <th>Name</th>
                             <th>Description</th>
                             <th>Price</th>
-                            <th>Image</th>
+                            <th style="width: 150px;">Image</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -39,16 +39,16 @@
                             <td>
                                 <img th:if="${food.hasImage}"
                                      th:src="@{menu/image/{id}(id=${food.foodId})}"
-                                     alt="Food Image"
-                                     style="max-width: 100px; max-height: 100px;">
+                                     class="img-fluid rounded"
+                                     alt="Food image"
+                                     style="object-fit: cover; height: 100px;"/>
                                 <span th:unless="${food.hasImage}">No image</span>
                             </td>
-                            <td>
+                            <td id="ownerMenuActions">
                                 <form
                                         th:action="@{/owner-dashboard/menu/delete/{id}(id=${food.foodId})}"
-                                        th:method="DELETE"
-                                        style="text-align: center;">
-                                    <button class="btn btn-light p-1" title="Delete" data-toggle="tooltip">
+                                        th:method="DELETE">
+                                    <button class="btn btn-light" title="Delete" data-toggle="tooltip">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>

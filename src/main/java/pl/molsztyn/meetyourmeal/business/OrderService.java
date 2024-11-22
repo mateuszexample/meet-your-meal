@@ -11,6 +11,7 @@ import pl.molsztyn.meetyourmeal.domain.exception.ProcessingException;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,9 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class OrderService {
+
+    public static final DateTimeFormatter FORMATTER_DB = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
+    public static final DateTimeFormatter FORMATTER_VIEW = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
 
     private final CustomerService customerService;
     private final CartService cartService;
@@ -52,9 +56,8 @@ public class OrderService {
 
     private OrderDetails buildOrder(Cart cart) {
         OffsetDateTime now = OffsetDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
 
-        OffsetDateTime receivedTime = OffsetDateTime.parse(now.format(formatter));
+        OffsetDateTime receivedTime = OffsetDateTime.parse(now.format(FORMATTER_DB));
         OffsetDateTime toCancelTime = receivedTime.plusMinutes(20);
 
         return OrderDetails.builder()
@@ -88,11 +91,18 @@ public class OrderService {
     }
 
     private Customer getCurrentlyLoggedInCustomer(Authentication authentication) {
-        return customerService.getCustomer(authentication);
+        return customerService.findCustomer(authentication);
     }
 
     public Set<OrderDetails> getAllOrdersForRestaurant(Integer restaurantId) {
         return orderDetailsDAO.findAllByRestaurantId(restaurantId);
     }
 
+    public Set<OrderDetails> getAllOrdersForCustomer(Integer customerId) {
+        return orderDetailsDAO.findAllByCustomerId(customerId);
+    }
+
+    public OffsetDateTime getToCancelTime(String orderNumber) {
+        return orderDetailsDAO.findToCancelTime(orderNumber);
+    }
 }
