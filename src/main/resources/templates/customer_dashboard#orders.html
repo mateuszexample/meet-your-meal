@@ -96,15 +96,10 @@
                                 <b>Order Value:</b> <span th:text="${order.orderValue} + ' zł'"></span>
                             </li>
                             <li class="list-group-item">
-                                <b>Status:</b>
-                                <span th:text="${order.orderStatus}"
-                                      th:classappend="${
-                                      order.orderStatus == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).DELIVERED
-                                        ? 'text-success'
-                                        : (order.orderStatus == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCELLED
-                                            ? 'text-danger'
-                                            : 'text-warning')}">
-                                </span>
+                                <b>Restaurant:</b> <span th:text="${order.restaurantName}"></span>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Status:</b> <span class="text-warning" th:text="${order.orderStatus}"></span>
                             </li>
                         </ul>
                     </div>
@@ -150,7 +145,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" th:id="'editStatusModalLabel' + ${order.orderNumber}">Edit Order Status</h5>
+                    <h5 class="modal-title" th:id="'editStatusModalLabel' + ${order.orderNumber}">Cancel Order</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -158,10 +153,10 @@
                     <div class="modal-body">
                         <input type="hidden" name="orderNumber" th:value="${order.orderNumber}"/>
 
-                        <label for="orderStatusSelect">Order Status</label>
+<!--                        <label for="orderStatusSelect"></label>-->
                         <select name="orderStatus" class="form-control text-danger" id="orderStatusSelect">
-                            <option th:value="${T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCELLED}"
-                                    th:text="${T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCELLED}">
+                            <option th:value="${T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCEL}"
+                                    th:text="${T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCEL}">
                             </option>
                         </select>
                     </div>

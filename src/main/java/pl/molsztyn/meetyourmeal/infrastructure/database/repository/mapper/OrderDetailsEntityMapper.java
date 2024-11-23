@@ -19,12 +19,9 @@ public interface OrderDetailsEntityMapper {
 
     OrderDetailsEntity mapToEntity(OrderDetails orderDetails);
 
-    @Mapping(target = "customer.name", ignore = true)
-    @Mapping(target = "customer.surname", ignore = true)
     @Mapping(target = "customer.phone", ignore = true)
     @Mapping(target = "customer.address", ignore = true)
     @Mapping(target = "customer.carts", ignore = true)
-    @Mapping(target = "restaurant.name", ignore = true)
     @Mapping(target = "restaurant.imageData", ignore = true)
     @Mapping(target = "restaurant.address", ignore = true)
     @Mapping(target = "restaurant.restaurantOwner", ignore = true)
@@ -50,10 +47,5 @@ public interface OrderDetailsEntityMapper {
     @Mapping(target = "orderDetails.customer", ignore = true)
     @Mapping(target = "orderDetails.restaurant", ignore = true)
     @Mapping(target = "orderDetails.orderItems", ignore = true)
-//    @Mapping(source = "orderDetails", target = "orderDetails", qualifiedByName = "mapOrderDetailsFromEntity")
     OrderItem mapFromEntity(OrderItemEntity orderItemEntity);
-
-//    @Named("mapOrderDetailsFromEntity")
-//    OrderDetails mapOrderDetailsFromEntity(OrderDetailsEntity orderDetailsEntity);
-
 }

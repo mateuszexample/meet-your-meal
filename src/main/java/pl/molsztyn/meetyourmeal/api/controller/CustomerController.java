@@ -13,8 +13,6 @@ import pl.molsztyn.meetyourmeal.api.dto.AddressDTO;
 import pl.molsztyn.meetyourmeal.api.dto.CustomerDTO;
 import pl.molsztyn.meetyourmeal.api.dto.OrderDetailsDTO;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.CustomerMapper;
-import pl.molsztyn.meetyourmeal.api.dto.mapper.DeliveryAreaMapper;
-import pl.molsztyn.meetyourmeal.api.dto.mapper.FoodMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.OrderMapper;
 import pl.molsztyn.meetyourmeal.business.CustomerDashboardService;
 import pl.molsztyn.meetyourmeal.domain.Customer;
@@ -90,6 +88,10 @@ public class CustomerController {
                 .map(orderMapper::mapToDTO)
                 .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(OrderDetailsDTO::getReceivedTime))));
 
+        orderDetailsDTOs.stream()
+                .filter(orderDetailsDTO -> OrderStatus.CANCELLED_BY_CUSTOMER.equals(orderDetailsDTO.getOrderStatus()))
+                .forEach(orderDetailsDTO -> orderDetailsDTO.setOrderStatus(OrderStatus.CANCELLED));
+
         model.addAttribute("orderDetailsDTOs", orderDetailsDTOs);
 
         return "customer_dashboard#orders_history";
@@ -106,11 +108,11 @@ public class CustomerController {
         OffsetDateTime toCancelTime = customerDashboardService.getOrderToCancelTime(orderNumber);
 
         boolean isTimeToCancelPassed = now.isAfter(toCancelTime);
-        boolean isCorrectStatus = OrderStatus.CANCELLED.equals(orderStatus);
+        boolean isCorrectStatus = OrderStatus.CANCEL.equals(orderStatus);
 
         if (isCorrectStatus) {
             if (!isTimeToCancelPassed) {
-                customerDashboardService.updateOrderStatus(orderNumber, orderStatus, authentication);
+                customerDashboardService.updateOrderStatus(orderNumber, OrderStatus.CANCELLED, authentication);
             } else {
                 redirectAttributes.addFlashAttribute("cancellationExpired", "true");
             }

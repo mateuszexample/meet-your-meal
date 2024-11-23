@@ -96,15 +96,10 @@
                                 <b>Order Value:</b> <span th:text="${order.orderValue} + ' zł'"></span>
                             </li>
                             <li class="list-group-item">
-                                <b>Status:</b>
-                                <span th:text="${order.orderStatus}"
-                                      th:classappend="${
-                                      order.orderStatus == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).DELIVERED
-                                        ? 'text-success'
-                                        : (order.orderStatus == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCELLED
-                                            ? 'text-danger'
-                                            : 'text-warning')}">
-                                </span>
+                                <b>Customer:</b> <span th:text="${order.customerName} + ' ' + ${order.customerSurname}"></span>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Status:</b> <span class="text-warning" th:text="${order.orderStatus}"></span>
                             </li>
                         </ul>
                     </div>
@@ -160,11 +155,14 @@
 
                         <label for="orderStatusSelect">Order Status</label>
                         <select name="orderStatus" class="form-control" id="orderStatusSelect">
-                            <option th:each="status : ${T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).values()}"
+                            <option th:each="status : ${T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).getEditableStatuses()}"
                                     th:value="${status}"
                                     th:text="${status}"
-                                    th:classappend="${status == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).DELIVERED ? 'text-success' :
-                                    (status == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCELLED ? 'text-danger' : 'text-warning')}">
+                                    th:classappend="${status == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).DELIVERED
+                                                                ? 'text-success'
+                                                                : (status == T(pl.molsztyn.meetyourmeal.domain.enums.OrderStatus).CANCELLED
+                                                                    ? 'text-danger'
+                                                                    : 'text-warning')}">
                             </option>
                         </select>
                     </div>

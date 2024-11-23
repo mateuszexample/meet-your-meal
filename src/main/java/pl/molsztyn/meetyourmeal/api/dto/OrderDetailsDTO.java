@@ -20,5 +20,8 @@ public class OrderDetailsDTO {
     private String toCancelTime;
     private BigDecimal orderValue;
     private OrderStatus orderStatus;
+    private String customerName;
+    private String customerSurname;
+    private String restaurantName;
     private List<OrderItemDTO> orderItems;
 }

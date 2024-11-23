@@ -20,6 +20,9 @@ public interface OrderMapper {
 
     @Mapping(target = "receivedTime", source = "receivedTime", qualifiedByName = "formatTime")
     @Mapping(target = "toCancelTime", source = "toCancelTime", qualifiedByName = "formatTime")
+    @Mapping(target = "customerName", expression = "java(orderDetails.getCustomer().getName())")
+    @Mapping(target = "customerSurname", expression = "java(orderDetails.getCustomer().getSurname())")
+    @Mapping(target = "restaurantName", expression = "java(orderDetails.getRestaurant().getName())")
     OrderDetailsDTO mapToDTO(OrderDetails orderDetails);
 
     @Named("formatTime")

@@ -271,7 +271,12 @@ public class RestaurantDashboardService {
         }
 
         OrderDetails orderToUpdate = optionalOrderDetails.get();
-        orderService.update(orderToUpdate.withOrderStatus(orderStatus));
+        if (OrderStatus.CANCELLED.equals(orderStatus)) {
+            orderService.update(orderToUpdate.withOrderStatus(OrderStatus.CANCELLED_BY_RESTAURANT));
+        } else {
+            orderService.update(orderToUpdate.withOrderStatus(orderStatus));
+        }
+
         return orderToUpdate.getOrderStatus();
     }
 }

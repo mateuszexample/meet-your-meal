@@ -358,6 +358,10 @@ public class RestaurantOwnerController {
                 .map(orderMapper::mapToDTO)
                 .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(OrderDetailsDTO::getReceivedTime))));
 
+        orderDetailsDTOs.stream()
+                .filter(orderDetailsDTO -> OrderStatus.CANCELLED_BY_RESTAURANT.equals(orderDetailsDTO.getOrderStatus()))
+                .forEach(orderDetailsDTO -> orderDetailsDTO.setOrderStatus(OrderStatus.CANCELLED));
+
         model.addAttribute("orderDetailsDTOs", orderDetailsDTOs);
 
         return "owner_dashboard#orders_history";

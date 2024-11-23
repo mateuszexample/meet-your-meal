@@ -19,32 +19,6 @@ public class CustomerDashboardService {
     private final CustomerService customerService;
     private final OrderService orderService;
 
-//    @Transactional
-//    public void update(CustomerOwner customerOwnerWithNewData) {
-//        customerOwnerService.createCustomer(customerOwnerWithNewData);
-//    }
-//
-//
-//    public void deleteOldAddress(Integer addressId) {
-//        addressService.deleteAddressById(addressId);
-//    }
-//
-//    public void deleteFood(Integer id, Authentication authentication) {
-//        Customer customer = getCurrentlyLoggedInCustomerOwner(authentication).getCustomer();
-//        Set<Food> menu = customer.getMenu();
-//        Optional<Food> foodToDelete = menu.stream()
-//                .filter(food -> id.equals(food.getFoodId()))
-//                .findFirst();
-//
-//        if (foodToDelete.isEmpty()) {
-//            throw new NotFoundException("Could not find food by id: [%s]".formatted(id));
-//        }
-//        menu.remove(foodToDelete.get());
-//
-//        customerService.updateCustomer(customer.withMenu(menu));
-//        foodService.deleteFood(foodToDelete.get().getFoodId());
-//    }
-
     public Customer getCurrentlyLoggedInCustomer(Authentication authentication) {
         return customerService.findCustomer(authentication);
     }
@@ -66,7 +40,11 @@ public class CustomerDashboardService {
         }
 
         OrderDetails orderToUpdate = optionalOrderDetails.get();
-        orderService.update(orderToUpdate.withOrderStatus(orderStatus));
+        if (OrderStatus.CANCELLED.equals(orderStatus)) {
+            orderService.update(orderToUpdate.withOrderStatus(OrderStatus.CANCELLED_BY_CUSTOMER));
+        } else {
+            orderService.update(orderToUpdate.withOrderStatus(orderStatus));
+        }
     }
 
     public OffsetDateTime getOrderToCancelTime(String orderNumber) {
