@@ -3,6 +3,7 @@ package pl.molsztyn.meetyourmeal.business;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.molsztyn.meetyourmeal.business.dao.CustomerDAO;
 import pl.molsztyn.meetyourmeal.domain.Customer;
 import pl.molsztyn.meetyourmeal.domain.exception.NotFoundException;
@@ -27,5 +28,10 @@ public class CustomerService {
         }
 
         return customer.get();
+    }
+
+    @Transactional
+    public void update(Customer customer) {
+        customerDAO.update(customer);
     }
 }

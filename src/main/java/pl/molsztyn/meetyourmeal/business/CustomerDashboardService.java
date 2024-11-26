@@ -3,12 +3,14 @@ package pl.molsztyn.meetyourmeal.business;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import pl.molsztyn.meetyourmeal.domain.Address;
 import pl.molsztyn.meetyourmeal.domain.Customer;
 import pl.molsztyn.meetyourmeal.domain.OrderDetails;
 import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
 import pl.molsztyn.meetyourmeal.domain.exception.NotFoundException;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,6 +19,7 @@ import java.util.Set;
 public class CustomerDashboardService {
 
     private final CustomerService customerService;
+    private final AddressService addressService;
     private final OrderService orderService;
 
     public Customer getCurrentlyLoggedInCustomer(Authentication authentication) {
@@ -49,5 +52,16 @@ public class CustomerDashboardService {
 
     public OffsetDateTime getOrderToCancelTime(String orderNumber) {
         return orderService.getToCancelTime(orderNumber);
+    }
+
+    public void updateAddress(Authentication authentication, Address newAddress) {
+        Customer customer = customerService.findCustomer(authentication);
+        if (Objects.isNull(customer.getAddress())) {
+            customerService.update(customer.withAddress(newAddress));
+        } else {
+            Integer oldAddressId = customer.getAddress().getAddressId();
+            customerService.update(customer.withAddress(newAddress));
+            addressService.deleteAddressById(oldAddressId);
+        }
     }
 }

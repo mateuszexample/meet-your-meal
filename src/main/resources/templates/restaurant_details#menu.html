@@ -198,9 +198,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    It looks like you haven't provided an address yet. Please provide one to proceed with placing your order.
+                    It looks like you haven't provided an address yet. Please provide one in your dashboard to proceed with placing your order.
                 </div>
                 <div class="modal-footer">
+                    <a th:href="@{/customer-dashboard/customer-details}" class="btn btn-success">Add address</a>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>

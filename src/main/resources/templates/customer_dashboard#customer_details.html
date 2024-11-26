@@ -107,11 +107,19 @@
                       th:object="${customerDTO}" method="post">
                     <div class="modal-body">
 
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Customer Name</label>
-                            <input type="text" class="form-control" id="name" th:field="*{name}"
-                                   placeholder="Enter customer name">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name"
+                                       th:field="*{name}" placeholder="Enter name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="surname" class="form-label">Surname</label>
+                                <input type="text" class="form-control" id="surname"
+                                       th:field="*{surname}" placeholder="Enter surname">
+                            </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success">Save Changes</button>
                         </div>

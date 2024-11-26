@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public interface CustomerEntityMapper {
 
     @Mapping(source = "carts", target = "carts", qualifiedByName = "mapCartsFromEntity")
+    @Mapping(target = "address.customer", ignore = true )
     Customer mapFromEntity(CustomerEntity customerEntity);
 
     @Named("mapCartsFromEntity")
@@ -29,6 +30,7 @@ public interface CustomerEntityMapper {
     }
 
     @Mapping(target = "customer.carts", ignore = true)
+    @Mapping(target = "customer.address", ignore = true)
     @Mapping(target = "restaurant.address", ignore = true)
     @Mapping(target = "restaurant.menu", ignore = true)
     @Mapping(target = "restaurant.restaurantOwner", ignore = true)
@@ -49,4 +51,6 @@ public interface CustomerEntityMapper {
     @Mapping(target = "cart.cartItems", ignore = true)
     @Mapping(target = "food.restaurant", ignore = true)
     CartItem mapFromEntity(CartItemEntity cartItemEntity);
+
+    CustomerEntity mapToEntity(Customer customer);
 }

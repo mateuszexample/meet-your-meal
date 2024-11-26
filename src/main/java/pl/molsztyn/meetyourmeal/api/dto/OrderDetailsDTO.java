@@ -22,6 +22,7 @@ public class OrderDetailsDTO {
     private OrderStatus orderStatus;
     private String customerName;
     private String customerSurname;
+    private AddressDTO customerAddress;
     private String restaurantName;
     private List<OrderItemDTO> orderItems;
 }

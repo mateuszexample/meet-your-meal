@@ -12,9 +12,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.molsztyn.meetyourmeal.api.dto.AddressDTO;
 import pl.molsztyn.meetyourmeal.api.dto.CustomerDTO;
 import pl.molsztyn.meetyourmeal.api.dto.OrderDetailsDTO;
+import pl.molsztyn.meetyourmeal.api.dto.mapper.AddressMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.CustomerMapper;
 import pl.molsztyn.meetyourmeal.api.dto.mapper.OrderMapper;
 import pl.molsztyn.meetyourmeal.business.CustomerDashboardService;
+import pl.molsztyn.meetyourmeal.domain.Address;
 import pl.molsztyn.meetyourmeal.domain.Customer;
 import pl.molsztyn.meetyourmeal.domain.OrderDetails;
 import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
@@ -31,6 +33,9 @@ import java.util.stream.Collectors;
 public class CustomerController {
     private static final String CUSTOMER = "/customer-dashboard";
     private static final String CUSTOMER_DETAILS = "/customer-dashboard/customer-details";
+    private static final String CUSTOMER_DETAILS_UPDATE_ADDRESS = "/customer-dashboard/customer-details/update-address";
+    private static final String CUSTOMER_DETAILS_UPDATE_NAME = "/customer-dashboard/customer-details/update-name";
+    private static final String CUSTOMER_DETAILS_UPDATE_PHONE = "/customer-dashboard/customer-details/update-phone";
     private static final String CUSTOMER_ORDERS = "/customer-dashboard/orders";
     private static final String CUSTOMER_ORDERS_HISTORY = "/customer-dashboard/orders-history";
     private static final String CUSTOMER_ORDER_UPDATE_STATUS = "/customer-dashboard/order/update-status";
@@ -40,6 +45,7 @@ public class CustomerController {
 
     private final CustomerMapper customerMapper;
     private final OrderMapper orderMapper;
+    private final AddressMapper addressMapper;
 
     @GetMapping(CUSTOMER)
     public String customerDashboard() {
@@ -55,6 +61,17 @@ public class CustomerController {
         model.addAttribute("addressDTO", new AddressDTO());
 
         return "customer_dashboard#customer_details";
+    }
+
+    @PostMapping(CUSTOMER_DETAILS_UPDATE_ADDRESS)
+    public String customerUpdateAddress(
+            @ModelAttribute("addressDTO") AddressDTO addressDTO,
+            Authentication authentication
+    ) {
+        Address address = addressMapper.mapFromDTO(addressDTO);
+        customerDashboardService.updateAddress(authentication, address);
+
+        return "redirect:/customer-dashboard/customer-details";
     }
 
     @GetMapping(CUSTOMER_ORDERS)
@@ -122,118 +139,4 @@ public class CustomerController {
 
         return "redirect:/customer-dashboard/orders";
     }
-
-
-//    @DeleteMapping(CUSTOMER_DELETE_RESTAURANT)
-//    public String customerDeleteCustomer(
-//            Authentication authentication
-//    ) {
-//
-//
-//            customerDashboardService.delete(authentication);
-//
-//
-//        return "redirect:/customer-dashboard";
-//    }
-//
-
-//
-//    private String showCustomerDetails(Authentication authentication, Model model) {
-//        Customer customer = customerDashboardService.getCustomer(authentication);
-//        CustomerDTO customerDTO = customerMapper.mapToDTO(customer);
-//
-//        model.addAttribute("customerDTO", customerDTO);
-//        model.addAttribute("customerCreateRequestDTO", new CustomerCreateRequestDTO());
-//
-//        if (customerDTO.isHasImage()) {
-//            // gpt idea
-//            String base64Image = Base64.getEncoder().encodeToString(customerDTO.getImageData());
-//            model.addAttribute("base64Image", base64Image);
-//        }
-//
-//        return "customer_dashboard#customer_details";
-//    }
-//
-//    private String showCustomerForm(Model model) {
-//        model.addAttribute("customerCreateRequestDTO", new CustomerCreateRequestDTO());
-//        return "customer_dashboard#customer_details_add_form";
-//    }
-//
-//    @PostMapping(CUSTOMER_RESTAURANT_DETAILS_ADD)
-//    public String createCustomer(
-//            @ModelAttribute("customerCreateRequestDTO") CustomerCreateRequestDTO customerCreateRequestDTO,
-//            @RequestParam("image") MultipartFile image,
-//            Authentication authentication
-//    ) throws IOException {
-//        CustomerCreateRequest customerCreateRequest = customerMapper.mapFromDTO(customerCreateRequestDTO);
-//
-//        // image upload
-//        if (!image.isEmpty()) {
-//            byte[] imageData = image.getBytes();
-//            customerDashboardService.create(customerCreateRequest.withImageData(imageData), authentication);
-//        } else {
-//            customerDashboardService.create(customerCreateRequest, authentication);
-//        }
-//
-//        return "redirect:/customer-dashboard";
-//    }
-//
-//    @PostMapping(CUSTOMER_RESTAURANT_DETAILS_UPDATE_NAME)
-//    public String updateCustomerName(
-//            @ModelAttribute("customerCreateRequestDTO") CustomerCreateRequestDTO customerCreateRequestDTO,
-//            Authentication authentication
-//    ) {
-//        String newCustomerName = customerCreateRequestDTO.getName();
-//        CustomerOwner customerOwner = customerDashboardService.getCurrentlyLoggedInCustomerOwner(authentication);
-//        Customer customerWithNewName = customerOwner.getCustomer().withName(newCustomerName);
-//        CustomerOwner customerWithCustomerWithNewName = customerOwner.withCustomer(customerWithNewName);
-//
-//        customerDashboardService.update(customerWithCustomerWithNewName);
-//
-//        return "redirect:/customer-dashboard/customer-details";
-//    }
-//
-//    @PostMapping(CUSTOMER_RESTAURANT_DETAILS_UPDATE_ADDRESS)
-//    public String updateCustomerAddress(
-//            @ModelAttribute("customerCreateRequestDTO") CustomerCreateRequestDTO customerCreateRequestDTO,
-//            Authentication authentication
-//    ) {
-//        CustomerOwner customerOwner = customerDashboardService.getCurrentlyLoggedInCustomerOwner(authentication);
-//        Integer addressId = customerOwner.getCustomer().getAddress().getAddressId();
-//        Customer customerWithNewAddress = customerOwner.getCustomer().withAddress(Address.builder()
-//                .country(customerCreateRequestDTO.getCustomerCountry())
-//                .city(customerCreateRequestDTO.getCustomerCity())
-//                .postalCode(customerCreateRequestDTO.getCustomerPostalCode())
-//                .street(customerCreateRequestDTO.getCustomerStreet())
-//                .buildingNumber(customerCreateRequestDTO.getCustomerBuildingNumber())
-//                .unitNumber(customerCreateRequestDTO.getCustomerUnitNumber())
-//                .build());
-//        CustomerOwner customerWithCustomerWithNewAddress = customerOwner.withCustomer(customerWithNewAddress);
-//
-//        customerDashboardService.update(customerWithCustomerWithNewAddress);
-//        customerDashboardService.deleteOldAddress(addressId);
-//
-//        return "redirect:/customer-dashboard/customer-details";
-//    }
-//
-//    @PostMapping(CUSTOMER_RESTAURANT_DETAILS_UPDATE_IMAGE)
-//    public String updateCustomerImage(
-//            @RequestParam("image") MultipartFile image,
-//            Authentication authentication
-//    ) throws IOException {
-//        CustomerOwner customerOwner = customerDashboardService.getCurrentlyLoggedInCustomerOwner(authentication);
-//
-//        if (!image.isEmpty()) {
-//            byte[] imageData = image.getBytes();
-//            Customer customerWithNewImage = customerOwner.getCustomer().withImageData(imageData);
-//            customerDashboardService.update(customerOwner.withCustomer(customerWithNewImage));
-//        } else {
-//            Customer customerWithNoImage = customerOwner.getCustomer().withImageData(null);
-//            customerDashboardService.update(customerOwner.withCustomer(customerWithNoImage));
-//        }
-//
-//        return "redirect:/customer-dashboard/customer-details";
-//    }
-//
-
 }

@@ -17,6 +17,7 @@ public class Customer {
     String name;
     String surname;
     String phone;
+    Integer userId;
     Address address;
     Set<Cart> carts;
 

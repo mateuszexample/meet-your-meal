@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import pl.molsztyn.meetyourmeal.business.dao.CustomerDAO;
 import pl.molsztyn.meetyourmeal.domain.Customer;
+import pl.molsztyn.meetyourmeal.infrastructure.database.entity.CustomerEntity;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.jpa.CustomerJpaRepository;
 import pl.molsztyn.meetyourmeal.infrastructure.database.repository.mapper.CustomerEntityMapper;
 
@@ -21,5 +22,11 @@ public class CustomerRepository implements CustomerDAO {
     public Optional<Customer> findByUserId(Integer userId) {
         return customerJpaRepository.findByUserId(userId)
                 .map(customerEntityMapper::mapFromEntity);
+    }
+
+    @Override
+    public void update(Customer customer) {
+        CustomerEntity customerEntity = customerEntityMapper.mapToEntity(customer);
+        customerJpaRepository.saveAndFlush(customerEntity);
     }
 }

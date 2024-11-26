@@ -80,7 +80,7 @@ public class RestaurantOwnerController {
     public String ownerRestaurantDetailsPage(Authentication authentication, Model model) {
         return hasRestaurant(authentication)
                 ? showRestaurantDetails(authentication, model)
-                : showRestaurantForm(model);
+                : showRestaurantAddForm(model);
     }
 
     private String showRestaurantDetails(Authentication authentication, Model model) {
@@ -99,7 +99,7 @@ public class RestaurantOwnerController {
         return "owner_dashboard#restaurant_details";
     }
 
-    private String showRestaurantForm(Model model) {
+    private String showRestaurantAddForm(Model model) {
         model.addAttribute("restaurantCreateRequestDTO", new RestaurantCreateRequestDTO());
         return "owner_dashboard#restaurant_details_add_form";
     }
@@ -144,7 +144,7 @@ public class RestaurantOwnerController {
             Authentication authentication
     ) {
         RestaurantOwner restaurantOwner = restaurantDashboardService.getCurrentlyLoggedInRestaurantOwner(authentication);
-        Integer addressId = restaurantOwner.getRestaurant().getAddress().getAddressId();
+        Integer oldAddressId = restaurantOwner.getRestaurant().getAddress().getAddressId();
         Restaurant restaurantWithNewAddress = restaurantOwner.getRestaurant().withAddress(Address.builder()
                 .country(restaurantCreateRequestDTO.getRestaurantCountry())
                 .city(restaurantCreateRequestDTO.getRestaurantCity())
@@ -156,7 +156,7 @@ public class RestaurantOwnerController {
         RestaurantOwner ownerWithRestaurantWithNewAddress = restaurantOwner.withRestaurant(restaurantWithNewAddress);
 
         restaurantDashboardService.update(ownerWithRestaurantWithNewAddress);
-        restaurantDashboardService.deleteOldAddress(addressId);
+        restaurantDashboardService.deleteOldAddress(oldAddressId);
 
         return "redirect:/owner-dashboard/restaurant-details";
     }
