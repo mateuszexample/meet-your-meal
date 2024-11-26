@@ -114,7 +114,7 @@ public class CustomerController {
             if (!isTimeToCancelPassed) {
                 customerDashboardService.updateOrderStatus(orderNumber, OrderStatus.CANCELLED, authentication);
             } else {
-                redirectAttributes.addFlashAttribute("cancellationExpired", "true");
+                redirectAttributes.addFlashAttribute("cancellationExpired", true);
             }
         } else {
             throw new OrderCancellationException("Something is not yes with Order Status");

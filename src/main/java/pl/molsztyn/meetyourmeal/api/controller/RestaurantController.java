@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.molsztyn.meetyourmeal.api.dto.CartItemDTO;
@@ -53,6 +54,7 @@ public class RestaurantController {
             @PathVariable("category") String category,
             @RequestParam(value = "cartId", required = false) Integer cartId,
             @RequestParam(value = "cartModal", required = false) String cartModal,
+            @ModelAttribute(value = "addressNotProvidedModal") String addressNotProvidedModal,
             Authentication authentication,
             Model model
     ) {
@@ -70,8 +72,6 @@ public class RestaurantController {
             menuByCategory = restaurant.getMenu().stream()
                     .map(foodMapper::mapToDTO)
                     .sorted(Comparator.comparing(FoodDTO::getCategory).thenComparing(FoodDTO::getName))
-//                    .sorted(Comparator.comparing(FoodDTO::getName))
-//                    .sorted(Comparator.comparing(FoodDTO::getCategory))
                     .toList();
         } else {
             menuByCategory = restaurant.getMenu().stream()
@@ -103,6 +103,9 @@ public class RestaurantController {
         }
 
         model.addAttribute("cartModal", cartModal != null && cartModal.equals("true"));
+
+        boolean showAddressNotProvidedModal = "true".equalsIgnoreCase(addressNotProvidedModal);
+        model.addAttribute("addressNotProvidedModal", showAddressNotProvidedModal);
 
         return "restaurant_details#menu";
     }

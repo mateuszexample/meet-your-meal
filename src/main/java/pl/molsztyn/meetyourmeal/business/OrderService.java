@@ -12,10 +12,7 @@ import pl.molsztyn.meetyourmeal.domain.exception.ProcessingException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -104,5 +101,10 @@ public class OrderService {
 
     public OffsetDateTime getToCancelTime(String orderNumber) {
         return orderDetailsDAO.findToCancelTime(orderNumber);
+    }
+
+    public boolean hasCustomerProvidedAddress(Authentication authentication) {
+        Customer customer = getCurrentlyLoggedInCustomer(authentication);
+        return Objects.nonNull(customer.getAddress());
     }
 }

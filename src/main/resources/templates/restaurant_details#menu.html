@@ -113,7 +113,6 @@
     </div>
 
     <div id="cartModal" class="modal fade" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -125,7 +124,6 @@
                     <!-- Your existing cart items content -->
                     <div th:each="item : ${cartItems}"
                          class="cart-item d-flex align-items-center justify-content-between mb-3">
-
 
                         <div class="cart-item-name" style="width: 27%;" th:text="${item.foodName}"></div>
 
@@ -164,8 +162,8 @@
 
                         <!-- Item price -->
                         <div class="cart-item-price text-end" style="width: 18%;"
-                             th:text="${item.cartItemValue} + ' zł'"></div>
-
+                             th:text="${item.cartItemValue} + ' zł'">
+                        </div>
                     </div>
                 </div>
 
@@ -181,16 +179,36 @@
                         <button type="submit" class="btn btn-success">Proceed to Checkout</button>
                     </form>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Shopping</button>
-
                 </div>
-
             </div>
-
         </div>
     </div>
+
+    <!-- Address Not Provided Modal -->
+    <div th:data-address-not-provided-modal="${addressNotProvidedModal}"
+         class="modal fade"
+         id="addressNotProvidedModal"
+         tabindex="-1"
+         aria-labelledby="addressNotProvidedModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addressNotProvidedModalLabel">Address Required</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    It looks like you haven't provided an address yet. Please provide one to proceed with placing your order.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
-
-
 </body>
 
 </html>

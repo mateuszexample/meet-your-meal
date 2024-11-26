@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.molsztyn.meetyourmeal.business.CartService;
 import pl.molsztyn.meetyourmeal.business.OrderService;
 import pl.molsztyn.meetyourmeal.domain.Cart;
@@ -66,11 +67,19 @@ public class CartController {
             @PathVariable("name") String restaurantName,
             @RequestParam("selectedCategory") String selectedCategory,
             @RequestParam("cartId") Integer cartId,
-            Authentication authentication
+            Authentication authentication,
+            RedirectAttributes redirectAttributes
     ){
-        Cart cart = cartService.getCartById(cartId);
-        OrderDetails orderDetails = orderService.create(cart, authentication);
-        System.out.println(orderDetails);
+        boolean hasProvidedAddress = orderService.hasCustomerProvidedAddress(authentication);
+
+        if(hasProvidedAddress) {
+            Cart cart = cartService.getCartById(cartId);
+            OrderDetails orderDetails = orderService.create(cart, authentication);
+            System.out.println(orderDetails);
+        } else {
+            redirectAttributes.addFlashAttribute("addressNotProvidedModal", true);
+        }
+
         return "redirect:/restaurant-details/{name}/menu/category/" + selectedCategory;
     }
 }
