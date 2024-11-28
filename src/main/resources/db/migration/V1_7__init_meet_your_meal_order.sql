@@ -13,21 +13,37 @@ CREATE TABLE cart
                 REFERENCES restaurant (restaurant_id)
 );
 
+CREATE TABLE delivery_address
+(
+    delivery_address_id         SERIAL      NOT NULL,
+    country                     VARCHAR(32) NOT NULL,
+    city                        VARCHAR(32) NOT NULL,
+    postal_code                 VARCHAR(32) NOT NULL,
+    street                      VARCHAR(32) NOT NULL,
+    building_number             VARCHAR(32) NOT NULL,
+    unit_number                 VARCHAR(32),
+    PRIMARY KEY (delivery_address_id)
+);
+
 CREATE TABLE order_details
 (
-    order_details_id    SERIAL                                          NOT NULL,
-    order_number        VARCHAR(64)                                     NOT NULL,
-    received_time       TIMESTAMP WITH TIME ZONE                        NOT NULL,
-    to_cancel_time      TIMESTAMP WITH TIME ZONE                        NOT NULL,
-    order_value         NUMERIC(19, 2)                                  NOT NULL,
-    order_status        VARCHAR                                         NOT NULL,
-    customer_id         INT                                             NOT NULL,
-    restaurant_id       INT                                             NOT NULL,
+    order_details_id            SERIAL                                          NOT NULL,
+    order_number                VARCHAR(64)                                     NOT NULL,
+    received_time               TIMESTAMP WITH TIME ZONE                        NOT NULL,
+    to_cancel_time              TIMESTAMP WITH TIME ZONE                        NOT NULL,
+    order_value                 NUMERIC(19, 2)                                  NOT NULL,
+    order_status                VARCHAR                                         NOT NULL,
+    customer_id                 INT                                             NOT NULL,
+    delivery_address_id         INT                                             NOT NULL,
+    restaurant_id               INT                                             NOT NULL,
     PRIMARY KEY (order_details_id),
     UNIQUE (order_number),
     CONSTRAINT fk_order_details_customer
         FOREIGN KEY (customer_id)
             REFERENCES customer (customer_id),
+    CONSTRAINT fk_order_details_delivery_address
+            FOREIGN KEY (delivery_address_id)
+                REFERENCES delivery_address (delivery_address_id),
     CONSTRAINT fk_order_details_restaurant
         FOREIGN KEY (restaurant_id)
             REFERENCES restaurant (restaurant_id)

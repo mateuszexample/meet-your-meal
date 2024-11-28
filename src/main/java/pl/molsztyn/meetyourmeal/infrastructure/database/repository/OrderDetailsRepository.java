@@ -24,7 +24,6 @@ public class OrderDetailsRepository implements OrderDetailsDAO {
     public OrderDetails create(OrderDetails orderDetails) {
         OrderDetailsEntity orderToSave = orderDetailsEntityMapper.mapToEntity(orderDetails);
         OrderDetailsEntity orderSaved = orderDetailsJpaRepository.saveAndFlush(orderToSave);
-
         return orderDetailsEntityMapper.mapFromEntity(orderSaved);
     }
 

@@ -44,6 +44,10 @@ public class OrderDetailsEntity {
     @JoinColumn(name = "customer_id")
     private CustomerEntity customer;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "delivery_address_id")
+    private DeliveryAddressEntity deliveryAddress;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private RestaurantEntity restaurant;

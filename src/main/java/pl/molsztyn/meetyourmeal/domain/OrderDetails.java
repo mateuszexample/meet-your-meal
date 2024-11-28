@@ -23,6 +23,7 @@ public class OrderDetails {
     BigDecimal orderValue;
     OrderStatus orderStatus;
     Customer customer;
+    DeliveryAddress deliveryAddress;
     Restaurant restaurant;
     List<OrderItem> orderItems;
 

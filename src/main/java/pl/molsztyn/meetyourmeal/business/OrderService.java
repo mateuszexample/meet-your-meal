@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.molsztyn.meetyourmeal.business.dao.DeliveryAddressDAO;
 import pl.molsztyn.meetyourmeal.business.dao.OrderDetailsDAO;
 import pl.molsztyn.meetyourmeal.domain.*;
 import pl.molsztyn.meetyourmeal.domain.enums.OrderStatus;
@@ -26,12 +27,21 @@ public class OrderService {
     private final CartService cartService;
 
     private final OrderDetailsDAO orderDetailsDAO;
+    private final DeliveryAddressDAO deliveryAddressDAO;
 
     @Transactional
     public OrderDetails create(Cart cart, Authentication authentication) {
-        validateCustomer(cart, authentication);
+        Customer customer = validateCustomer(cart, authentication);
 
-        OrderDetails orderDetails = buildOrder(cart);
+        DeliveryAddress deliveryAddress = buildDeliveryAddress(customer);
+        Optional<DeliveryAddress> optionalDeliveryAddress = deliveryAddressDAO.findIfExists(deliveryAddress);
+
+        // Ensure the address is managed
+        DeliveryAddress managedAddress = optionalDeliveryAddress
+                .orElseGet(() -> deliveryAddressDAO.create(deliveryAddress)); // Persist and manage if not exists
+
+        OrderDetails orderDetails = buildOrder(cart, managedAddress);
+
         OrderDetails orderDetailsSaved = orderDetailsDAO.create(orderDetails);
 
         List<CartItem> cartItems = cart.getCartItems();
@@ -46,12 +56,24 @@ public class OrderService {
         return orderDetailsSaved;
     }
 
+
+    private DeliveryAddress buildDeliveryAddress(Customer customer) {
+        return DeliveryAddress.builder()
+                .country(customer.getAddress().getCountry())
+                .city(customer.getAddress().getCity())
+                .postalCode(customer.getAddress().getPostalCode())
+                .street(customer.getAddress().getStreet())
+                .buildingNumber(customer.getAddress().getBuildingNumber())
+                .unitNumber(customer.getAddress().getUnitNumber())
+                .build();
+    }
+
     @Transactional
     public void update(OrderDetails orderDetails) {
         orderDetailsDAO.create(orderDetails);
     }
 
-    private OrderDetails buildOrder(Cart cart) {
+    private OrderDetails buildOrder(Cart cart, DeliveryAddress deliveryAddress) {
         OffsetDateTime now = OffsetDateTime.now();
 
         OffsetDateTime receivedTime = OffsetDateTime.parse(now.format(FORMATTER_DB));
@@ -64,6 +86,7 @@ public class OrderService {
                 .orderValue(cart.getTotalPrice())
                 .orderStatus(OrderStatus.PENDING)
                 .customer(cart.getCustomer())
+                .deliveryAddress(deliveryAddress)
                 .restaurant(cart.getRestaurant())
                 .orderItems(new ArrayList<>())
                 .build();
@@ -78,13 +101,15 @@ public class OrderService {
                 .build();
     }
 
-    private void validateCustomer(Cart cart, Authentication authentication) {
+    private Customer validateCustomer(Cart cart, Authentication authentication) {
         Customer customerAuthentication = getCurrentlyLoggedInCustomer(authentication);
         Customer customerCart = cart.getCustomer();
 
         if (!customerAuthentication.equals(customerCart)) {
             throw new ProcessingException("Who are you?");
         }
+
+        return customerAuthentication;
     }
 
     private Customer getCurrentlyLoggedInCustomer(Authentication authentication) {
